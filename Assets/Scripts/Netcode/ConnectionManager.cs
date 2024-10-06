@@ -6,11 +6,13 @@ using Unity.Entities;
 using System.Net;
 using Unity.Collections;
 using Unity.Networking.Transport;
+using Unity.Scenes;
 
 public class ConnectionManager : MonoBehaviour
 {
     //Change this IP address to the address of the dedicated server when we publish!
-    [SerializeField] private string ip = "127.0.0.1";
+    [SerializeField] private string listenIP = "127.0.0.1";
+    [SerializeField] private string connectIP = "127.0.0.1";
     [SerializeField] private ushort port = 7979;
 
     public static World serverWorld = null;
@@ -35,13 +37,11 @@ public class ConnectionManager : MonoBehaviour
         {
             role = Role.Client;
         }
-        Connect();
+        StartCoroutine(Connect());
     }
 
-    private void Connect()
+    private IEnumerator Connect()
     {
-        
-
         //Set up worlds for server and client
         if(role == Role.ServerClient || role == Role.Server)
         {
@@ -71,25 +71,56 @@ public class ConnectionManager : MonoBehaviour
             World.DefaultGameObjectInjectionWorld = clientWorld;
         }
 
-        if(serverWorld != null)
-        {
+        //Get all our SubScenes
+        SubScene[] subScenes = FindObjectsByType<SubScene>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        
+        
+        if (serverWorld != null)
+        { 
+            while (!serverWorld.IsCreated)
+            {
+                yield return null;
+            } 
+            if (subScenes != null)
+            {
+                for (int i = 0; i < subScenes.Length; i++)
+                {
+                        //Load all the subscenes with parameters
+                        SceneSystem.LoadParameters loadParameters = new SceneSystem.LoadParameters() { Flags = SceneLoadFlags.BlockOnStreamIn };
+                        var sceneEntity = SceneSystem.LoadSceneAsync(serverWorld.Unmanaged, new Unity.Entities.Hash128(subScenes[i].SceneGUID.Value), loadParameters);
+                        while(!SceneSystem.IsSceneLoaded(serverWorld.Unmanaged, sceneEntity))
+                        {
+                            serverWorld.Update();
+                        }
+                    }
+            }
             //Make the server listen for connections
             using var query = serverWorld.EntityManager.CreateEntityQuery(ComponentType.ReadWrite<NetworkStreamDriver>());
-            query.GetSingletonRW<NetworkStreamDriver>().ValueRW.Listen(ClientServerBootstrap.DefaultListenAddress.WithPort(port));
+            query.GetSingletonRW<NetworkStreamDriver>().ValueRW.Listen(NetworkEndpoint.Parse(listenIP, port));
         }
+
         if (clientWorld != null)
         {
-            //All of this is just to convert from ip and port into an endpoint
-            IPAddress serverAddress = IPAddress.Parse(ip);
-            NativeArray<byte> nativeArrayAddress = new NativeArray<byte>(serverAddress.GetAddressBytes().Length, Allocator.Temp);
-            nativeArrayAddress.CopyFrom(serverAddress.GetAddressBytes());
-            NetworkEndpoint endpoint = NetworkEndpoint.AnyIpv4;
-            endpoint.SetRawAddressBytes(nativeArrayAddress);
-            endpoint.Port = port;
-
+            while (!clientWorld.IsCreated)
+            {
+                yield return null;
+            }
+            if (subScenes != null)
+            {
+                for (int i = 0; i < subScenes.Length; i++)
+                {
+                    //Load all the subscenes with parameters
+                    SceneSystem.LoadParameters loadParameters = new SceneSystem.LoadParameters() { Flags = SceneLoadFlags.BlockOnStreamIn };
+                    var sceneEntity = SceneSystem.LoadSceneAsync(clientWorld.Unmanaged, new Unity.Entities.Hash128(subScenes[i].SceneGUID.Value), loadParameters);
+                    while (!SceneSystem.IsSceneLoaded(clientWorld.Unmanaged, sceneEntity))
+                    {
+                        clientWorld.Update();
+                    }
+                }
+            }
             //Now we can actually send the connection request to the endpoint
             using var query = clientWorld.EntityManager.CreateEntityQuery(ComponentType.ReadWrite<NetworkStreamDriver>());
-            query.GetSingletonRW<NetworkStreamDriver>().ValueRW.Connect(clientWorld.EntityManager, endpoint);
+            query.GetSingletonRW<NetworkStreamDriver>().ValueRW.Connect(clientWorld.EntityManager, NetworkEndpoint.Parse(connectIP, port));
         }
 
     }
