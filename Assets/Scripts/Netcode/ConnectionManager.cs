@@ -12,6 +12,9 @@ public class ConnectionManager : MonoBehaviour
     //Change this IP address to the address of the dedicated server when we publish!
     [SerializeField] private string ip = "127.0.0.1";
     [SerializeField] private ushort port = 7979;
+
+    public static World serverWorld = null;
+    public static World clientWorld = null;
     public enum Role
     {
         ServerClient = 0, Server = 1, Client = 2
@@ -37,8 +40,7 @@ public class ConnectionManager : MonoBehaviour
 
     private void Connect()
     {
-        World serverWorld = null;
-        World clientWorld = null;
+        
 
         //Set up worlds for server and client
         if(role == Role.ServerClient || role == Role.Server)
