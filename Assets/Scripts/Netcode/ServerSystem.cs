@@ -19,9 +19,17 @@ public struct ServerMessageRpcCommand : IRpcCommand
 [WorldSystemFilter(WorldSystemFilterFlags.ServerSimulation)]
 public partial class ServerSystem : SystemBase
 {
-    
+    //Needed for grabbing network ID of clients
+    private ComponentLookup<NetworkId> clients;
+
+    protected override void OnCreate()
+    {
+        clients = GetComponentLookup<NetworkId>(true);
+    }
+
     protected override void OnUpdate()
     {
+        clients.Update(this);
         var commandBuffer = new EntityCommandBuffer(Allocator.Temp);
 
         //This runs when an RPC request is recieved from the client.
