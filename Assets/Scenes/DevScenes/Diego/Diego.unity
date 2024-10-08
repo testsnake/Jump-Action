@@ -1567,8 +1567,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   standingSpeed: 10
   jumpHeight: 10
-  groundDrag: 1
-  airDrag: 0.5
+  groundDrag: 5
+  airDrag: 1
   airSpeedMultiplier: 0.4
   playerHeight: 2
   ground:
@@ -1576,6 +1576,8 @@ MonoBehaviour:
     m_Bits: 8
   crouchingSpeed: 5
   crouchYScale: 0.5
+  maxSlideTime: 0.5
+  slideSpeed: 15
   maxSlopeAngle: 40
   orientation: {fileID: 1516719046}
   rb: {fileID: 0}
