@@ -13,6 +13,11 @@ public struct ClientMessageRpcCommand : IRpcCommand
     public FixedString64Bytes message;
 }
 
+public struct SpawnPlayerRpcCommand : IRpcCommand
+{
+
+}
+
 [WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation)]
 public partial class ClientSystem : SystemBase
 {
@@ -32,9 +37,13 @@ public partial class ClientSystem : SystemBase
             commandBuffer.DestroyEntity(entity);
         }
 
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    SendMessageRpc("Hello", ConnectionManager.clientWorld);
+        //}
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SendMessageRpc("Hello", ConnectionManager.clientWorld);
+            SpawnPlayerRpc(ConnectionManager.clientWorld);
         }
 
         commandBuffer.Playback(EntityManager);
@@ -53,5 +62,12 @@ public partial class ClientSystem : SystemBase
         {
             message = text
         });
+    }
+
+    //This code sends the RPC request to the server to instantiate a player. 
+    public void SpawnPlayerRpc(World world)
+    {
+        if (world == null || world.IsCreated == false) { return; }
+        world.EntityManager.CreateEntity(typeof(SendRpcCommandRequest), typeof(SpawnPlayerRpcCommand));
     }
 }
