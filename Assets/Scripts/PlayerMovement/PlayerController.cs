@@ -3,13 +3,16 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
-    private float speed;
+    [HideInInspector]
+    public float speed;
     public float standingSpeed = 10f;
     public float jumpHeight = 5f;
     public float groundDrag = 2f;
     public float airDrag = 1f;
     public float airSpeedMultiplier = 0.4f;
-    private Vector3 moveDirection;
+
+    [HideInInspector]
+    public Vector3 moveDirection;
 
     [Header("Ground Check")]
     public float playerHeight;
@@ -26,14 +29,16 @@ public class PlayerController : MonoBehaviour
     public float slideSpeed = 15f;
     private float slideTimer;
 
+    [Header("WallRunning")]
+    private WallRunning wallRunning;
+
     [Header("SlopeHandling")]
     public float maxSlopeAngle = 40f;
     private RaycastHit slopeHit;
-
-
     public Transform orientation;
     private InputActions inputActions;
     private InputAction movement;
+    [HideInInspector]
     public Rigidbody rb;
     public MovementState state;
     public enum MovementState
@@ -41,6 +46,7 @@ public class PlayerController : MonoBehaviour
         standing,
         crouching,
         sliding,
+        wallRunning,
         falling
     };
 
@@ -54,6 +60,7 @@ public class PlayerController : MonoBehaviour
         speed = standingSpeed;
         state = MovementState.standing;
         slideTimer = maxSlideTime;
+        wallRunning = GetComponent<WallRunning>();
     }
 
     private void Update()
@@ -64,12 +71,30 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (state == MovementState.sliding)
-            slideMovement();
-        else
-            movePlayer();
-        if (state == MovementState.falling) // Fall faster
-            rb.AddForce(Vector3.down * 15f, ForceMode.Force);
+        switch (state)
+        {
+            case MovementState.standing:
+                speed = standingSpeed;
+                movePlayer();
+                break;
+            case MovementState.crouching:
+                speed = crouchingSpeed;
+                movePlayer();
+                break;
+            case MovementState.falling:
+                movePlayer();
+                rb.AddForce(Vector3.down * 15f, ForceMode.Force);
+                break;
+            case MovementState.sliding:
+                speed = slideSpeed;
+                slideMovement();
+                break;
+            case MovementState.wallRunning:
+                // WallRunning Script Does Everything
+                break;
+            default:
+                break;
+        }
     }
 
     //called when script enabled
@@ -97,8 +122,15 @@ public class PlayerController : MonoBehaviour
     {
         if (isGrounded)
         {
+            if (state == MovementState.sliding)
+                transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
+                
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+        }
+        else if (state == MovementState.wallRunning)
+        {
+            wallRunning.wallJump();
         }
     }
 
@@ -108,7 +140,6 @@ public class PlayerController : MonoBehaviour
         {
             transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
             rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
-            speed = crouchingSpeed;
             state = MovementState.crouching;
 
             if (moveDirection.x != 0 || moveDirection.z != 0)
@@ -121,7 +152,6 @@ public class PlayerController : MonoBehaviour
         if (state != MovementState.sliding)
         {
             transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
-            speed = standingSpeed;
             state = MovementState.standing;
         }
     }
@@ -130,14 +160,13 @@ public class PlayerController : MonoBehaviour
     {
         state = MovementState.sliding;
         slideTimer = maxSlideTime;
-        speed = slideSpeed;
         Vector2 v2 = movement.ReadValue<Vector2>();
         moveDirection = orientation.forward * v2.y + orientation.right * v2.x;
     }
 
     private void slideMovement()
     {
-        if(!onSlope() || rb.velocity.y > -0.1f)
+        if (!onSlope() || rb.velocity.y > -0.1f)
         {
             rb.AddForce(moveDirection.normalized * slideSpeed * 10f, ForceMode.Force);
             slideTimer -= Time.deltaTime;
@@ -146,7 +175,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.AddForce(getSlopeMovementDirection(moveDirection) * slideSpeed * 10f, ForceMode.Force);
         }
-        
+
         if (slideTimer <= 0f)
             stopSlide();
     }
@@ -154,8 +183,7 @@ public class PlayerController : MonoBehaviour
     private void stopSlide()
     {
         transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
-        speed = standingSpeed;
-        state = MovementState.standing;
+        state = isGrounded ? MovementState.standing : MovementState.falling;
     }
 
     private void movePlayer()
@@ -173,7 +201,8 @@ public class PlayerController : MonoBehaviour
         else
             rb.AddForce(moveDirection.normalized * speed * 10f * airSpeedMultiplier, ForceMode.Force);
 
-        rb.useGravity = !onSlope();
+        if (state != MovementState.wallRunning)
+            rb.useGravity = !onSlope();
     }
 
     private void limitSpeed()
@@ -208,7 +237,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             rb.drag = airDrag;
-            if (state != MovementState.sliding)
+            if (state != MovementState.sliding && state != MovementState.wallRunning)
                 state = MovementState.falling;
         }
     }
