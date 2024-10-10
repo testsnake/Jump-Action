@@ -4,8 +4,6 @@ using UnityEngine;
 using Unity.Entities;
 using Unity.NetCode;
 using Unity.Collections;
-using UnityEditor.VersionControl;
-using UnityEngine.Rendering;
 
 public struct ClientMessageRpcCommand : IRpcCommand
 {

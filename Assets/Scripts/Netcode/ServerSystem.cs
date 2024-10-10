@@ -91,7 +91,7 @@ public partial class ServerSystem : SystemBase
                 //Set the position to instantiate the player at. Should tweak later to set spawn points.
                 commandBuffer.SetComponent(player, new LocalTransform()
                 {
-                    Position = new Unity.Mathematics.float3(UnityEngine.Random.Range(-10f, 10f), 0, UnityEngine.Random.Range(-10f, 10f)),
+                    Position = new Unity.Mathematics.float3(UnityEngine.Random.Range(-10f, 10f), 1.4f, UnityEngine.Random.Range(-10f, 10f)),
                     Rotation = Unity.Mathematics.quaternion.identity,
                     Scale = 1f
                 });

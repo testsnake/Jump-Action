@@ -8,5 +8,7 @@ using Unity.Mathematics;
 public struct PlayerInputData : IInputComponentData
 {
     public float2 move;
+    public float2 rotation;
     public InputEvent jump;
+    public InputEvent crouch;
 }
