@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DevScenes/Will/NetworkingTest.unity
     guid: e532626cc30cb324c8ddb2f3548b3fff
+  - enabled: 1
+    path: Assets/Scenes/DevScenes/Will/GameObjectNetcodeTest.unity
+    guid: 710b94dd7a73218438e13ed6fe984167
   m_configObjects: {}
