@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Unity.Netcode;
 
 public class DevHUD : MonoBehaviour
 {
@@ -11,7 +12,20 @@ public class DevHUD : MonoBehaviour
 
     void Update()
     {
-        speed.SetText("Speed: " + player.rb.velocity.magnitude.ToString("F2"));
-        state.SetText(player.state.ToString());
+        if (player == null)
+        {
+            GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject p in allPlayers)
+            {
+                if (p.GetComponent<NetworkObject>()?.IsOwner == true)
+                {
+                    player = p.GetComponent<PlayerController>();
+                }
+            }
+        } else
+        {
+            speed.SetText("Speed: " + player.rb.velocity.magnitude.ToString("F2"));
+            state.SetText(player.state.ToString());
+        }
     }
 }
