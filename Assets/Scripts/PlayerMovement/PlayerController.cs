@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-public class PlayerController : MonoBehaviour
+using Unity.Netcode;
+public class PlayerController : NetworkBehaviour
 {
     [Header("Movement")]
     [HideInInspector]
@@ -50,7 +51,7 @@ public class PlayerController : MonoBehaviour
         falling
     };
 
-    private void Awake()
+    public void Awake()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
@@ -65,12 +66,14 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (!IsOwner) return;
         checkGrounded();
         limitSpeed();
     }
 
     private void FixedUpdate()
     {
+        if (!IsOwner) return;
         switch (state)
         {
             case MovementState.standing:

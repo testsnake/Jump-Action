@@ -36,6 +36,7 @@ public class WallRunning : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         player = GetComponent<PlayerController>();
+        cam = GameObject.FindWithTag("MainCamera").GetComponent<PlayerCam>();
     }
 
     void Update()
