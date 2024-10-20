@@ -5,6 +5,7 @@ using Unity.Services.Core;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
+using Mono.Cecil.Cil;
 
 public class TestLobby : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class TestLobby : MonoBehaviour
     private float heartbeatTimer;
     public GameObject lobbiesMenu;
     public GameObject lobbyPanelPrefab;
+    //Set this through settings? Would be nice to save this to a file and load dynamically.
+    public string playerName = "Anonymous";
     [SerializeField] private float heartbeatTimerMax = 15;
 
     private async void Start()
@@ -52,11 +55,36 @@ public class TestLobby : MonoBehaviour
             //Could set lobby privacy and such. We're just gonna do all public lobbies for now.
             CreateLobbyOptions createLobbyOptions = new CreateLobbyOptions()
             {
-                IsPrivate = false
+                IsPrivate = false,
+                Player = GetPlayer(),
+                Data = new Dictionary<string, DataObject>
+                {
+                    //Dynamically change this later for other gamemodes if we do them.
+                    {"GameMode", new DataObject(DataObject.VisibilityOptions.Public, "Capture the Chip", DataObject.IndexOptions.S1)}
+                }
             };
             Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, createLobbyOptions);
             hostLobby = lobby;
-            Debug.Log("Created lobby! " + lobby.Name + ", Max players:" + lobby.MaxPlayers);
+            Debug.Log("Created lobby! " + lobby.Name + ", Max players:" + lobby.MaxPlayers + ", ID: " + lobby.Id + ", Code: " + lobby.LobbyCode);
+            PrintPlayers(hostLobby);
+        }
+        catch (LobbyServiceException ex)
+        {
+            Debug.Log(ex);
+        }
+    }
+
+    //Might go unused. Oh well.
+    public async void UpdateLobbyGameMode(string gameMode) {
+        try
+        {
+            Lobbies.Instance.UpdateLobbyAsync(hostLobby.Id, new UpdateLobbyOptions
+            {
+                Data = new Dictionary<string, DataObject>
+                {
+                    {"GameMode", new DataObject(DataObject.VisibilityOptions.Public, gameMode, DataObject.IndexOptions.S1)}
+                }
+            });
         }
         catch (LobbyServiceException ex)
         {
@@ -74,7 +102,9 @@ public class TestLobby : MonoBehaviour
             {
                 Count = 100,
                 Filters = new List<QueryFilter>() { 
-                    new QueryFilter(QueryFilter.FieldOptions.AvailableSlots, "0", QueryFilter.OpOptions.GT)
+                    new QueryFilter(QueryFilter.FieldOptions.AvailableSlots, "0", QueryFilter.OpOptions.GT),
+                    //Change this to filter for other gamemodes (of which we have none.
+                    new QueryFilter(QueryFilter.FieldOptions.S1, "Capture the Chip", QueryFilter.OpOptions.EQ)
                 },
                 Order = new List<QueryOrder>() { 
                     new QueryOrder(false, QueryOrder.FieldOptions.Created)
@@ -92,8 +122,7 @@ public class TestLobby : MonoBehaviour
                 {
                     lobbyid = lobby.Id,
                     lobbyname = lobby.Name,
-                    //Dynamically change this later if we add more gamemodes
-                    gamemode = "Capture the Flag",
+                    gamemode = lobby.Data["GameMode"].Value,
                     currentplayers = "" + (int.Parse(lobby.MaxPlayers.ToString()) - int.Parse(lobby.AvailableSlots.ToString())),
                     maxplayers = lobby.MaxPlayers.ToString(),
                 };
@@ -104,5 +133,59 @@ public class TestLobby : MonoBehaviour
             Debug.Log(ex);
         }
     }
-    
+
+    //Useful if we want to have a "join by code" feature, which we probably should eventually
+    public async void JoinLobbyByCode(string code)
+    {
+        try
+        {
+            JoinLobbyByCodeOptions options = new JoinLobbyByCodeOptions
+            {
+                Player = GetPlayer()
+            };
+            Lobby joinedLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(code);
+            Debug.Log("Joined Lobby with code " + code);
+            PrintPlayers(joinedLobby);
+        }
+        catch (LobbyServiceException ex)
+        {
+            Debug.Log(ex);
+        }
+    }
+
+    //Do we want this? Maybe. It's easy as hell so might as well include it.
+    public async void QuickJoin()
+    {
+        try
+        {
+            await LobbyService.Instance.QuickJoinLobbyAsync();
+        }
+        catch (LobbyServiceException ex)
+        {
+            Debug.Log(ex);
+        }
+        
+    }
+
+    public Player GetPlayer()
+    {
+        //Could store loadout data in here? Maybe?
+        Player player = new Player
+        {
+            Data = new Dictionary<string, PlayerDataObject>
+                    {
+                        {"PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerName) }
+                    }
+        };
+        return player;
+    }
+
+    public void PrintPlayers(Lobby lobby)
+    {
+        Debug.Log("Players in Lobby " + lobby.Name);
+        foreach (Player player in lobby.Players)
+        {
+            Debug.Log(player.Id + " " + player.Data["PlayerName"].Value);
+        }
+    }
 }

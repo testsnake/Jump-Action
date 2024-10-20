@@ -940,7 +940,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8269714723496209321, guid: f76abd287f4d21e37bd058d2bb588723, type: 3}
       propertyPath: textValue
-      value: menu.start
+      value: menu.lobbies
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1150,7 +1150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8269714723496209321, guid: f76abd287f4d21e37bd058d2bb588723, type: 3}
       propertyPath: textValue
-      value: menu.start
+      value: menu.host
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1587,7 +1587,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -1084.9401}
+  m_AnchoredPosition: {x: 0, y: -1331.1583}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1904949316
