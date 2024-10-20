@@ -863,11 +863,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: f21afb87-7c3a-41ea-b64b-d4b0e5ffb7b2
+  cloudProjectId: 543a096d-4e6c-4e63-9805-b60d7c61a0f8
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Jump Action 2024-09-24_11-27-41
-  organizationId: testsnake
+  projectName: Jump Action
+  organizationId: jump-action
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
