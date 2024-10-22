@@ -21,6 +21,7 @@ public class WallRunning : MonoBehaviour
     private RaycastHit rightWallHit;
     private bool wallLeft;
     private bool wallRight;
+    private Transform lastWall;
 
     [Header("Gravity")]
     private bool useGravity = true;
@@ -41,7 +42,7 @@ public class WallRunning : MonoBehaviour
     void Update()
     {
         checkForWall();
-        if ((wallRight || wallLeft) && player.moveDirection.z != 0 && AboveGround())
+        if (AboveGround() && (wallRight || wallLeft) && player.moveDirection.z != 0)
         {
             if (player.state != PlayerController.MovementState.wallRunning)
                 startWallRun();
@@ -71,15 +72,24 @@ public class WallRunning : MonoBehaviour
 
     bool AboveGround()
     {
-        return !Physics.Raycast(transform.position, Vector3.down, minHeight, ground);
+        bool isGrounded = Physics.Raycast(transform.position, Vector3.down, minHeight, ground);
+
+        if (isGrounded)
+            lastWall = null;
+
+        return !isGrounded;
     }
 
     void startWallRun()
     {
+        if ((wallRight && rightWallHit.transform == lastWall) || (wallLeft && leftWallHit.transform == lastWall))
+            return;
+
         player.state = PlayerController.MovementState.wallRunning;
         player.speed = wallRunningSpeed;
         wallRunTimer = maxWallRunTime;
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        lastWall = wallRight ? rightWallHit.transform : leftWallHit.transform;
 
         cam.DoFov(90f);
         if (wallLeft)

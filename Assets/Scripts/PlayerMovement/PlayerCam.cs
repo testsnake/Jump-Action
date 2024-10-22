@@ -60,4 +60,9 @@ public class PlayerCam : MonoBehaviour
     {
         transform.DOLocalRotate(new Vector3(0, 0, zTilt), 0.25f);
     }
+
+    public void Rotate180(float duration)
+    {
+        transform.DORotate(new Vector3(0f, 180f, 0f), duration, RotateMode.LocalAxisAdd);
+    }
 }

@@ -17,7 +17,8 @@ public class PlayerController : MonoBehaviour
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask ground;
-    private bool isGrounded;
+    [HideInInspector]
+    public bool isGrounded;
 
     [Header("Crouching")]
     public float crouchingSpeed = 5f;
@@ -31,6 +32,9 @@ public class PlayerController : MonoBehaviour
 
     [Header("WallRunning")]
     private WallRunning wallRunning;
+
+    [Header("Climbing")]
+    private Climbing climbing;
 
     [Header("SlopeHandling")]
     public float maxSlopeAngle = 40f;
@@ -47,6 +51,7 @@ public class PlayerController : MonoBehaviour
         crouching,
         sliding,
         wallRunning,
+        climbing,
         falling
     };
 
@@ -61,6 +66,7 @@ public class PlayerController : MonoBehaviour
         state = MovementState.standing;
         slideTimer = maxSlideTime;
         wallRunning = GetComponent<WallRunning>();
+        climbing = GetComponent<Climbing>();
     }
 
     private void Update()
@@ -91,6 +97,9 @@ public class PlayerController : MonoBehaviour
                 break;
             case MovementState.wallRunning:
                 // WallRunning Script Does Everything
+                break;
+            case MovementState.climbing:
+                // Climbing Script Does Everything
                 break;
             default:
                 break;
@@ -124,7 +133,7 @@ public class PlayerController : MonoBehaviour
         {
             if (state == MovementState.sliding)
                 transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
-                
+
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
         }
@@ -132,6 +141,10 @@ public class PlayerController : MonoBehaviour
         {
             wallRunning.wallJump();
         }
+        // else if (state == MovementState.climbing)
+        // {
+        //     climbing.climbJump();
+        // }
     }
 
     private void Crouch(InputAction.CallbackContext obj)
@@ -140,10 +153,14 @@ public class PlayerController : MonoBehaviour
         {
             transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
             rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
-            state = MovementState.crouching;
 
-            if (moveDirection.x != 0 || moveDirection.z != 0)
-                startSlide();
+            if ((moveDirection.x != 0 || moveDirection.z != 0) && state != MovementState.sliding)
+            {
+                if (!onSlope() || rb.velocity.y <= -0.1f)
+                    startSlide();
+            }
+            else
+                state = MovementState.crouching;
         }
     }
 
@@ -166,12 +183,12 @@ public class PlayerController : MonoBehaviour
 
     private void slideMovement()
     {
-        if (!onSlope() || rb.velocity.y > -0.1f)
+        if (!onSlope())
         {
             rb.AddForce(moveDirection.normalized * slideSpeed * 10f, ForceMode.Force);
             slideTimer -= Time.deltaTime;
         }
-        else
+        else if (rb.velocity.y <= -0.1f)
         {
             rb.AddForce(getSlopeMovementDirection(moveDirection) * slideSpeed * 10f, ForceMode.Force);
         }
@@ -183,6 +200,7 @@ public class PlayerController : MonoBehaviour
     private void stopSlide()
     {
         transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
+
         state = isGrounded ? MovementState.standing : MovementState.falling;
     }
 
@@ -226,7 +244,7 @@ public class PlayerController : MonoBehaviour
 
     private void checkGrounded()
     {
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, ground);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.4f, ground);
 
         if (isGrounded)
         {
