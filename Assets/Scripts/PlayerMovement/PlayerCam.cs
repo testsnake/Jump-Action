@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
+using Unity.Netcode;
 
 public class PlayerCam : MonoBehaviour
 {
@@ -39,16 +40,29 @@ public class PlayerCam : MonoBehaviour
 
     private void Update()
     {
-        Vector2 rotationVector2D = rotation.ReadValue<Vector2>();
-        float x = rotationVector2D.x * turnSensitivity * Time.deltaTime;
-        float y = rotationVector2D.y * turnSensitivity * Time.deltaTime;
+        if (orientation == null)
+        {
+            GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject player in allPlayers)
+            {
+                if (player.GetComponent<NetworkObject>()?.IsOwner == true)
+                {
+                    orientation = player.transform;
+                }
+            }
+        } else
+        {
+            Vector2 rotationVector2D = rotation.ReadValue<Vector2>();
+            float x = rotationVector2D.x * turnSensitivity * Time.deltaTime;
+            float y = rotationVector2D.y * turnSensitivity * Time.deltaTime;
 
-        yRotation += x;
-        xRotation -= y;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+            yRotation += x;
+            xRotation -= y;
+            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        camHolder.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+            camHolder.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+            orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+        }
     }
 
     public void DoFov(float endValue)
