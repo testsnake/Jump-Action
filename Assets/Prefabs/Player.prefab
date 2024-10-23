@@ -110,7 +110,8 @@ MonoBehaviour:
   playerHeight: 2
   ground:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 136
+  isGrounded: 0
   crouchingSpeed: 5
   crouchYScale: 0.5
   maxSlideTime: 0.5
@@ -138,14 +139,14 @@ MonoBehaviour:
   maxWallRunTime: 1.5
   wall:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 192
   ground:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 136
   wallCheckDistance: 0.7
   minHeight: 1
   gravityCounterForce: 5
-  orientation: {fileID: 1640048120710098717}
+  orientation: {fileID: 0}
   cam: {fileID: 0}
 --- !u!114 &5787353793172975808
 MonoBehaviour:

@@ -278,4 +278,19 @@ public class PlayerController : NetworkBehaviour
     {
         return Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
     }
+
+    public void Die()
+    {
+        //Implement respawn logic here at some point.
+        transform.position = new Vector3(0, 2, 0);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!IsOwner) return;
+        if (other.gameObject.tag == "DeathPlane")
+        {
+            Die();
+        }
+    }
 }

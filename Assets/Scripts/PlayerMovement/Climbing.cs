@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Unity.Netcode;
 
-public class Climbing : MonoBehaviour
+public class Climbing : NetworkBehaviour
 {
     [Header("References")]
     public Transform orientation;
@@ -34,13 +35,16 @@ public class Climbing : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (!IsOwner) return;
         rb = GetComponent<Rigidbody>();
         player = GetComponent<PlayerController>();
+        orientation = transform.Find("Orientation");
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!IsOwner) return;
         wallCheck();
 
         if (wallFront && (player.moveDirection.x * orientation.forward.x > 0.1f || player.moveDirection.z * orientation.forward.z > 0.1f) && wallAngle < maxAngle)
@@ -62,6 +66,7 @@ public class Climbing : MonoBehaviour
 
     private void wallCheck()
     {
+        if (!IsOwner) return;
         wallFront = Physics.SphereCast(transform.position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, wall);
         wallAngle = Vector3.Angle(orientation.forward, -frontWallHit.normal);
 
@@ -71,23 +76,27 @@ public class Climbing : MonoBehaviour
 
     private void startClimb()
     {
+        if (!IsOwner) return;
         player.state = PlayerController.MovementState.climbing;
         player.speed = climbSpeed;
     }
 
     private void climbingMovement()
     {
+        if (!IsOwner) return;
         rb.velocity = new Vector3(rb.velocity.x, climbSpeed, rb.velocity.z);
     }
 
     private void StopClimbing()
     {
+        if (!IsOwner) return;
         player.state = PlayerController.MovementState.standing;
         player.speed = player.standingSpeed;
     }
 
     public void climbJump()
     {
+        if (!IsOwner) return;
         Vector3 jumpForce = transform.up * climbJumpUpForce + frontWallHit.normal * climbJumpBackForce;
 
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);

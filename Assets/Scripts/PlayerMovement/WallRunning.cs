@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class WallRunning : MonoBehaviour
+public class WallRunning : NetworkBehaviour
 {
     [Header("Movement")]
     public float wallRunningSpeed = 12f;
@@ -35,13 +36,16 @@ public class WallRunning : MonoBehaviour
 
     void Start()
     {
+        if (!IsOwner) return;
         rb = GetComponent<Rigidbody>();
         player = GetComponent<PlayerController>();
         cam = GameObject.FindWithTag("MainCamera").GetComponent<PlayerCam>();
+        orientation = transform.Find("Orientation");
     }
 
     void Update()
     {
+        if (!IsOwner) return;
         checkForWall();
         if (AboveGround() && (wallRight || wallLeft) && player.moveDirection.z != 0)
         {
@@ -61,7 +65,8 @@ public class WallRunning : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (player.state == PlayerController.MovementState.wallRunning)
+        if (!IsOwner) return;
+        if (player?.state == PlayerController.MovementState.wallRunning)
             wallRunningMovement();
     }
 

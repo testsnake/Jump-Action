@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class StartNetwork : MonoBehaviour
 {
+    public void Start()
+    {
+        StartHost();
+    }
     public void StartServer()
     {
         NetworkManager.Singleton.StartServer();
