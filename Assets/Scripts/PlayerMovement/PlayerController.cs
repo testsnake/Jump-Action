@@ -75,6 +75,10 @@ public class PlayerController : NetworkBehaviour
         if (!IsOwner) return;
         checkGrounded();
         limitSpeed();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     private void FixedUpdate()
