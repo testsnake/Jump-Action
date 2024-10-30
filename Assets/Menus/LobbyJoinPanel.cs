@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Services.Lobbies;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
 public class LobbyJoinPanel : MonoBehaviour
@@ -10,6 +11,12 @@ public class LobbyJoinPanel : MonoBehaviour
     public TMP_Text Name;
     public TMP_Text Gamemode;
     public TMP_Text Playerslots;
+    private GameObject LobbyManager;
+
+    public void Awake()
+    {
+        LobbyManager = GameObject.Find("LobbyManager");
+    }
 
     public void RefreshData()
     {
@@ -20,14 +27,7 @@ public class LobbyJoinPanel : MonoBehaviour
 
     public async void JoinLobby()
     {
-        try
-        {
-            await Lobbies.Instance.JoinLobbyByIdAsync(data.lobbyid);
-        }
-        catch (LobbyServiceException ex)
-        {
-            Debug.Log(ex);
-        }
+        await LobbyManager.GetComponent<TestLobby>().JoinLobbyById(data.lobbyid);
     }
 }
 
