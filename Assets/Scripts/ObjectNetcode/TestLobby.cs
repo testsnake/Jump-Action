@@ -5,6 +5,8 @@ using Unity.Services.Core;
 using Unity.Services.Authentication;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
+using System;
+using System.Threading.Tasks;
 
 public class TestLobby : MonoBehaviour
 {
@@ -12,17 +14,44 @@ public class TestLobby : MonoBehaviour
     private Lobby joinedLobby;
     public GameObject lobbiesMenu;
     public GameObject lobbyPanelPrefab;
+    public GameObject inLobbyPanel;
+    public LobbyMenu lobbyMenu;
     //Set this through settings? Would be nice to save this to a file and load dynamically.
     public string playerName = "Anonymous";
     public string playerTeam = "None";
     private float heartbeatTimer;
     [SerializeField] private float heartbeatTimerMax = 15;
-    private float pollTimer;
+    public float pollTimer;
     [SerializeField] private float pollTimerMax = 1.1f;
+
+    public event EventHandler OnLeftLobby;
+
+    public event EventHandler<LobbyEventArgs> OnJoinedLobby;
+    public event EventHandler<LobbyEventArgs> OnJoinedLobbyUpdate;
+    public event EventHandler<LobbyEventArgs> OnKickedFromLobby;
+    public event EventHandler<LobbyEventArgs> OnLobbyGameModeChanged;
+    public class LobbyEventArgs : EventArgs
+    {
+        public Lobby lobby;
+    }
+
+    public event EventHandler<OnLobbyListChangedEventArgs> OnLobbyListChanged;
+    public class OnLobbyListChangedEventArgs : EventArgs
+    {
+        public List<Lobby> lobbyList;
+    }
 
     private async void Start()
     {
-        await UnityServices.InitializeAsync();
+        const string glyphs = "ABCDE0123456789";
+        for (int i = 0; i < 5; i++)
+        {
+            playerName += glyphs[UnityEngine.Random.Range(0, glyphs.Length)];
+        }
+        InitializationOptions initializationOptions = new InitializationOptions();
+        initializationOptions.SetProfile(playerName);
+
+        await UnityServices.InitializeAsync(initializationOptions);
         heartbeatTimer = 0;
         pollTimer = 0;
         AuthenticationService.Instance.SignedIn += () =>
@@ -34,8 +63,44 @@ public class TestLobby : MonoBehaviour
 
     private void Update()
     {
-        HandleLobbyHeartbeat();
-        HandleLobbyPollForUpdates();
+        try
+        {
+            if (joinedLobby != null && playerTeam == "None")
+            {
+                int bluePlayers = 0;
+                int redPlayers = 0;
+                foreach (Player p in joinedLobby.Players)
+                {
+                    if (p.Data["PlayerTeam"].Value == "Blue")
+                    {
+                        bluePlayers++;
+                    }
+                    else if (p.Data["PlayerTeam"].Value == "Red")
+                    {
+                        redPlayers++;
+                    }
+                }
+                if (bluePlayers <= redPlayers)
+                {
+                    UpdatePlayerTeam("Blue");
+                }
+                else
+                {
+                    UpdatePlayerTeam("Red");
+                }
+            }
+            else if (joinedLobby == null)
+            {
+                playerTeam = "None";
+            }
+            HandleLobbyHeartbeat();
+            HandleLobbyPollForUpdates();
+        }
+        catch (Exception ex)
+        {
+            
+        }
+        
     }
 
     private async void HandleLobbyHeartbeat()
@@ -61,8 +126,41 @@ public class TestLobby : MonoBehaviour
                 pollTimer = pollTimerMax;
                 Lobby lobby = await LobbyService.Instance.GetLobbyAsync(joinedLobby.Id);
                 joinedLobby = lobby;
+                lobbyMenu.RefreshData(joinedLobby);
+
+                OnJoinedLobbyUpdate?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby });
+                if (!IsPlayerInLobby())
+                {
+                    // Player was kicked out of this lobby
+                    Debug.Log("Kicked from Lobby!");
+
+                    OnKickedFromLobby?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby });
+
+                    joinedLobby = null;
+                }
             }
         }
+    }
+
+    public bool IsLobbyHost()
+    {
+        return joinedLobby != null && joinedLobby.HostId == AuthenticationService.Instance.PlayerId;
+    }
+
+    private bool IsPlayerInLobby()
+    {
+        if (joinedLobby != null && joinedLobby.Players != null)
+        {
+            foreach (Player player in joinedLobby.Players)
+            {
+                if (player.Id == AuthenticationService.Instance.PlayerId)
+                {
+                    // This player is in this lobby
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public async void createLobby()
@@ -87,6 +185,8 @@ public class TestLobby : MonoBehaviour
             joinedLobby = lobby;
             Debug.Log("Created lobby! " + lobby.Name + ", Max players:" + lobby.MaxPlayers + ", ID: " + lobby.Id + ", Code: " + lobby.LobbyCode);
             PrintPlayers(hostLobby);
+            inLobbyPanel.SetActive(true);
+            lobbyMenu.RefreshData(joinedLobby);
         }
         catch (LobbyServiceException ex)
         {
@@ -98,7 +198,12 @@ public class TestLobby : MonoBehaviour
     {
         try
         {
+            playerTeam = "None";
+            UpdatePlayerTeam("None");
             await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId);
+            hostLobby = null;
+            joinedLobby = null;
+            inLobbyPanel.SetActive(false);
         }
         catch (LobbyServiceException ex)
         {
@@ -143,13 +248,16 @@ public class TestLobby : MonoBehaviour
         try
         {
             playerName = newPlayerName;
-            await LobbyService.Instance.UpdatePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId, new UpdatePlayerOptions()
+            Lobby lobby = await LobbyService.Instance.UpdatePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId, new UpdatePlayerOptions()
             {
                 Data = new Dictionary<string, PlayerDataObject>
             {
                 { "PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerName) }
             }
             });
+            joinedLobby = lobby;
+
+            OnJoinedLobbyUpdate?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby });
         }
         catch (LobbyServiceException ex)
         {
@@ -162,13 +270,16 @@ public class TestLobby : MonoBehaviour
         try
         {
             playerTeam = newPlayerTeam;
-            await LobbyService.Instance.UpdatePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId, new UpdatePlayerOptions()
+            Lobby lobby = await LobbyService.Instance.UpdatePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId, new UpdatePlayerOptions()
             {
                 Data = new Dictionary<string, PlayerDataObject>
             {
-                { "Team", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerTeam) }
+                { "PlayerTeam", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerTeam) }
             }
             });
+            joinedLobby = lobby;
+
+            OnJoinedLobbyUpdate?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby });
         }
         catch (LobbyServiceException ex)
         {
@@ -229,6 +340,30 @@ public class TestLobby : MonoBehaviour
             };
             joinedLobby = await Lobbies.Instance.JoinLobbyByCodeAsync(code);
             Debug.Log("Joined Lobby with code " + code);
+            OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby });
+            inLobbyPanel.SetActive(true);
+            lobbyMenu.RefreshData(joinedLobby);
+            PrintPlayers(joinedLobby);
+        }
+        catch (LobbyServiceException ex)
+        {
+            Debug.Log(ex);
+        }
+    }
+
+    public async Task JoinLobbyById(string id)
+    {
+        try
+        {
+            JoinLobbyByIdOptions options = new JoinLobbyByIdOptions
+            {
+                Player = GetPlayer()
+            };
+            joinedLobby = await Lobbies.Instance.JoinLobbyByIdAsync(id, options);
+            Debug.Log("Joined Lobby with id " + id);
+            OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby });
+            inLobbyPanel.SetActive(true);
+            lobbyMenu.RefreshData(joinedLobby);
             PrintPlayers(joinedLobby);
         }
         catch (LobbyServiceException ex)
@@ -258,7 +393,8 @@ public class TestLobby : MonoBehaviour
         {
             Data = new Dictionary<string, PlayerDataObject>
                     {
-                        {"PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerName) }
+                        {"PlayerName", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerName) },
+                        {"PlayerTeam", new PlayerDataObject(PlayerDataObject.VisibilityOptions.Member, playerTeam) }
                     }
         };
         return player;
@@ -277,4 +413,42 @@ public class TestLobby : MonoBehaviour
             Debug.Log(player.Id + " " + player.Data["PlayerName"].Value);
         }
     }
+
+    private void OnApplicationQuit()
+    {
+        Debug.Log("OnQuit");
+        if (joinedLobby != null)
+        {
+            Task.Run(async () => await LeaveOnQuit());
+        }
+    }
+
+    private void OnDisable()
+    {
+        Debug.Log("OnDisable");
+        if (Application.isEditor && joinedLobby != null)
+        {
+            Task.Run(async () => await LeaveOnQuit());
+        }
+    }
+
+    private async Task LeaveOnQuit()
+    {
+        Debug.Log("LeaveOnQuit");
+        try
+        {
+            playerTeam = "None";
+            await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId);
+            hostLobby = null;
+            joinedLobby = null;
+            inLobbyPanel.SetActive(false);
+        }
+        catch (LobbyServiceException ex)
+        {
+            Debug.Log(ex);
+        }
+    }
+
 }
+
+

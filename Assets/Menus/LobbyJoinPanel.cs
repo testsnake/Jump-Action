@@ -10,6 +10,12 @@ public class LobbyJoinPanel : MonoBehaviour
     public TMP_Text Name;
     public TMP_Text Gamemode;
     public TMP_Text Playerslots;
+    public TestLobby lobbyManager;
+
+    public void Awake()
+    {
+        lobbyManager = GameObject.Find("LobbyManager").GetComponent<TestLobby>();
+    }
 
     public void RefreshData()
     {
@@ -22,7 +28,7 @@ public class LobbyJoinPanel : MonoBehaviour
     {
         try
         {
-            await Lobbies.Instance.JoinLobbyByIdAsync(data.lobbyid);
+            await lobbyManager.JoinLobbyById(data.lobbyid);
         }
         catch (LobbyServiceException ex)
         {
