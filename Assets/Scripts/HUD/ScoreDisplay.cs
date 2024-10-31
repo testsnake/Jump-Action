@@ -25,7 +25,7 @@ public class ScoreDisplay : MonoBehaviour
     {
         if (scoreText != null && teamScore != null)
         {
-            scoreText.text = "Score: " + teamScore.GetScore().ToString();
+            scoreText.text = teamScore.GetScore().ToString();
         }
     }
 }
