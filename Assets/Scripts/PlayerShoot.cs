@@ -1,10 +1,16 @@
 using UnityEngine;
+using Unity.Netcode;
 
-public class PlayerShoot : MonoBehaviour
+public class PlayerShoot : NetworkBehaviour
 {
     public GameObject projectilePrefab;
-    public Transform player; // Reference to the camera or look direction of the player
+    public Transform playerCam; // Reference to the camera or look direction of the player
     public float firePointDistance = 1.0f; // Distance in front of the player
+
+    void Start()
+    {
+        playerCam = GameObject.FindWithTag("MainCamera").GetComponent<Transform>();
+    }
 
     void Update()
     {
@@ -18,7 +24,7 @@ public class PlayerShoot : MonoBehaviour
     void Shoot()
     {
         // Instantiate the projectile at the fire point's position
-        GameObject projectile = Instantiate(projectilePrefab, transform.position, player.rotation);
+        GameObject projectile = Instantiate(projectilePrefab, transform.position, playerCam.rotation);
     }
 
 
