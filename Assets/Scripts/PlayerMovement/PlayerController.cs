@@ -45,6 +45,7 @@ public class PlayerController : NetworkBehaviour
     private InputAction movement;
     [HideInInspector]
     public Rigidbody rb;
+    private PlayerSounds audioPlayer;
     public MovementState state;
     public enum MovementState
     {
@@ -68,6 +69,7 @@ public class PlayerController : NetworkBehaviour
         slideTimer = maxSlideTime;
         wallRunning = GetComponent<WallRunning>();
         climbing = GetComponent<Climbing>();
+        audioPlayer = GameObject.Find("AudioManager").GetComponent<PlayerSounds>();
     }
 
     private void Update()
@@ -143,10 +145,12 @@ public class PlayerController : NetworkBehaviour
 
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+            audioPlayer.playSound("Jump");
         }
         else if (state == MovementState.wallRunning)
         {
             wallRunning.wallJump();
+            audioPlayer.playSound("Jump");
         }
         // else if (state == MovementState.climbing)
         // {
@@ -182,6 +186,7 @@ public class PlayerController : NetworkBehaviour
 
     private void startSlide()
     {
+        audioPlayer.playSound("Slide");
         state = MovementState.sliding;
         slideTimer = maxSlideTime;
         Vector2 v2 = movement.ReadValue<Vector2>();
@@ -206,6 +211,7 @@ public class PlayerController : NetworkBehaviour
 
     private void stopSlide()
     {
+        audioPlayer.stopSound("Slide");
         transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
 
         state = isGrounded ? MovementState.standing : MovementState.falling;
@@ -286,6 +292,7 @@ public class PlayerController : NetworkBehaviour
     public void Die()
     {
         //Implement respawn logic here at some point.
+        audioPlayer.playSound("Die");
         transform.position = new Vector3(0, 2, 0);
     }
 

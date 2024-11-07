@@ -81,15 +81,18 @@ public class WallRunning : NetworkBehaviour
         bool isGrounded = Physics.Raycast(transform.position, Vector3.down, minHeight, ground);
 
         if (isGrounded)
+        {
+            cam.DoTilt(0f);
             lastWall = null;
+        }
 
         return !isGrounded;
     }
 
     void startWallRun()
     {
-        if ((wallRight && rightWallHit.transform == lastWall) || (wallLeft && leftWallHit.transform == lastWall))
-            return;
+        // if ((wallRight && rightWallHit.transform == lastWall) || (wallLeft && leftWallHit.transform == lastWall))
+        //     return;
 
         player.state = PlayerController.MovementState.wallRunning;
         player.speed = wallRunningSpeed;

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5165337560070364164}
   - component: {fileID: 5787353793172975808}
   - component: {fileID: 5310526225051260351}
+  - component: {fileID: 5474098827311543265}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -191,6 +192,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5474098827311543265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2727057753797406310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89fa1848aa5a6e740901290495b23558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orientation: {fileID: 480968629394867588, guid: 1c6e8b72a37d7ca46982e774b09c3965, type: 3}
+  wall:
+    serializedVersion: 2
+    m_Bits: 192
+  cam: {fileID: 0}
+  climbSpeed: 7
+  maxClimbTime: 0.75
+  detectionLength: 0.7
+  sphereCastRadius: 0.25
+  maxAngle: 30
+  climbJumpUpForce: 14
+  climbJumpBackForce: 12
+  climbJumpRotationDuration: 0.3
 --- !u!1 &4667462484670913996
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ public class PlayerCam : MonoBehaviour
 {
     private InputActions inputActions;
     private InputAction rotation;
-    public float turnSensitivity = 400f;
+    public float turnSensitivity = 100f;
     public Transform orientation;
     public Transform camHolder;
     float xRotation;
