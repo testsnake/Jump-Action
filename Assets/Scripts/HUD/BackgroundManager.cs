@@ -9,7 +9,10 @@ public class BackgroundManager : MonoBehaviour
 
     void Start()
     {
-        // Set the background image to appear behind the text
-        backgroundImage.transform.SetSiblingIndex(tmpText.transform.GetSiblingIndex() - 1);
+        if (backgroundImage != null)
+        {
+            // Set the background image to appear behind the text
+            backgroundImage.transform.SetSiblingIndex(tmpText.transform.GetSiblingIndex() - 1);
+        }
     }
 }
