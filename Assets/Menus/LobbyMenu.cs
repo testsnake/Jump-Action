@@ -12,6 +12,7 @@ public class LobbyMenu : MonoBehaviour
 {
     public TMP_Text Name;
     public TMP_Text Gamemode;
+    public TMP_Text lobbyCode;
     public bool isHost;
     public Button startGameBtn;
     public GameObject[] BlueTeamSlots = new GameObject[5];
@@ -33,6 +34,7 @@ public class LobbyMenu : MonoBehaviour
         }
         Name.SetText(lobby.Name);
         Gamemode.SetText(lobby.Data["GameMode"].Value);
+        lobbyCode.SetText(lobby.LobbyCode);
         int blueTeamPlayers = 0;
         int redTeamPlayers = 0;
         foreach (Player player in lobby.Players)

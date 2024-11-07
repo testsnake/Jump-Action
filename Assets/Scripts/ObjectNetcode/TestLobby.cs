@@ -24,6 +24,9 @@ public class TestLobby : MonoBehaviour
     public float pollTimer;
     [SerializeField] private float pollTimerMax = 1.1f;
 
+    public const string KEY_START_GAME = "Start";
+    public event EventHandler<EventArgs> OnGameStarted;
+
     public event EventHandler OnLeftLobby;
 
     public event EventHandler<LobbyEventArgs> OnJoinedLobby;
@@ -138,6 +141,17 @@ public class TestLobby : MonoBehaviour
 
                     joinedLobby = null;
                 }
+                if (joinedLobby.Data[KEY_START_GAME].Value != "0")
+                {
+                    if (!IsLobbyHost())
+                    {
+                        TestRelay.Instance.JoinRelay(joinedLobby.Data[KEY_START_GAME].Value);
+                    }
+
+                    joinedLobby = null;
+
+                    OnGameStarted?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
     }
@@ -163,12 +177,15 @@ public class TestLobby : MonoBehaviour
         return false;
     }
 
-    public async void createLobby()
+    public void createLobby()
+    {
+        createLobby("My Lobby", 10, "Capture the Chip");
+    }
+
+    public async void createLobby(string lobbyName = "My Lobby", int maxPlayers = 10, string gameMode = "Capture the Chip")
     {
         try
         {
-            string lobbyName = "My Lobby";
-            int maxPlayers = 10;
             //Could set lobby privacy and such. We're just gonna do all public lobbies for now.
             CreateLobbyOptions createLobbyOptions = new CreateLobbyOptions()
             {
@@ -177,7 +194,8 @@ public class TestLobby : MonoBehaviour
                 Data = new Dictionary<string, DataObject>
                 {
                     //Dynamically change this later for other gamemodes if we do them.
-                    {"GameMode", new DataObject(DataObject.VisibilityOptions.Public, "Capture the Chip", DataObject.IndexOptions.S1)}
+                    {"GameMode", new DataObject(DataObject.VisibilityOptions.Public, gameMode, DataObject.IndexOptions.S1)},
+                    {KEY_START_GAME, new DataObject(DataObject.VisibilityOptions.Member, "0") }
                 }
             };
             Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, createLobbyOptions);
@@ -449,6 +467,31 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    public async void StartGame()
+    {
+        if (IsLobbyHost())
+        {
+            try
+            {
+                Debug.Log("StartGame");
+
+                string relayCode = await TestRelay.Instance.CreateRelay();
+
+                Lobby lobby = await Lobbies.Instance.UpdateLobbyAsync(joinedLobby.Id, new UpdateLobbyOptions
+                {
+                    Data = new Dictionary<string, DataObject> {
+                        {KEY_START_GAME, new DataObject(DataObject.VisibilityOptions.Member, relayCode) }
+                    }
+                });
+
+                joinedLobby = lobby;
+            }
+            catch (LobbyServiceException ex)
+            {
+                Debug.Log(ex);
+            }
+        }
+    }
 }
 
 
