@@ -894,6 +894,10 @@ PrefabInstance:
       propertyPath: orientation
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 8233750207110846622, guid: e264714b6395fe740a95f3f8bdf91c7c, type: 3}
+      propertyPath: turnSensitivity
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
