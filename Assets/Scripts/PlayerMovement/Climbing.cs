@@ -23,8 +23,11 @@ public class Climbing : NetworkBehaviour
     public float sphereCastRadius;
     public float maxAngle;
     private float wallAngle;
+    private float tallWallAngle;
     private RaycastHit frontWallHit;
+    private RaycastHit tallWallHit;
     private bool wallFront;
+    private bool tallWallFront;
 
     [Header("ClimbJumping")]
     public float climbJumpUpForce;
@@ -46,10 +49,11 @@ public class Climbing : NetworkBehaviour
     {
         if (!IsOwner) return;
         wallCheck();
+        tallWallCheck();
 
-        if (wallFront && (player.moveDirection.x * orientation.forward.x > 0.1f || player.moveDirection.z * orientation.forward.z > 0.1f) && wallAngle < maxAngle)
+        if (wallFront && playerIsHoldingForward() && wallAngle < maxAngle) // Player is running into wall or barrier
         {
-            if (player.state == PlayerController.MovementState.falling && climbTimer > 0)
+            if (canClimb() || canVault())
                 startClimb();
 
             if (climbTimer > 0)
@@ -64,11 +68,40 @@ public class Climbing : NetworkBehaviour
             climbingMovement();
     }
 
+    private bool canClimb()
+    {
+        return player.state == PlayerController.MovementState.falling && climbTimer > 0;
+    }
+
+    private bool canVault()
+    {
+        return !tallWallFront && climbTimer > 0;
+    }
+
+    private bool playerIsHoldingForward()
+    {
+        return player.moveDirection.x * orientation.forward.x > 0.1f || player.moveDirection.z * orientation.forward.z > 0.1f;
+    }
+
     private void wallCheck()
     {
         if (!IsOwner) return;
-        wallFront = Physics.SphereCast(transform.position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, wall);
+        Vector3 position = transform.position - new Vector3(0f, player.playerHeight * 0.25f, 0f);
+
+        wallFront = Physics.SphereCast(position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, wall);
         wallAngle = Vector3.Angle(orientation.forward, -frontWallHit.normal);
+
+        if (player.isGrounded)
+            climbTimer = maxClimbTime;
+    }
+
+    private void tallWallCheck()
+    {
+        if (!IsOwner) return;
+        Vector3 position = transform.position + new Vector3(0f, player.playerHeight * 0.125f, 0f);
+
+        tallWallFront = Physics.SphereCast(position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, wall);
+        tallWallAngle = Vector3.Angle(orientation.forward, -frontWallHit.normal);
 
         if (player.isGrounded)
             climbTimer = maxClimbTime;
