@@ -72,6 +72,7 @@ public class WallRunning : NetworkBehaviour
 
     void checkForWall()
     {
+        if (!IsOwner) return;
         wallRight = Physics.Raycast(transform.position, orientation.right, out rightWallHit, wallCheckDistance, wall);
         wallLeft = Physics.Raycast(transform.position, -orientation.right, out leftWallHit, wallCheckDistance, wall);
     }
@@ -93,7 +94,7 @@ public class WallRunning : NetworkBehaviour
     {
         // if ((wallRight && rightWallHit.transform == lastWall) || (wallLeft && leftWallHit.transform == lastWall))
         //     return;
-
+        if (!IsOwner) return;
         player.state = PlayerController.MovementState.wallRunning;
         player.speed = wallRunningSpeed;
         wallRunTimer = maxWallRunTime;
@@ -109,6 +110,7 @@ public class WallRunning : NetworkBehaviour
 
     void wallRunningMovement()
     {
+        if (!IsOwner) return;
         rb.useGravity = useGravity;
 
         Vector3 wallNormal = wallRight ? rightWallHit.normal : leftWallHit.normal;
@@ -125,6 +127,7 @@ public class WallRunning : NetworkBehaviour
 
     void endWallRun()
     {
+        if (!IsOwner) return;
         player.state = PlayerController.MovementState.standing;
         player.speed = player.standingSpeed;
 
@@ -134,6 +137,7 @@ public class WallRunning : NetworkBehaviour
 
     public void wallJump()
     {
+        if (!IsOwner) return;
         Vector3 wallNormal = wallRight ? rightWallHit.normal : leftWallHit.normal;
         Vector3 wallJumpForce = transform.up * wallJumpUpForce + wallNormal * wallJumpSideForce;
 

@@ -9,11 +9,13 @@ public class PlayerShoot : NetworkBehaviour
 
     void Start()
     {
+        if (!IsOwner) return;
         playerCam = GameObject.FindWithTag("MainCamera").GetComponent<Transform>();
     }
 
     void Update()
     {
+        if (!IsOwner) return;
         // Fire the projectile when left mouse button is clicked
         if (Input.GetMouseButtonDown(0))
         {
@@ -23,6 +25,7 @@ public class PlayerShoot : NetworkBehaviour
 
     void Shoot()
     {
+        if (!IsOwner) return;
         // Instantiate the projectile at the fire point's position
         GameObject projectile = Instantiate(projectilePrefab, transform.position, playerCam.rotation);
     }

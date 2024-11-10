@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 725580512578156187, guid: 34b7b09ee08ffd049b349a753ee12b33, type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1566028484
+      value: 2859832161
       objectReference: {fileID: 0}
     - target: {fileID: 725580512578156187, guid: 34b7b09ee08ffd049b349a753ee12b33, type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
@@ -18,7 +18,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2727057753797406310, guid: 34b7b09ee08ffd049b349a753ee12b33, type: 3}
       propertyPath: m_Name
-      value: Player Variant
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 3541433827875367954, guid: 34b7b09ee08ffd049b349a753ee12b33, type: 3}
       propertyPath: m_LocalPosition.x
@@ -67,6 +67,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2727057753797406310, guid: 34b7b09ee08ffd049b349a753ee12b33, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2431325688055168624}
+    - targetCorrespondingSourceObject: {fileID: 2727057753797406310, guid: 34b7b09ee08ffd049b349a753ee12b33, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8512938478372538667}
   m_SourcePrefab: {fileID: 100100000, guid: 34b7b09ee08ffd049b349a753ee12b33, type: 3}
 --- !u!1 &1619561720246215853 stripped
 GameObject:
@@ -88,3 +91,28 @@ MonoBehaviour:
   projectilePrefab: {fileID: 8889818665173407388, guid: 63d59a4bb34b9244fbed4a2c30040af4, type: 3}
   playerCam: {fileID: 0}
   firePointDistance: 1
+--- !u!114 &8512938478372538667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1619561720246215853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89fa1848aa5a6e740901290495b23558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orientation: {fileID: 480968629394867588, guid: 1c6e8b72a37d7ca46982e774b09c3965, type: 3}
+  wall:
+    serializedVersion: 2
+    m_Bits: 192
+  cam: {fileID: 0}
+  climbSpeed: 7
+  maxClimbTime: 0.75
+  detectionLength: 0.7
+  sphereCastRadius: 0.25
+  maxAngle: 30
+  climbJumpUpForce: 14
+  climbJumpBackForce: 12
+  climbJumpRotationDuration: 0.3

@@ -47,6 +47,8 @@ public class PlayerController : NetworkBehaviour
     public Rigidbody rb;
     private PlayerSounds audioPlayer;
     public MovementState state;
+    private string playerTeam;
+    GameObject spawnPoint;
     public enum MovementState
     {
         standing,
@@ -70,6 +72,40 @@ public class PlayerController : NetworkBehaviour
         wallRunning = GetComponent<WallRunning>();
         climbing = GetComponent<Climbing>();
         audioPlayer = GameObject.Find("AudioManager").GetComponent<PlayerSounds>();
+        
+    }
+
+    public void Start()
+    {
+        Debug.Log("IsOwner for " + gameObject.name + ": " + IsOwner);
+        respawnPlayer();
+    }
+
+    public void respawnPlayer()
+    {
+        if (!IsOwner) return;
+        playerTeam = PlayerPrefs.GetString("Team");
+        Debug.Log("Player team for spawn: " + playerTeam);
+        if(spawnPoint == null)
+        {
+            if (playerTeam == "Red")
+            {
+                spawnPoint = GameObject.Find("RedTeamSpawn");
+
+            }
+            else if (playerTeam == "Blue")
+            {
+                spawnPoint = GameObject.Find("BlueTeamSpawn");
+            }
+            else
+            {
+                Debug.Log("Failed to properly spawn player.");
+                spawnPoint = GameObject.Find("Map");
+            }
+        }
+        transform.position = spawnPoint.transform.position;
+        transform.rotation = spawnPoint.transform.rotation;
+        
     }
 
     private void Update()
@@ -177,6 +213,7 @@ public class PlayerController : NetworkBehaviour
 
     private void Uncrouch(InputAction.CallbackContext obj)
     {
+        if (!IsOwner) return;
         if (state != MovementState.sliding)
         {
             transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
@@ -186,6 +223,7 @@ public class PlayerController : NetworkBehaviour
 
     private void startSlide()
     {
+        if (!IsOwner) return;
         audioPlayer.playSound("Slide");
         state = MovementState.sliding;
         slideTimer = maxSlideTime;
@@ -195,6 +233,7 @@ public class PlayerController : NetworkBehaviour
 
     private void slideMovement()
     {
+        if (!IsOwner) return;
         if (!onSlope())
         {
             rb.AddForce(moveDirection.normalized * slideSpeed * 10f, ForceMode.Force);
@@ -211,6 +250,7 @@ public class PlayerController : NetworkBehaviour
 
     private void stopSlide()
     {
+        if (!IsOwner) return;
         audioPlayer.stopSound("Slide");
         transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
 
@@ -238,6 +278,7 @@ public class PlayerController : NetworkBehaviour
 
     private void limitSpeed()
     {
+        if (!IsOwner) return;
         if (onSlope())
         {
             if (rb.velocity.magnitude > speed)
@@ -257,6 +298,7 @@ public class PlayerController : NetworkBehaviour
 
     private void checkGrounded()
     {
+        if (!IsOwner) return;
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.4f, ground);
 
         if (isGrounded)
@@ -291,6 +333,7 @@ public class PlayerController : NetworkBehaviour
 
     public void Die()
     {
+        if (!IsOwner) return;
         //Implement respawn logic here at some point.
         audioPlayer.playSound("Die");
         transform.position = new Vector3(0, 2, 0);

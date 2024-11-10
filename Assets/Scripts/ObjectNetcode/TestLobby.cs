@@ -87,7 +87,7 @@ public class TestLobby : MonoBehaviour
                 {
                     UpdatePlayerTeam("Blue");
                 }
-                else
+                else if (redPlayers < bluePlayers)
                 {
                     UpdatePlayerTeam("Red");
                 }
@@ -274,7 +274,7 @@ public class TestLobby : MonoBehaviour
             }
             });
             joinedLobby = lobby;
-
+            
             OnJoinedLobbyUpdate?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby });
         }
         catch (LobbyServiceException ex)
@@ -288,6 +288,7 @@ public class TestLobby : MonoBehaviour
         try
         {
             playerTeam = newPlayerTeam;
+            Debug.Log("Updating player team to: " +  playerTeam);
             Lobby lobby = await LobbyService.Instance.UpdatePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId, new UpdatePlayerOptions()
             {
                 Data = new Dictionary<string, PlayerDataObject>
@@ -296,7 +297,7 @@ public class TestLobby : MonoBehaviour
             }
             });
             joinedLobby = lobby;
-
+            PlayerPrefs.SetString("Team", playerTeam);
             OnJoinedLobbyUpdate?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby });
         }
         catch (LobbyServiceException ex)
