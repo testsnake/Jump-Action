@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Netcode;
+using System.Collections.Generic;
 public class PlayerController : NetworkBehaviour
 {
     [Header("Movement")]
@@ -47,6 +48,9 @@ public class PlayerController : NetworkBehaviour
     public Rigidbody rb;
     private PlayerSounds audioPlayer;
     public MovementState state;
+
+    [Header("Miscellanious")]
+    public List<Material> teamColorMaterials;
     private string playerTeam;
     GameObject spawnPoint;
     public enum MovementState
@@ -78,13 +82,29 @@ public class PlayerController : NetworkBehaviour
     public void Start()
     {
         Debug.Log("IsOwner for " + gameObject.name + ": " + IsOwner);
+        if (!IsOwner) return;
+        playerTeam = PlayerPrefs.GetString("Team");
+        if (!string.IsNullOrEmpty(playerTeam))
+        {
+            MeshRenderer meshRenderer = transform.Find("PlayerBody").gameObject.GetComponent<MeshRenderer>();
+            //If, when we implement the animated model for the player, they have multiple materials, then one of two things needs to happen here
+            //Either we make sure that the material we want to swap is the first material in the list in the renderer
+            //Or we set the list of materials in here and change the entire list (because we unfortunately can't just change one element for some reason.
+            if (playerTeam == "Blue")
+            {
+                meshRenderer.material = teamColorMaterials[0];
+            }
+            else if (playerTeam == "Red")
+            {
+                meshRenderer.material = teamColorMaterials[1];
+            }
+        }
         respawnPlayer();
     }
 
     public void respawnPlayer()
     {
-        if (!IsOwner) return;
-        playerTeam = PlayerPrefs.GetString("Team");
+        
         Debug.Log("Player team for spawn: " + playerTeam);
         if(spawnPoint == null)
         {
