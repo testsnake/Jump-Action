@@ -51,6 +51,8 @@ public class PlayerController : NetworkBehaviour
 
     [Header("Miscellanious")]
     public List<Material> teamColorMaterials;
+    public SkinnedMeshRenderer renderer;
+    public Animator animator;
     private string playerTeam;
     GameObject spawnPoint;
     public enum MovementState
@@ -86,18 +88,21 @@ public class PlayerController : NetworkBehaviour
         playerTeam = PlayerPrefs.GetString("Team");
         if (!string.IsNullOrEmpty(playerTeam))
         {
-            MeshRenderer meshRenderer = transform.Find("PlayerBody").gameObject.GetComponent<MeshRenderer>();
-            //If, when we implement the animated model for the player, they have multiple materials, then one of two things needs to happen here
-            //Either we make sure that the material we want to swap is the first material in the list in the renderer
-            //Or we set the list of materials in here and change the entire list (because we unfortunately can't just change one element for some reason.
+            Material[] matArray = new Material[3];
+            int offset = 0;
             if (playerTeam == "Blue")
             {
-                meshRenderer.material = teamColorMaterials[0];
+                offset = 0;
             }
             else if (playerTeam == "Red")
             {
-                meshRenderer.material = teamColorMaterials[1];
+                offset = 3;
             }
+            for (int i = offset; i < offset + 3; i++)
+            {
+                matArray[i] = teamColorMaterials[i];
+            }
+            renderer.materials = matArray;
         }
         respawnPlayer();
     }
@@ -201,11 +206,13 @@ public class PlayerController : NetworkBehaviour
 
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+            animator.SetBool("Jump", true);
             audioPlayer.playSound("Jump");
         }
         else if (state == MovementState.wallRunning)
         {
             wallRunning.wallJump();
+            animator.SetBool("Jump", true);
             audioPlayer.playSound("Jump");
         }
         // else if (state == MovementState.climbing)
@@ -281,16 +288,20 @@ public class PlayerController : NetworkBehaviour
     {
         Vector2 v2 = movement.ReadValue<Vector2>();
         moveDirection = orientation.forward * v2.y + orientation.right * v2.x;
-
+        animator.SetFloat("Speed", v2.y);
         if (onSlope())
         {
             rb.AddForce(getSlopeMovementDirection(moveDirection) * speed * 10f, ForceMode.Force);
         }
 
         if (isGrounded)
+        {
             rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
-        else
+        } else
+        {
             rb.AddForce(moveDirection.normalized * speed * 10f * airSpeedMultiplier, ForceMode.Force);
+        }
+            
 
         if (state != MovementState.wallRunning)
             rb.useGravity = !onSlope();
@@ -323,15 +334,22 @@ public class PlayerController : NetworkBehaviour
 
         if (isGrounded)
         {
+            animator.SetBool("Grounded", true);
             rb.drag = groundDrag;
             if (state == MovementState.falling)
                 state = MovementState.standing;
         }
         else
         {
+            
             rb.drag = airDrag;
             if (state != MovementState.sliding && state != MovementState.wallRunning)
+            {
+                animator.SetBool("Grounded", false);
+                animator.SetBool("Jump", false);
                 state = MovementState.falling;
+            }
+                
         }
     }
 
