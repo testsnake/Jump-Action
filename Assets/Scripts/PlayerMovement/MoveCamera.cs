@@ -7,11 +7,6 @@ public class MoveCamera : MonoBehaviour
 {
     public Transform target;
 
-    // Update is called once per frame
-    void Awake()
-    {
-        target = null;
-    }
     void Update()
     {
         if (target == null)
