@@ -10,7 +10,7 @@ public class ClimbingBase : MonoBehaviour
     protected Rigidbody rb;
     public LayerMask wall;
     protected PlayerControllerBase player; // Base player controller for modularity
-    private PlayerCam cam;
+    private PlayerCamBase cam;
 
     [Header("Climbing")]
     public float climbSpeed = 7f;
@@ -39,7 +39,7 @@ public class ClimbingBase : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         player = GetComponent<PlayerControllerBase>(); // Reference to the base player controller
         orientation = transform.Find("Orientation");
-        cam = GameObject.FindWithTag("MainCamera")?.GetComponent<PlayerCam>();
+        cam = GameObject.Find("CameraHolder")?.GetComponent<PlayerCamBase>();
 
         // Safety checks
         if (orientation == null)
@@ -47,7 +47,7 @@ public class ClimbingBase : MonoBehaviour
         if (player == null)
             Debug.LogError("PlayerControllerBase component is missing. Ensure the PlayerControllerBase is attached.");
         if (cam == null)
-            Debug.LogWarning("PlayerCam is not assigned. Assign it in the Inspector if needed.");
+            Debug.LogWarning("PlayerCamBase is not assigned. Assign it in the Inspector if needed.");
     }
 
     public virtual void Update()

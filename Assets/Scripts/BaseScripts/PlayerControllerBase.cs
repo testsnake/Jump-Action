@@ -143,7 +143,6 @@ public class PlayerControllerBase : MonoBehaviour
                 break;
         }
 
-        Debug.Log($"Current state: ${state}");
     }
 
     private void OnEnable()

@@ -29,7 +29,7 @@ public class WallRunningBase : MonoBehaviour
 
     [Header("References")]
     public Transform orientation;
-    private PlayerCam cam;
+    private PlayerCamBase cam;
     protected PlayerControllerBase player; // Use PlayerControllerBase for modularity
     protected Rigidbody rb;
 
@@ -38,9 +38,30 @@ public class WallRunningBase : MonoBehaviour
         // Setup references
         rb = GetComponent<Rigidbody>();
         player = GetComponent<PlayerControllerBase>();
-        cam = GameObject.FindWithTag("MainCamera")?.GetComponent<PlayerCam>();
+        cam = GameObject.Find("CameraHolder")?.GetComponent<PlayerCamBase>();
         orientation = transform.Find("Orientation");
     }
+    protected virtual void startWallRun()
+    {
+        player.state = PlayerControllerBase.MovementState.wallRunning;
+        player.speed = wallRunningSpeed;
+        wallRunTimer = maxWallRunTime;
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        lastWall = wallRight ? rightWallHit.transform : leftWallHit.transform;
+
+        cam.DoFov(90f);
+        cam.DoTilt(wallLeft ? -15f : 15f);
+    }
+
+    protected virtual void endWallRun()
+    {
+        player.state = PlayerControllerBase.MovementState.standing;
+        player.speed = player.standingSpeed;
+        
+        cam.DoFov(80f);
+        cam.DoTilt(0f);
+    }
+
 
     public virtual void Update()
     {
@@ -76,6 +97,7 @@ public class WallRunningBase : MonoBehaviour
         wallLeft = Physics.Raycast(transform.position, -orientation.right, out leftWallHit, wallCheckDistance, wall);
     }
 
+
     protected virtual bool AboveGround()
     {
         bool isGrounded = Physics.Raycast(transform.position, Vector3.down, minHeight, ground);
@@ -87,22 +109,6 @@ public class WallRunningBase : MonoBehaviour
         }
 
         return !isGrounded;
-    }
-
-    protected virtual void startWallRun()
-    {
-        player.state = PlayerControllerBase.MovementState.wallRunning;
-        player.speed = wallRunningSpeed;
-        wallRunTimer = maxWallRunTime;
-
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        lastWall = wallRight ? rightWallHit.transform : leftWallHit.transform;
-
-        cam?.DoFov(90f);
-        if (wallLeft)
-            cam?.DoTilt(-5f);
-        else if (wallRight)
-            cam?.DoTilt(5f);
     }
 
     protected virtual void wallRunningMovement()
@@ -119,15 +125,6 @@ public class WallRunningBase : MonoBehaviour
 
         if (useGravity)
             rb.AddForce(Vector3.up * gravityCounterForce, ForceMode.Force);
-    }
-
-    protected virtual void endWallRun()
-    {
-        player.state = PlayerControllerBase.MovementState.standing;
-        player.speed = player.standingSpeed;
-
-        cam?.DoFov(80f);
-        cam?.DoTilt(0f);
     }
 
     public virtual void wallJump()
