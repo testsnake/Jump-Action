@@ -7,8 +7,7 @@ public class Projectile : MonoBehaviour
 
     void Start()
     {
-        // Destroy the projectile after a set time
-        Destroy(gameObject, lifetime);
+        Destroy(gameObject, 5f);
     }
 
     void FixedUpdate() 
@@ -19,7 +18,10 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // TODO: Add logic to deal damage to other players
+        // TODO: Add logic to deal damage to the target
+        Debug.Log("Projectile hit " + other.gameObject.name);
+
+        // Destroy the projectile
         Destroy(gameObject);
     }
 }
