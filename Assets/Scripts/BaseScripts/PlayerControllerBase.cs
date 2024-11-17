@@ -5,10 +5,11 @@ using System.Collections.Generic;
 public class PlayerControllerBase : MonoBehaviour
 {
     [Header("Movement")]
+    [HideInInspector]
     public float speed;
     public float standingSpeed = 10f;
-    public float jumpHeight = 5f;
-    public float groundDrag = 2f;
+    public float jumpHeight = 12f;
+    public float groundDrag = 5f;
     public float airDrag = 1f;
     public float airSpeedMultiplier = 0.4f;
 
@@ -16,8 +17,8 @@ public class PlayerControllerBase : MonoBehaviour
     public Vector3 moveDirection;
 
     [Header("Ground Check")]
-    public float playerHeight;
-    public LayerMask ground;
+    public float playerHeight = 2f;
+    private LayerMask ground;
     [HideInInspector]
     public bool isGrounded;
 
@@ -32,7 +33,7 @@ public class PlayerControllerBase : MonoBehaviour
     private float slideTimer;
 
     [Header("WallRunning")]
-    private WallRunning wallRunning;
+    private WallRunningBase wallRunning;
 
     [Header("Climbing")]
     private Climbing climbing;
@@ -40,7 +41,7 @@ public class PlayerControllerBase : MonoBehaviour
     [Header("SlopeHandling")]
     public float maxSlopeAngle = 40f;
     private RaycastHit slopeHit;
-    public Transform orientation;
+    private Transform orientation;
 
     [Header("Miscellaneous")]
     public List<Material> teamColorMaterials;
@@ -75,9 +76,11 @@ public class PlayerControllerBase : MonoBehaviour
         speed = standingSpeed;
         state = MovementState.standing;
         slideTimer = maxSlideTime;
-        wallRunning = GetComponent<WallRunning>();
+        wallRunning = GetComponent<WallRunningBase>();
         climbing = GetComponent<Climbing>();
         audioPlayer = GameObject.Find("AudioManager").GetComponent<PlayerSounds>();
+        orientation = transform.Find("Orientation");
+        ground = LayerMask.GetMask("ground", "Stage");
     }
 
     public virtual void Start()
@@ -139,6 +142,8 @@ public class PlayerControllerBase : MonoBehaviour
             default:
                 break;
         }
+
+        Debug.Log($"Current state: ${state}");
     }
 
     private void OnEnable()
@@ -305,11 +310,31 @@ public class PlayerControllerBase : MonoBehaviour
     }
 
     private void checkGrounded()
-    {
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.4f, ground);
+{
+    isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.4f, ground);
 
-        rb.drag = isGrounded ? groundDrag : airDrag;
+    if (isGrounded)
+    {
+        rb.drag = groundDrag;
+
+        // Transition back to standing state if grounded
+        if (state == MovementState.falling)
+        {
+            state = MovementState.standing;
+        }
     }
+    else
+    {
+        rb.drag = airDrag;
+
+        // Ensure player transitions to falling if not grounded
+        if (state != MovementState.sliding && state != MovementState.wallRunning && state != MovementState.climbing)
+        {
+            state = MovementState.falling;
+        }
+    }
+}
+
 
     private bool onSlope()
     {
