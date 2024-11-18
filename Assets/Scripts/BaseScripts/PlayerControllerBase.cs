@@ -45,8 +45,8 @@ public class PlayerControllerBase : MonoBehaviour
 
     [Header("Miscellaneous")]
     public List<Material> teamColorMaterials;
+    public GameObject spawnPoint;
     private string playerTeam;
-    private GameObject spawnPoint;
 
     private InputActions inputActions;
     private InputAction movement;
@@ -85,7 +85,9 @@ public class PlayerControllerBase : MonoBehaviour
 
     public virtual void Start()
     {
-        playerTeam = PlayerPrefs.GetString("Team");
+
+        // To change for different players
+        playerTeam = "Red";
         if (!string.IsNullOrEmpty(playerTeam))
         {
             MeshRenderer meshRenderer = transform.Find("PlayerBody").gameObject.GetComponent<MeshRenderer>();

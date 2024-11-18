@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - DeathPlane
+  - DataChip
   layers:
   - Default
   - TransparentFX
