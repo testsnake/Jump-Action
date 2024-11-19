@@ -29,16 +29,23 @@ public class PlayerShootBase : MonoBehaviour
 
     public virtual void Shoot()
     {
-        // Instantiate the projectile at the camera's position and rotation
+        Debug.Log("Shoot() Called!"); // Check if Shoot() is called
+
         if (projectilePrefab != null && cameraHolder != null)
         {
-            Vector3 spawnPosition = cameraHolder.position + cameraHolder.forward * firePointDistance; // Use cameraHolder position
-            Quaternion spawnRotation = cameraHolder.rotation; // Use cameraHolder rotation
-            Instantiate(projectilePrefab, spawnPosition, spawnRotation);
+            Vector3 spawnPosition = cameraHolder.position + cameraHolder.forward * firePointDistance;
+            Quaternion spawnRotation = cameraHolder.rotation;
+
+            GameObject projectile = Instantiate(projectilePrefab, spawnPosition, spawnRotation);
+            if (projectile != null)
+            {
+                Debug.Log("Projectile Created Successfully!"); // Check if the projectile was created
+            }
         }
         else
         {
             Debug.LogWarning("ProjectilePrefab or PlayerCam is not assigned in PlayerShootBase.");
         }
     }
+
 }

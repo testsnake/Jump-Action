@@ -1,44 +1,41 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    private int playerStartHealth = 100;
-    private int health;
+    public float maxHealth = 100f;
+    private float currentHealth;
 
-    void Start()
+    public string team; // Assign team dynamically (e.g., "Blue" or "Red")
+
+    private void Start()
     {
-        // Subject to change
-        SetHealth(playerStartHealth);
+        currentHealth = maxHealth;
     }
 
-    void Update()
+    public void ApplyDamage(float damage)
     {
-        // TODO: Add logic regarding taking damage
+        currentHealth -= damage;
+        Debug.Log($"{gameObject.name} took {damage} damage. Remaining health: {currentHealth}");
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
     }
 
-    public void SetHealth(int newHealth)  
-    { 
-        health = newHealth;
-    }
-
-    public int getHealth()
-    { 
-        return health; 
-    }
-
-    public void GainHealth(int healthGainAmount)
+    private void Die()
     {
-        int newHealth = health + healthGainAmount;
-        SetHealth(newHealth);
+        Debug.Log($"{gameObject.name} has died!");
+        // Add respawn or death logic here
+        PlayerControllerBase playerController = GetComponent<PlayerControllerBase>();
+        if (playerController != null)
+        {
+            playerController.Die(); // Use existing Die() method in PlayerControllerBase
+        }
     }
 
-    public void LoseHealth(int healthLossAmount)
-    { 
-        int newHealth = health - healthLossAmount;
-        SetHealth(newHealth);
+    public float GetCurrentHealth()
+    {
+        return currentHealth;
     }
-
-    
 }

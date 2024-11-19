@@ -4,23 +4,33 @@ public class Projectile : MonoBehaviour
 {
     public float speed;
     public float lifetime;
+    public float damage = 25f; // Damage dealt by this projectile
 
     void Start()
     {
-        Destroy(gameObject, 5f);
+        Destroy(gameObject, lifetime); // Destroy projectile after its lifetime
     }
 
-    void FixedUpdate() 
+    void FixedUpdate()
     {
-        // Move the GameObject by velocity * time between frames
-        transform.position += transform.forward * speed;
+        // Move the projectile forward
+        transform.position += transform.forward * speed * Time.fixedDeltaTime;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // TODO: Add logic to deal damage to the target
+        // Check if the object hit has a Health component
+        Health targetHealth = other.GetComponent<Health>();
+        if (targetHealth != null)
+        {
+            // Damage the target regardless of their team
+            targetHealth.ApplyDamage(damage);
 
-        // Destroy the projectile
+            // Optionally log the hit
+            Debug.Log($"{gameObject.name} hit {other.gameObject.name} for {damage} damage.");
+        }
+
+        // Destroy the projectile on impact
         Destroy(gameObject);
     }
 }

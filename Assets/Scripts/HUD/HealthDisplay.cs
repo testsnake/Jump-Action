@@ -25,7 +25,7 @@ public class HealthDisplay : MonoBehaviour
     {
         if (healthText != null && playerHealth != null)
         {
-            healthText.text = playerHealth.getHealth().ToString();
+            healthText.text = playerHealth.GetCurrentHealth().ToString();
         }
     }
 }
