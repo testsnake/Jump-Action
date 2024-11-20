@@ -53,6 +53,7 @@ public class PlayerController : NetworkBehaviour
     public List<Material> teamColorMaterials;
     private string playerTeam;
     GameObject spawnPoint;
+    bool colorIsSet;
     public enum MovementState
     {
         standing,
@@ -76,14 +77,11 @@ public class PlayerController : NetworkBehaviour
         wallRunning = GetComponent<WallRunning>();
         climbing = GetComponent<Climbing>();
         audioPlayer = GameObject.Find("AudioManager").GetComponent<PlayerSounds>();
-        
+        colorIsSet = false;
     }
 
-    public void Start()
+    private void attemptSetColor()
     {
-        Debug.Log("IsOwner for " + gameObject.name + ": " + IsOwner);
-        if (!IsOwner) return;
-        playerTeam = PlayerPrefs.GetString("Team");
         if (!string.IsNullOrEmpty(playerTeam))
         {
             MeshRenderer meshRenderer = transform.Find("PlayerBody").gameObject.GetComponent<MeshRenderer>();
@@ -93,13 +91,24 @@ public class PlayerController : NetworkBehaviour
             if (playerTeam == "Blue")
             {
                 meshRenderer.material = teamColorMaterials[0];
+                colorIsSet = true;
             }
             else if (playerTeam == "Red")
             {
                 meshRenderer.material = teamColorMaterials[1];
+                colorIsSet = true;
             }
         }
-        respawnPlayer();
+    }
+
+    public void Start()
+    {
+        Debug.Log("IsOwner for " + gameObject.name + ": " + IsOwner);
+        if (IsOwner)
+            playerTeam = PlayerPrefs.GetString("Team");
+        attemptSetColor();
+        if (IsOwner)
+            respawnPlayer();
     }
 
     public void respawnPlayer()
@@ -136,6 +145,10 @@ public class PlayerController : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
+        }
+        if (!colorIsSet)
+        {
+            attemptSetColor();
         }
     }
 
