@@ -47,8 +47,8 @@ public class PlayerControllerBase : NetworkBehaviour
     [Header("Miscellaneous")]
     public List<Material> teamColorMaterials;
     public GameObject spawnPoint;
-    public NetworkVariable<string> playerTeam;
-    public NetworkVariable<bool> colorIsSet;
+    public string playerTeam;
+    public bool colorIsSet;
 
     private InputActions inputActions;
     private InputAction movement;
@@ -83,26 +83,26 @@ public class PlayerControllerBase : NetworkBehaviour
         audioPlayer = GameObject.Find("AudioManager").GetComponent<PlayerSounds>();
         orientation = transform.Find("Orientation");
         ground = LayerMask.GetMask("ground", "Stage");
-        colorIsSet = new NetworkVariable<bool>(false);
+        colorIsSet = false;
     }
 
-    private void attemptSetColor(string previous, string current)
+    private void attemptSetColor()
     {
-        if (!string.IsNullOrEmpty(current))
+        if (!string.IsNullOrEmpty(playerTeam))
         {
             MeshRenderer meshRenderer = transform.Find("PlayerBody").gameObject.GetComponent<MeshRenderer>();
             //If, when we implement the animated model for the player, they have multiple materials, then one of two things needs to happen here
             //Either we make sure that the material we want to swap is the first material in the list in the renderer
             //Or we set the list of materials in here and change the entire list (because we unfortunately can't just change one element for some reason.
-            if (current == "Blue")
+            if (playerTeam == "Blue")
             {
                 meshRenderer.material = teamColorMaterials[0];
-                colorIsSet.Value = true;
+                colorIsSet = true;
             }
-            else if (current == "Red")
+            else if (playerTeam == "Red")
             {
                 meshRenderer.material = teamColorMaterials[1];
-                colorIsSet.Value = true;
+                colorIsSet = true;
             }
         }
     }
@@ -111,9 +111,8 @@ public class PlayerControllerBase : NetworkBehaviour
     {
         Debug.Log("IsOwner for " + gameObject.name + ": " + IsOwner);
         if (IsOwner)
-            playerTeam.Value = PlayerPrefs.GetString("Team");
-        attemptSetColor(null, playerTeam.Value);
-        playerTeam.OnValueChanged += attemptSetColor;
+            playerTeam = PlayerPrefs.GetString("Team");
+        attemptSetColor();
         if (IsOwner)
             respawnPlayer();
     }
@@ -128,6 +127,11 @@ public class PlayerControllerBase : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
+        }
+
+        if (!colorIsSet)
+        {
+            attemptSetColor();
         }
     }
 
@@ -246,11 +250,11 @@ public class PlayerControllerBase : NetworkBehaviour
 
         if (spawnPoint == null)
         {
-            if (playerTeam.Value == "Red")
+            if (playerTeam == "Red")
             {
                 spawnPoint = GameObject.Find("RedTeamSpawn");
             }
-            else if (playerTeam.Value == "Blue")
+            else if (playerTeam == "Blue")
             {
                 spawnPoint = GameObject.Find("BlueTeamSpawn");
             }
