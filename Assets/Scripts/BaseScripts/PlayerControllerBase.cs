@@ -112,7 +112,6 @@ public class PlayerControllerBase : NetworkBehaviour
         Debug.Log("IsOwner for " + gameObject.name + ": " + IsOwner);
         if (IsOwner)
             playerTeam.Value = PlayerPrefs.GetString("Team");
-        Debug.Log("PlayerTeam.Value for " + gameObject.name + ": " + playerTeam.Value);
         attemptSetColor(null, playerTeam.Value);
         playerTeam.OnValueChanged += attemptSetColor;
         if (IsOwner)
@@ -262,7 +261,7 @@ public class PlayerControllerBase : NetworkBehaviour
             }
         }
 
-        transform.position = spawnPoint.transform.position + new Vector3(0, 2, 0);
+        transform.position = spawnPoint.transform.position;
         transform.rotation = spawnPoint.transform.rotation;
     }
 
