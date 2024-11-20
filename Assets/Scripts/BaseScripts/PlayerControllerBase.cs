@@ -47,7 +47,7 @@ public class PlayerControllerBase : NetworkBehaviour
     [Header("Miscellaneous")]
     public List<Material> teamColorMaterials;
     public GameObject spawnPoint;
-    private NetworkVariable<string> playerTeam = new NetworkVariable<string>();
+    private string playerTeam;
 
     private InputActions inputActions;
     private InputAction movement;
@@ -66,21 +66,6 @@ public class PlayerControllerBase : NetworkBehaviour
         climbing,
         falling
     };
-
-    public override void OnNetworkSpawn()
-    {
-        playerTeam.Value = "";
-        playerTeam.OnValueChanged += OnSomeValueChanged;
-        if (IsOwner)
-        {
-            playerTeam.Value = PlayerPrefs.GetString("Team");
-        }
-    }
-
-    private void OnSomeValueChanged(string previous, string current)
-    {
-        Debug.Log($"Detected NetworkVariable Change: Previous: {previous} | Current: {current}");
-    }
 
     public virtual void Awake()
     {
@@ -101,21 +86,27 @@ public class PlayerControllerBase : NetworkBehaviour
 
     public virtual void Start()
     {
-        attemptApplyColour();
         if (!IsOwner) return;
+
+        // To change for different players
+        playerTeam = PlayerPrefs.GetString("Team");
+
+        attemptApplyColourRpc();
+
         respawnPlayer();
     }
 
-    public void attemptApplyColour()
+    [Rpc(SendTo.Server)]
+    public void attemptApplyColourRpc()
     {
-        if (!string.IsNullOrEmpty(playerTeam.Value))
+        if (!string.IsNullOrEmpty(playerTeam))
         {
             MeshRenderer meshRenderer = transform.Find("PlayerBody").gameObject.GetComponent<MeshRenderer>();
-            if (playerTeam.Value == "Blue")
+            if (playerTeam == "Blue")
             {
                 meshRenderer.material = teamColorMaterials[0];
             }
-            else if (playerTeam.Value == "Red")
+            else if (playerTeam == "Red")
             {
                 meshRenderer.material = teamColorMaterials[1];
             }
@@ -250,11 +241,11 @@ public class PlayerControllerBase : NetworkBehaviour
 
         if (spawnPoint == null)
         {
-            if (playerTeam.Value == "Red")
+            if (playerTeam == "Red")
             {
                 spawnPoint = GameObject.Find("RedTeamSpawn");
             }
-            else if (playerTeam.Value == "Blue")
+            else if (playerTeam == "Blue")
             {
                 spawnPoint = GameObject.Find("BlueTeamSpawn");
             }
