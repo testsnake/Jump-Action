@@ -7,6 +7,12 @@ public class DataChip : MonoBehaviour
     public float resetHeightOffset = 2.0f; // Offset above the starting point
     private bool isBeingCarried = false; // DataChip status
     public string team;
+    private PlayerSounds audioPlayer;
+
+    void Start()
+    {
+        audioPlayer = GameObject.Find("AudioManager").GetComponent<PlayerSounds>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -20,6 +26,7 @@ public class DataChip : MonoBehaviour
 
             // Optionally adjust position relative to the player
             transform.localPosition = new Vector3(0, 1, 0); // Adjust based on where the chip should appear
+            audioPlayer.playSound("Grab Chip");
         }
     }
 
