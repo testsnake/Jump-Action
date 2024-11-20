@@ -47,8 +47,7 @@ public class PlayerControllerBase : NetworkBehaviour
     [Header("Miscellaneous")]
     public List<Material> teamColorMaterials;
     public GameObject spawnPoint;
-    public string playerTeam;
-    public bool colorIsSet;
+    private string playerTeam;
 
     private InputActions inputActions;
     private InputAction movement;
@@ -83,38 +82,28 @@ public class PlayerControllerBase : NetworkBehaviour
         audioPlayer = GameObject.Find("AudioManager").GetComponent<PlayerSounds>();
         orientation = transform.Find("Orientation");
         ground = LayerMask.GetMask("ground", "Stage");
-        colorIsSet = false;
-    }
-
-    private void attemptSetColor()
-    {
-        if (!string.IsNullOrEmpty(playerTeam))
-        {
-            MeshRenderer meshRenderer = transform.Find("PlayerBody").gameObject.GetComponent<MeshRenderer>();
-            //If, when we implement the animated model for the player, they have multiple materials, then one of two things needs to happen here
-            //Either we make sure that the material we want to swap is the first material in the list in the renderer
-            //Or we set the list of materials in here and change the entire list (because we unfortunately can't just change one element for some reason.
-            if (playerTeam == "Blue")
-            {
-                meshRenderer.material = teamColorMaterials[0];
-                colorIsSet = true;
-            }
-            else if (playerTeam == "Red")
-            {
-                meshRenderer.material = teamColorMaterials[1];
-                colorIsSet = true;
-            }
-        }
     }
 
     public virtual void Start()
     {
-        Debug.Log("IsOwner for " + gameObject.name + ": " + IsOwner);
-        if (IsOwner)
-            playerTeam = PlayerPrefs.GetString("Team");
-        attemptSetColor();
-        if (IsOwner)
-            respawnPlayer();
+        if (!IsOwner) return;
+
+        // To change for different players
+        playerTeam = PlayerPrefs.GetString("Team");
+        if (!string.IsNullOrEmpty(playerTeam))
+        {
+            MeshRenderer meshRenderer = transform.Find("PlayerBody").gameObject.GetComponent<MeshRenderer>();
+            if (playerTeam == "Blue")
+            {
+                meshRenderer.material = teamColorMaterials[0];
+            }
+            else if (playerTeam == "Red")
+            {
+                meshRenderer.material = teamColorMaterials[1];
+            }
+        }
+
+        respawnPlayer();
     }
 
     public virtual void Update()
@@ -127,11 +116,6 @@ public class PlayerControllerBase : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
-        }
-
-        if (!colorIsSet)
-        {
-            attemptSetColor();
         }
     }
 
