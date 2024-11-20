@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class WallRunningBase : MonoBehaviour
+public class WallRunningBase : NetworkBehaviour
 {
     [Header("Movement")]
     public float wallRunningSpeed = 12f;
@@ -35,6 +36,8 @@ public class WallRunningBase : MonoBehaviour
 
     public virtual void Start()
     {
+        if (!IsOwner) return;
+
         // Setup references
         rb = GetComponent<Rigidbody>();
         player = GetComponent<PlayerControllerBase>();
@@ -43,6 +46,8 @@ public class WallRunningBase : MonoBehaviour
     }
     protected virtual void startWallRun()
     {
+        if (!IsOwner) return;
+
         player.state = PlayerControllerBase.MovementState.wallRunning;
         player.speed = wallRunningSpeed;
         wallRunTimer = maxWallRunTime;
@@ -55,6 +60,8 @@ public class WallRunningBase : MonoBehaviour
 
     protected virtual void endWallRun()
     {
+        if (!IsOwner) return;
+
         player.state = PlayerControllerBase.MovementState.standing;
         player.speed = player.standingSpeed;
         
@@ -65,6 +72,8 @@ public class WallRunningBase : MonoBehaviour
 
     public virtual void Update()
     {
+        if (!IsOwner) return;
+
         // Wall detection and wall-running logic
         checkForWall();
         if (AboveGround() && (wallRight || wallLeft) && player.moveDirection.z != 0)
@@ -87,12 +96,16 @@ public class WallRunningBase : MonoBehaviour
 
     public virtual void FixedUpdate()
     {
+        if (!IsOwner) return;
+
         if (player?.state == PlayerControllerBase.MovementState.wallRunning)
             wallRunningMovement();
     }
 
     protected virtual void checkForWall()
     {
+        if (!IsOwner) return;
+
         wallRight = Physics.Raycast(transform.position, orientation.right, out rightWallHit, wallCheckDistance, wall);
         wallLeft = Physics.Raycast(transform.position, -orientation.right, out leftWallHit, wallCheckDistance, wall);
     }
@@ -113,6 +126,8 @@ public class WallRunningBase : MonoBehaviour
 
     protected virtual void wallRunningMovement()
     {
+        if (!IsOwner) return;
+
         rb.useGravity = useGravity;
 
         Vector3 wallNormal = wallRight ? rightWallHit.normal : leftWallHit.normal;
@@ -129,6 +144,8 @@ public class WallRunningBase : MonoBehaviour
 
     public virtual void wallJump()
     {
+        if (!IsOwner) return;
+
         Vector3 wallNormal = wallRight ? rightWallHit.normal : leftWallHit.normal;
         Vector3 wallJumpForce = transform.up * wallJumpUpForce + wallNormal * wallJumpSideForce;
 

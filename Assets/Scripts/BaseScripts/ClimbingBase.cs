@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Unity.Netcode;
 
-public class ClimbingBase : MonoBehaviour
+public class ClimbingBase : NetworkBehaviour
 {
     [Header("References")]
     public Transform orientation;
@@ -35,6 +36,8 @@ public class ClimbingBase : MonoBehaviour
 
     public virtual void Start()
     {
+        if (!IsOwner) return;
+
         // Setup references
         rb = GetComponent<Rigidbody>();
         player = GetComponent<PlayerControllerBase>(); // Reference to the base player controller
@@ -52,6 +55,8 @@ public class ClimbingBase : MonoBehaviour
 
     public virtual void Update()
     {
+        if (!IsOwner) return;
+
         wallCheck();
         tallWallCheck();
 
@@ -93,6 +98,8 @@ public class ClimbingBase : MonoBehaviour
 
     protected virtual void wallCheck()
     {
+        if (!IsOwner) return;
+
         Vector3 position = transform.position - new Vector3(0f, player.playerHeight * 0.25f, 0f);
         wallFront = Physics.SphereCast(position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, wall);
         wallAngle = Vector3.Angle(orientation.forward, -frontWallHit.normal);
@@ -103,6 +110,8 @@ public class ClimbingBase : MonoBehaviour
 
     protected virtual void tallWallCheck()
     {
+        if (!IsOwner) return;
+
         Vector3 position = transform.position + new Vector3(0f, player.playerHeight * 0.125f, 0f);
         tallWallFront = Physics.SphereCast(position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, wall);
         tallWallAngle = Vector3.Angle(orientation.forward, -frontWallHit.normal);
@@ -113,23 +122,31 @@ public class ClimbingBase : MonoBehaviour
 
     protected virtual void startClimb()
     {
+        if (!IsOwner) return;
+
         player.state = PlayerControllerBase.MovementState.climbing;
         player.speed = climbSpeed;
     }
 
     protected virtual void climbingMovement()
     {
+        if (!IsOwner) return;
+
         rb.velocity = new Vector3(rb.velocity.x, climbSpeed, rb.velocity.z);
     }
 
     protected virtual void StopClimbing()
     {
+        if (!IsOwner) return;
+
         player.state = PlayerControllerBase.MovementState.standing;
         player.speed = player.standingSpeed;
     }
 
     public virtual void climbJump()
     {
+        if (!IsOwner) return;
+
         Vector3 jumpForce = transform.up * climbJumpUpForce + frontWallHit.normal * climbJumpBackForce;
 
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);

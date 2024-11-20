@@ -6,6 +6,7 @@ public class DataChip : MonoBehaviour
     public Transform startingPosition; // The data chip's original position (reset point)
     public float resetHeightOffset = 2.0f; // Offset above the starting point
     private bool isBeingCarried = false; // DataChip status
+    public string team;
 
     private void OnTriggerEnter(Collider other)
     {

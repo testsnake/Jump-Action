@@ -5,6 +5,11 @@ public class PlayerCaptureDataChip : MonoBehaviour
     [Header("Player Settings")]
     public Transform basePosition; // The player's base where the data chip needs to be returned
 
+    public void Start()
+    {
+        basePosition = GameObject.FindWithTag("MainCamera").GetComponent<Transform>();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         // Check if the player reaches their base while carrying the data chip

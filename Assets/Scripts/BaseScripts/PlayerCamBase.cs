@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
+using Unity.Netcode;
 
 public class PlayerCamBase : MonoBehaviour
 {
@@ -85,10 +86,22 @@ public class PlayerCamBase : MonoBehaviour
         }
     }
 
-    protected virtual void AssignOrientation()
+    private void AssignOrientation()
     {
-        // Placeholder for orientation assignment logic
-        Debug.LogWarning("AssignOrientation() needs to be implemented in a derived class.");
+        GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject player in allPlayers)
+        {
+            if (player.GetComponent<NetworkObject>()?.IsOwner == true)
+            {
+                orientation = player.transform;
+                break;
+            }
+        }
+
+        if (orientation == null)
+        {
+            Debug.LogError("Failed to assign orientation. Ensure the player has a NetworkObject and is properly tagged.");
+        }
     }
 
     public virtual void DoFov(float endValue)

@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using Unity.Netcode; // Add Netcode namespace
 
-public class PlayerControllerBase : MonoBehaviour
+public class PlayerControllerBase : NetworkBehaviour
 {
     [Header("Movement")]
     [HideInInspector]
@@ -85,9 +86,10 @@ public class PlayerControllerBase : MonoBehaviour
 
     public virtual void Start()
     {
+        if (!IsOwner) return;
 
         // To change for different players
-        playerTeam = "Red";
+        playerTeam = PlayerPrefs.GetString("Team");
         if (!string.IsNullOrEmpty(playerTeam))
         {
             MeshRenderer meshRenderer = transform.Find("PlayerBody").gameObject.GetComponent<MeshRenderer>();
@@ -104,10 +106,10 @@ public class PlayerControllerBase : MonoBehaviour
         respawnPlayer();
     }
 
-
-
     public virtual void Update()
     {
+        if (!IsOwner) return;
+
         checkGrounded();
         limitSpeed();
 
@@ -119,6 +121,8 @@ public class PlayerControllerBase : MonoBehaviour
 
     public virtual void FixedUpdate()
     {
+        if (!IsOwner) return;
+
         switch (state)
         {
             case MovementState.standing:
@@ -146,7 +150,6 @@ public class PlayerControllerBase : MonoBehaviour
             default:
                 break;
         }
-
     }
 
     private void OnEnable()
@@ -206,6 +209,8 @@ public class PlayerControllerBase : MonoBehaviour
 
     private void Uncrouch(InputAction.CallbackContext obj)
     {
+        if (!IsOwner) return;
+
         if (state != MovementState.sliding)
         {
             transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
@@ -215,6 +220,8 @@ public class PlayerControllerBase : MonoBehaviour
 
     private void startSlide()
     {
+        if (!IsOwner) return;
+
         audioPlayer.playSound("Slide");
         state = MovementState.sliding;
         slideTimer = maxSlideTime;
@@ -224,6 +231,7 @@ public class PlayerControllerBase : MonoBehaviour
 
     private void respawnPlayer()
     {
+
         if (spawnPoint == null)
         {
             if (playerTeam == "Red")
@@ -247,12 +255,16 @@ public class PlayerControllerBase : MonoBehaviour
 
     public void Die()
     {
+        if (!IsOwner) return;
+
         audioPlayer.playSound("Die");
         transform.position = new Vector3(0, 2, 0);
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
+        if (!IsOwner) return;
+
         if (other.gameObject.CompareTag("DeathPlane"))
         {
             Die();
@@ -261,6 +273,8 @@ public class PlayerControllerBase : MonoBehaviour
 
     private void slideMovement()
     {
+        if (!IsOwner) return;
+
         if (!onSlope())
         {
             rb.AddForce(moveDirection.normalized * slideSpeed * 10f, ForceMode.Force);
@@ -277,6 +291,8 @@ public class PlayerControllerBase : MonoBehaviour
 
     private void stopSlide()
     {
+        if (!IsOwner) return;
+
         audioPlayer.stopSound("Slide");
         transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
         state = isGrounded ? MovementState.standing : MovementState.falling;
@@ -295,6 +311,8 @@ public class PlayerControllerBase : MonoBehaviour
 
     private void limitSpeed()
     {
+        if (!IsOwner) return;
+
         if (onSlope())
         {
             if (rb.velocity.magnitude > speed)
@@ -313,31 +331,32 @@ public class PlayerControllerBase : MonoBehaviour
     }
 
     private void checkGrounded()
-{
-    isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.4f, ground);
-
-    if (isGrounded)
     {
-        rb.drag = groundDrag;
+        if (!IsOwner) return;
 
-        // Transition back to standing state if grounded
-        if (state == MovementState.falling)
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.4f, ground);
+
+        if (isGrounded)
         {
-            state = MovementState.standing;
+            rb.drag = groundDrag;
+
+            // Transition back to standing state if grounded
+            if (state == MovementState.falling)
+            {
+                state = MovementState.standing;
+            }
+        }
+        else
+        {
+            rb.drag = airDrag;
+
+            // Ensure player transitions to falling if not grounded
+            if (state != MovementState.sliding && state != MovementState.wallRunning && state != MovementState.climbing)
+            {
+                state = MovementState.falling;
+            }
         }
     }
-    else
-    {
-        rb.drag = airDrag;
-
-        // Ensure player transitions to falling if not grounded
-        if (state != MovementState.sliding && state != MovementState.wallRunning && state != MovementState.climbing)
-        {
-            state = MovementState.falling;
-        }
-    }
-}
-
 
     private bool onSlope()
     {

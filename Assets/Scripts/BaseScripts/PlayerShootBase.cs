@@ -1,6 +1,7 @@
 using UnityEngine;
+using Unity.Netcode;
 
-public class PlayerShootBase : MonoBehaviour
+public class PlayerShootBase : NetworkBehaviour
 {
     [Header("Projectile Settings")]
     public GameObject projectilePrefab; // Prefab for the projectile
@@ -9,17 +10,16 @@ public class PlayerShootBase : MonoBehaviour
 
     public virtual void Start()
     {
+        if (!IsOwner) return;
+
         // Find the main camera to use as the shooting direction (can be overridden in derived classes)
-        if (cameraHolder == null)
-        {
-            cameraHolder = GameObject.Find("CameraHolder")?.GetComponent<Transform>();
-        }
-        if (cameraHolder == null)
-            Debug.Log("Still NULL");
+        cameraHolder = GameObject.Find("CameraHolder")?.GetComponent<Transform>();
     }
 
     public virtual void Update()
     {
+        if (!IsOwner) return;
+
         // Fire the projectile when the left mouse button is clicked (can be overridden)
         if (Input.GetMouseButtonDown(0))
         {
@@ -30,6 +30,7 @@ public class PlayerShootBase : MonoBehaviour
     public virtual void Shoot()
     {
         Debug.Log("Shoot() Called!"); // Check if Shoot() is called
+
 
         if (projectilePrefab != null && cameraHolder != null)
         {
