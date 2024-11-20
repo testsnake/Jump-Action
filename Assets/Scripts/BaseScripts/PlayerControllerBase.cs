@@ -90,6 +90,15 @@ public class PlayerControllerBase : NetworkBehaviour
 
         // To change for different players
         playerTeam = PlayerPrefs.GetString("Team");
+
+        attemptApplyColourRpc();
+
+        respawnPlayer();
+    }
+
+    [Rpc(SendTo.Server)]
+    public void attemptApplyColourRpc()
+    {
         if (!string.IsNullOrEmpty(playerTeam))
         {
             MeshRenderer meshRenderer = transform.Find("PlayerBody").gameObject.GetComponent<MeshRenderer>();
@@ -102,8 +111,6 @@ public class PlayerControllerBase : NetworkBehaviour
                 meshRenderer.material = teamColorMaterials[1];
             }
         }
-
-        respawnPlayer();
     }
 
     public virtual void Update()
