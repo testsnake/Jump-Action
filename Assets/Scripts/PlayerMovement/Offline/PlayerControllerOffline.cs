@@ -103,20 +103,7 @@ public class PlayerControllerOffline : MonoBehaviour
         Debug.Log("Player team for spawn: " + playerTeam);
         if(spawnPoint == null)
         {
-            if (playerTeam == "Red")
-            {
-                spawnPoint = GameObject.Find("RedTeamSpawn");
-
-            }
-            else if (playerTeam == "Blue")
-            {
-                spawnPoint = GameObject.Find("BlueTeamSpawn");
-            }
-            else
-            {
-                Debug.Log("Failed to properly spawn player.");
-                spawnPoint = GameObject.Find("Map");
-            }
+            spawnPoint = GameObject.Find("TeamSpawn");
         }
         rb.velocity = Vector3.zero;
         transform.position = spawnPoint.transform.position;

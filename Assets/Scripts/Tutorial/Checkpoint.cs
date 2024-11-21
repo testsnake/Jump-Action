@@ -16,5 +16,10 @@ public class Checkpoint : MonoBehaviour
             spawnPoint.position = transform.position;
         if (tutorialText != "")
             tutorialDisplay.text = tutorialText;
+        if (tutorialText.Contains("Congratulations"))
+        {
+            SceneChange sceneManager = GameObject.Find("SceneManager").GetComponent<SceneChange>();
+            sceneManager.LoadSceneByNameWithDelay("MainMenu", 3f);
+        }
     }
 }

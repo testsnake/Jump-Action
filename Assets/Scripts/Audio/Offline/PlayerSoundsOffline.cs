@@ -7,7 +7,7 @@ public class PlayerSoundsOffline : MonoBehaviour
 {
     public GameObject playerObject;
     private Rigidbody playerRB;
-    private PlayerController playerMovement;
+    private PlayerControllerOffline playerMovement;
     public AudioSource runningSound;
     public AudioSource wallRunningSound;
     public AudioSource jumpingSound;
@@ -31,7 +31,7 @@ public class PlayerSoundsOffline : MonoBehaviour
     void Update()
     {
         if (playerRB == null) playerRB = playerObject.GetComponent<Rigidbody>();
-        else if (playerMovement == null) playerMovement = playerObject.GetComponent<PlayerController>();
+        else if (playerMovement == null) playerMovement = playerObject.GetComponent<PlayerControllerOffline>();
         else
         {
             bool currentlyRunning = isRunning();
@@ -56,18 +56,18 @@ public class PlayerSoundsOffline : MonoBehaviour
     bool isRunning()
     {
         return (playerMovement.moveDirection.x != 0f || playerMovement.moveDirection.z != 0f) && 
-                playerMovement.state == PlayerController.MovementState.standing;
+                playerMovement.state == PlayerControllerOffline.MovementState.standing;
     }
 
     bool isWallRunning()
     {
         return (playerMovement.moveDirection.x != 0f || playerMovement.moveDirection.z != 0f) && 
-                playerMovement.state == PlayerController.MovementState.wallRunning;
+                playerMovement.state == PlayerControllerOffline.MovementState.wallRunning;
     }
 
     bool isSliding()
     {
-        return playerMovement.state == PlayerController.MovementState.sliding;
+        return playerMovement.state == PlayerControllerOffline.MovementState.sliding;
     }
 
     public void playSound(string soundName)

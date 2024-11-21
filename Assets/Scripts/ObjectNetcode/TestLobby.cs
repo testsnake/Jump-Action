@@ -46,6 +46,9 @@ public class TestLobby : MonoBehaviour
 
     private async void Start()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         const string glyphs = "ABCDE0123456789";
         for (int i = 0; i < 5; i++)
         {
@@ -61,6 +64,9 @@ public class TestLobby : MonoBehaviour
         {
             Debug.Log("Signed in " + AuthenticationService.Instance.PlayerId);
         };
+
+        if (AuthenticationService.Instance.IsSignedIn) return;
+
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
     }
 
