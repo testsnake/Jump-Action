@@ -29,8 +29,6 @@ public class PlayerShootBase : NetworkBehaviour
 
     public virtual void Shoot()
     {
-        Debug.Log("Shoot() Called!"); // Check if Shoot() is called
-
 
         if (projectilePrefab != null && cameraHolder != null)
         {
@@ -38,9 +36,15 @@ public class PlayerShootBase : NetworkBehaviour
             Quaternion spawnRotation = cameraHolder.rotation;
 
             GameObject projectile = Instantiate(projectilePrefab, spawnPosition, spawnRotation);
+
             if (projectile != null)
             {
-                Debug.Log("Projectile Created Successfully!"); // Check if the projectile was created
+                // Assign the ownerClientId to the projectile
+                Projectile projectileComponent = projectile.GetComponent<Projectile>();
+                if (projectileComponent != null)
+                {
+                    projectileComponent.ownerClientId = NetworkManager.Singleton.LocalClientId;
+                }
             }
         }
         else
@@ -48,5 +52,4 @@ public class PlayerShootBase : NetworkBehaviour
             Debug.LogWarning("ProjectilePrefab or PlayerCam is not assigned in PlayerShootBase.");
         }
     }
-
 }

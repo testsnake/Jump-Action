@@ -1,10 +1,12 @@
 using UnityEngine;
+using Unity.Netcode;
 
 public class Projectile : MonoBehaviour
 {
     public float speed;
     public float lifetime;
     public float damage = 25f; // Damage dealt by this projectile
+    public ulong ownerClientId; // The owner of this projectile (NetworkObjectId)
 
     void Start()
     {
@@ -19,11 +21,23 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // Check if the object hit has a NetworkObject
+        NetworkObject targetNetworkObject = other.GetComponent<NetworkObject>();
+        if (targetNetworkObject != null)
+        {
+            // Ignore if the target is the owner of the projectile
+            if (targetNetworkObject.OwnerClientId == ownerClientId)
+            {
+                Debug.Log("Projectile hit its owner; ignoring.");
+                return;
+            }
+        }
+
         // Check if the object hit has a Health component
         Health targetHealth = other.GetComponent<Health>();
         if (targetHealth != null)
         {
-            // Damage the target regardless of their team
+            // Damage the target
             targetHealth.ApplyDamage(damage);
 
             // Optionally log the hit
