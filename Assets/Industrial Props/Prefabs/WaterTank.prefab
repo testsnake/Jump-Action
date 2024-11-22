@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 495206}
   - component: {fileID: 3353590}
   - component: {fileID: 2386984}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.014
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 477876}
   - component: {fileID: 3337592}
   - component: {fileID: 2369806}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BezierCurve.011
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 446346}
   - component: {fileID: 3325296}
   - component: {fileID: 2344942}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BezierCurve.009
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 407770}
   - component: {fileID: 3374364}
   - component: {fileID: 2348758}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BezierCurve.013
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -343,7 +343,7 @@ GameObject:
   - component: {fileID: 411834}
   - component: {fileID: 3310192}
   - component: {fileID: 2397176}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.017
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -426,7 +426,7 @@ GameObject:
   - component: {fileID: 470806}
   - component: {fileID: 3376010}
   - component: {fileID: 2323424}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.015
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -509,7 +509,7 @@ GameObject:
   - component: {fileID: 406938}
   - component: {fileID: 3383964}
   - component: {fileID: 2333092}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.025
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -590,7 +590,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 477724}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WaterTank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -653,7 +653,7 @@ GameObject:
   - component: {fileID: 444332}
   - component: {fileID: 3381324}
   - component: {fileID: 2392692}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.020
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -736,7 +736,7 @@ GameObject:
   - component: {fileID: 417546}
   - component: {fileID: 3332390}
   - component: {fileID: 2372636}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.023
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -819,7 +819,7 @@ GameObject:
   - component: {fileID: 402906}
   - component: {fileID: 3312632}
   - component: {fileID: 2359388}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.029
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -902,7 +902,7 @@ GameObject:
   - component: {fileID: 432554}
   - component: {fileID: 3367918}
   - component: {fileID: 2363884}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.016
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -985,7 +985,7 @@ GameObject:
   - component: {fileID: 474560}
   - component: {fileID: 3359760}
   - component: {fileID: 2348714}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.022
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1068,7 +1068,7 @@ GameObject:
   - component: {fileID: 401002}
   - component: {fileID: 3344238}
   - component: {fileID: 2311236}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.011
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1151,7 +1151,7 @@ GameObject:
   - component: {fileID: 427588}
   - component: {fileID: 3340764}
   - component: {fileID: 2326040}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.027
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1234,7 +1234,7 @@ GameObject:
   - component: {fileID: 437022}
   - component: {fileID: 3377208}
   - component: {fileID: 2317890}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube.030
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1317,7 +1317,7 @@ GameObject:
   - component: {fileID: 455336}
   - component: {fileID: 3364216}
   - component: {fileID: 2399808}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.030
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1400,7 +1400,7 @@ GameObject:
   - component: {fileID: 456928}
   - component: {fileID: 3306910}
   - component: {fileID: 2332458}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube.046
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1483,7 +1483,7 @@ GameObject:
   - component: {fileID: 430622}
   - component: {fileID: 3320740}
   - component: {fileID: 2361870}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.024
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1566,7 +1566,7 @@ GameObject:
   - component: {fileID: 426470}
   - component: {fileID: 3313894}
   - component: {fileID: 2314464}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.013
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1649,7 +1649,7 @@ GameObject:
   - component: {fileID: 431482}
   - component: {fileID: 3398268}
   - component: {fileID: 2392372}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.019
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1732,7 +1732,7 @@ GameObject:
   - component: {fileID: 414174}
   - component: {fileID: 3386664}
   - component: {fileID: 2363360}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BezierCurve.015
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1815,7 +1815,7 @@ GameObject:
   - component: {fileID: 429782}
   - component: {fileID: 3372416}
   - component: {fileID: 2325590}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.018
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1898,7 +1898,7 @@ GameObject:
   - component: {fileID: 455066}
   - component: {fileID: 3301214}
   - component: {fileID: 2360346}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BezierCurve.010
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1981,7 +1981,7 @@ GameObject:
   - component: {fileID: 400820}
   - component: {fileID: 3391540}
   - component: {fileID: 2384378}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BezierCurve.012
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2064,7 +2064,7 @@ GameObject:
   - component: {fileID: 462046}
   - component: {fileID: 3392222}
   - component: {fileID: 2322172}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.026
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2145,7 +2145,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 437386}
-  m_Layer: 0
+  - component: {fileID: 6581575287256458919}
+  m_Layer: 7
   m_Name: WaterTank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2168,6 +2169,27 @@ Transform:
   - {fileID: 477724}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6581575287256458919
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184236}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9848804, y: 2.0917797, z: 1.9421282}
+  m_Center: {x: 0.79534435, y: 0.9831805, z: 0.244349}
 --- !u!1 &185700
 GameObject:
   m_ObjectHideFlags: 0
@@ -2179,7 +2201,7 @@ GameObject:
   - component: {fileID: 481504}
   - component: {fileID: 3341352}
   - component: {fileID: 2347666}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.010
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2262,7 +2284,7 @@ GameObject:
   - component: {fileID: 411720}
   - component: {fileID: 3394786}
   - component: {fileID: 2359382}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube.029
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2345,7 +2367,7 @@ GameObject:
   - component: {fileID: 487594}
   - component: {fileID: 3348132}
   - component: {fileID: 2324444}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.028
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2428,7 +2450,7 @@ GameObject:
   - component: {fileID: 455742}
   - component: {fileID: 3340476}
   - component: {fileID: 2368102}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.021
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2511,7 +2533,7 @@ GameObject:
   - component: {fileID: 461896}
   - component: {fileID: 3340122}
   - component: {fileID: 2397956}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.012
   m_TagString: Untagged
   m_Icon: {fileID: 0}

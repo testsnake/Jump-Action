@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 401146}
   - component: {fileID: 3365888}
   - component: {fileID: 2300626}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CinderBlock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 492910}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CinderBlock
   m_TagString: Untagged
   m_Icon: {fileID: 0}

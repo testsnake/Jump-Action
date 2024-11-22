@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 491818}
   - component: {fileID: 3354212}
   - component: {fileID: 2398282}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.063
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 402778}
   - component: {fileID: 3334590}
   - component: {fileID: 2354406}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LightPole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,7 +187,7 @@ GameObject:
   - component: {fileID: 461946}
   - component: {fileID: 3354484}
   - component: {fileID: 2307094}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube.043
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -270,7 +270,7 @@ GameObject:
   - component: {fileID: 491658}
   - component: {fileID: 3325102}
   - component: {fileID: 2359900}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.061
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -353,7 +353,7 @@ GameObject:
   - component: {fileID: 446020}
   - component: {fileID: 3345760}
   - component: {fileID: 2346548}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.062
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -436,7 +436,7 @@ GameObject:
   - component: {fileID: 495680}
   - component: {fileID: 3381966}
   - component: {fileID: 2306148}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube.044
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -519,7 +519,7 @@ GameObject:
   - component: {fileID: 425132}
   - component: {fileID: 3396154}
   - component: {fileID: 2387352}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.057
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -602,7 +602,7 @@ GameObject:
   - component: {fileID: 432518}
   - component: {fileID: 3357578}
   - component: {fileID: 2365598}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube.045
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -685,7 +685,7 @@ GameObject:
   - component: {fileID: 484298}
   - component: {fileID: 3337720}
   - component: {fileID: 2317150}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.058
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -766,7 +766,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 465660}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LightPole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -800,7 +800,7 @@ GameObject:
   - component: {fileID: 401502}
   - component: {fileID: 3319784}
   - component: {fileID: 2304794}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.059
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -883,7 +883,7 @@ GameObject:
   - component: {fileID: 479522}
   - component: {fileID: 3371932}
   - component: {fileID: 2328936}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.060
   m_TagString: Untagged
   m_Icon: {fileID: 0}

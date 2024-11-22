@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 441036}
   - component: {fileID: 3353964}
   - component: {fileID: 2305004}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube.031
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 465728}
   - component: {fileID: 3378550}
   - component: {fileID: 2342236}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube.037
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 437456}
   - component: {fileID: 3371894}
   - component: {fileID: 2376854}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube.033
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 481384}
   - component: {fileID: 3300728}
   - component: {fileID: 2392646}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube.034
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -341,7 +341,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 458460}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Fence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -375,7 +375,7 @@ GameObject:
   - component: {fileID: 452070}
   - component: {fileID: 3343724}
   - component: {fileID: 2362074}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube.032
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -456,7 +456,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 443324}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Fence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -497,7 +497,7 @@ GameObject:
   - component: {fileID: 457504}
   - component: {fileID: 3348768}
   - component: {fileID: 2376498}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube.035
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -580,7 +580,7 @@ GameObject:
   - component: {fileID: 423234}
   - component: {fileID: 3372504}
   - component: {fileID: 2383200}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube.036
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -663,7 +663,7 @@ GameObject:
   - component: {fileID: 416632}
   - component: {fileID: 3315452}
   - component: {fileID: 2347542}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube.038
   m_TagString: Untagged
   m_Icon: {fileID: 0}

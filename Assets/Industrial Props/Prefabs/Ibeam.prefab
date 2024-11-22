@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 458290}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ibeam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 453594}
   - component: {fileID: 3334914}
   - component: {fileID: 2350810}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ibeam
   m_TagString: Untagged
   m_Icon: {fileID: 0}

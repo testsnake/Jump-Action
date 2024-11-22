@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 413484}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ConstructionCone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 467356}
   - component: {fileID: 3392486}
   - component: {fileID: 2338434}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube.040
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 474482}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ConstructionCone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -159,7 +159,7 @@ GameObject:
   - component: {fileID: 401976}
   - component: {fileID: 3360116}
   - component: {fileID: 2307094}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.034
   m_TagString: Untagged
   m_Icon: {fileID: 0}

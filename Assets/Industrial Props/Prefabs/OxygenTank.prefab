@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 491680}
   - component: {fileID: 3371040}
   - component: {fileID: 2360922}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.052
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 440782}
   - component: {fileID: 3342390}
   - component: {fileID: 2377602}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.051
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 450514}
   - component: {fileID: 3341612}
   - component: {fileID: 2323558}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.055
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 436006}
   - component: {fileID: 3380006}
   - component: {fileID: 2320486}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.054
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -341,7 +341,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 462444}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: OxygenTank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -380,7 +380,7 @@ GameObject:
   - component: {fileID: 472320}
   - component: {fileID: 3312382}
   - component: {fileID: 2311960}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.050
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -463,7 +463,7 @@ GameObject:
   - component: {fileID: 406588}
   - component: {fileID: 3386940}
   - component: {fileID: 2340766}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder.053
   m_TagString: Untagged
   m_Icon: {fileID: 0}
