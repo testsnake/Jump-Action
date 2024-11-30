@@ -197,6 +197,9 @@ MonoBehaviour:
   - {fileID: 2100000, guid: a37938f532bd1cc4789ce033b8021b0e, type: 2}
   - {fileID: 2100000, guid: 0e646c1945ab58949a5f8c52c0a6a5b7, type: 2}
   spawnPoint: {fileID: 0}
+  playerTeam: 
+  playerMatIsSet: 0
+  meshRenderer: {fileID: 2468776562462184410}
   rb: {fileID: 0}
   state: 0
 --- !u!114 &8431372143461298379
@@ -396,7 +399,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1cec550eee09fe542b33749e343f6189, type: 2}
+  - {fileID: 2100000, guid: 781f1817b41f7214387a6083edc1af47, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

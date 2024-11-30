@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
-using Unity.Netcode; // Add Netcode namespace
+using Unity.Netcode;
+using Unity.Collections;
+using System.Collections; // Add Netcode namespace
 
 public class PlayerControllerBase : NetworkBehaviour
 {
@@ -47,7 +49,9 @@ public class PlayerControllerBase : NetworkBehaviour
     [Header("Miscellaneous")]
     public List<Material> teamColorMaterials;
     public GameObject spawnPoint;
-    private string playerTeam;
+    public NetworkVariable<FixedString32Bytes> playerTeam = new NetworkVariable<FixedString32Bytes>(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public bool playerMatIsSet;
+    public MeshRenderer meshRenderer;
 
     private InputActions inputActions;
     private InputAction movement;
@@ -84,30 +88,74 @@ public class PlayerControllerBase : NetworkBehaviour
         ground = LayerMask.GetMask("ground", "Stage");
     }
 
+    public override void OnNetworkSpawn()
+    {
+        if (IsOwner)
+        {
+            StartCoroutine(InitializeTeamWithDelay());
+        }
+
+        playerTeam.OnValueChanged += OnTeamChanged;
+    }
+
+    private IEnumerator InitializeTeamWithDelay()
+    {
+        // Small delay to ensure the connection is established
+        yield return new WaitForSeconds(0.5f);
+
+        string team = PlayerPrefs.GetString("Team");
+        if (!string.IsNullOrEmpty(team))
+        {
+            SetTeamOnServerRpc(team);
+        }
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        playerTeam.OnValueChanged -= OnTeamChanged;
+    }
+
+    [ServerRpc]
+    private void SetTeamOnServerRpc(string team)
+    {
+        playerTeam.Value = new FixedString32Bytes(team);
+    }
+
+    private void OnTeamChanged(FixedString32Bytes oldTeam, FixedString32Bytes newTeam)
+    {
+        // Update the material whenever the team changes
+        UpdateMaterial(newTeam.ToString());
+    }
+
+    private void UpdateMaterial(string team)
+    {
+        if (team == "Blue")
+        {
+            meshRenderer.material = teamColorMaterials[0];
+            playerMatIsSet = true;
+        }
+        else if (team == "Red")
+        {
+            meshRenderer.material = teamColorMaterials[1];
+            playerMatIsSet = true;
+        }
+    }
+
     public virtual void Start()
     {
         if (!IsOwner) return;
-
-        // To change for different players
-        playerTeam = PlayerPrefs.GetString("Team");
-        if (!string.IsNullOrEmpty(playerTeam))
-        {
-            MeshRenderer meshRenderer = transform.Find("PlayerBody").gameObject.GetComponent<MeshRenderer>();
-            if (playerTeam == "Blue")
-            {
-                meshRenderer.material = teamColorMaterials[0];
-            }
-            else if (playerTeam == "Red")
-            {
-                meshRenderer.material = teamColorMaterials[1];
-            }
-        }
 
         respawnPlayer();
     }
 
     public virtual void Update()
     {
+        //This is a very brute force way of doing this but we don't have time for optimization right now
+        if(!playerMatIsSet)
+        {
+            UpdateMaterial(playerTeam.Value.ToString());
+        }
+
         if (!IsOwner) return;
 
         checkGrounded();
@@ -231,14 +279,15 @@ public class PlayerControllerBase : NetworkBehaviour
 
     private void respawnPlayer()
     {
+        string spawnTeam = PlayerPrefs.GetString("Team");
 
         if (spawnPoint == null)
         {
-            if (playerTeam == "Red")
+            if (spawnTeam == "Red")
             {
                 spawnPoint = GameObject.Find("RedTeamSpawn");
             }
-            else if (playerTeam == "Blue")
+            else if (spawnTeam == "Blue")
             {
                 spawnPoint = GameObject.Find("BlueTeamSpawn");
             }
