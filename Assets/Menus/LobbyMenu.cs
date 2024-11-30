@@ -31,6 +31,9 @@ public class LobbyMenu : MonoBehaviour
         if (isHost)
         {
             startGameBtn.gameObject.SetActive(true);
+        } else
+        {
+            startGameBtn.gameObject.SetActive(false);
         }
         Name.SetText(lobby.Name);
         Gamemode.SetText(lobby.Data["GameMode"].Value);
