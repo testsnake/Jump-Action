@@ -83,8 +83,13 @@ public class PlayerSounds : MonoBehaviour
 
     public void playSound(string soundName)
     {
+        float sfxVol = PlayerPrefs.GetFloat("SFXVolume");
         if (sounds.ContainsKey(soundName))
+        {
+            sounds[soundName].volume = sfxVol;
             sounds[soundName].Play();
+        }
+            
     }
 
     public void stopSound(string soundName)

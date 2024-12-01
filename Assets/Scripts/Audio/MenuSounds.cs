@@ -10,4 +10,10 @@ public class MenuSounds : MonoBehaviour
     {
         music.Play();
     }
+
+    public void Update()
+    {
+        float musicVol = PlayerPrefs.GetFloat("MusicVolume", 1);
+        music.volume = musicVol;
+    }
 }
