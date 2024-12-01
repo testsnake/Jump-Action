@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Track2
   m_EditorClassIdentifier: 
   speed: 0.01
-  rotationSpeed: 0.03
+  rotationSpeed: 0.025
   startRotation: {x: 0, y: -25, z: 0}
   startPoint: {x: -30, y: -45, z: 8}
   endRotation: {x: 0, y: 30, z: 0}

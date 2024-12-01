@@ -4,10 +4,32 @@ using UnityEngine;
 
 public class MenuHandler : MonoBehaviour
 {
-    // TODO - Handle controller input within groups of buttons
-    void Start()
+    public GameObject[] allMenus;
+    public enum menuName
     {
-        
+        lobbies = 0,
+        settings = 1,
+        credits = 2
+    }
+    public void switchToLobbies()
+    {
+        switchTo(menuName.lobbies);
+    }
+    public void switchToSettings()
+    {
+        switchTo(menuName.settings);
+    }
+    public void switchToCredits()
+    {
+        switchTo(menuName.credits);
     }
 
+    public void switchTo(menuName menu)
+    {
+        foreach (GameObject child in allMenus)
+        {
+            child.SetActive(false);
+        }
+        allMenus[(int) menu].SetActive(true);
+    }
 }

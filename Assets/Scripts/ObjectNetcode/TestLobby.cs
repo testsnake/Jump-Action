@@ -16,6 +16,7 @@ public class TestLobby : MonoBehaviour
     public GameObject lobbyPanelPrefab;
     public GameObject inLobbyPanel;
     public LobbyMenu lobbyMenu;
+    public MenuHandler menuHandler;
     //Set this through settings? Would be nice to save this to a file and load dynamically.
     public string playerName = "Anonymous";
     public string playerTeam = "None";
@@ -330,24 +331,28 @@ public class TestLobby : MonoBehaviour
                     new QueryOrder(false, QueryOrder.FieldOptions.Created)
                 }
             };
-
             QueryResponse res = await Lobbies.Instance.QueryLobbiesAsync(query);
             Debug.Log("Lobbies found: " + res.Results.Count);
-            foreach (Lobby lobby in res.Results)
+            menuHandler.switchTo(MenuHandler.menuName.lobbies);
+            if (res.Results.Count > 0)
             {
-                Debug.Log(lobby.Name + ": " + lobby.MaxPlayers + " max players");
-                GameObject lobbyPanel = GameObject.Instantiate(lobbyPanelPrefab, lobbiesMenu.transform);
-                LobbyJoinPanel ljp = lobbyPanel.GetComponent<LobbyJoinPanel>();
-                ljp.data = new LobbyData()
+                foreach (Lobby lobby in res.Results)
                 {
-                    lobbyid = lobby.Id,
-                    lobbyname = lobby.Name,
-                    gamemode = lobby.Data["GameMode"].Value,
-                    currentplayers = "" + (int.Parse(lobby.MaxPlayers.ToString()) - int.Parse(lobby.AvailableSlots.ToString())),
-                    maxplayers = lobby.MaxPlayers.ToString(),
-                };
-                ljp.RefreshData();
+                    Debug.Log(lobby.Name + ": " + lobby.MaxPlayers + " max players");
+                    GameObject lobbyPanel = GameObject.Instantiate(lobbyPanelPrefab, lobbiesMenu.transform);
+                    LobbyJoinPanel ljp = lobbyPanel.GetComponent<LobbyJoinPanel>();
+                    ljp.data = new LobbyData()
+                    {
+                        lobbyid = lobby.Id,
+                        lobbyname = lobby.Name,
+                        gamemode = lobby.Data["GameMode"].Value,
+                        currentplayers = "" + (int.Parse(lobby.MaxPlayers.ToString()) - int.Parse(lobby.AvailableSlots.ToString())),
+                        maxplayers = lobby.MaxPlayers.ToString(),
+                    };
+                    ljp.RefreshData();
+                }
             }
+            
         } catch (LobbyServiceException ex)
         {
             Debug.Log(ex);
