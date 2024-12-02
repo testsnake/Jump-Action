@@ -23,6 +23,10 @@ public class GameSettingsHandler : MonoBehaviour
     {
         float masterVol = PlayerPrefs.GetFloat("MasterVolume", 1);
         AudioListener.volume = masterVol;
+        int screenMode = PlayerPrefs.GetInt("ScreenMode", 1);
+        setDisplayMode(screenMode);
+        int screenRes = PlayerPrefs.GetInt("ScreenRes", 0);
+        setGameResolution(screenRes);
     }
 
     public void setMasterVolume(float vol)
@@ -39,5 +43,46 @@ public class GameSettingsHandler : MonoBehaviour
     public void setSFXVolume(float vol)
     {
         PlayerPrefs.SetFloat("SFXVolume", vol);
+    }
+
+    public void setDisplayMode(int mode)
+    {
+        PlayerPrefs.SetInt("ScreenMode", mode);
+        FullScreenMode fsm;
+        switch (mode)
+        {
+            case 0:
+                fsm = FullScreenMode.ExclusiveFullScreen; break;
+            case 1:
+                fsm = FullScreenMode.FullScreenWindow; break;
+            case 2:
+                fsm = FullScreenMode.Windowed; break;
+            default:
+                fsm = FullScreenMode.FullScreenWindow; break;
+        }
+        Screen.fullScreenMode = fsm;
+    }
+
+    public void setGameResolution(int resolution)
+    {
+        PlayerPrefs.SetInt("ScreenRes", resolution);
+        FullScreenMode currentScreenMode = Screen.fullScreenMode;
+        switch (resolution)
+        {
+            case 0:
+                Screen.SetResolution(1920, 1080, currentScreenMode); break;
+            case 1:
+                Screen.SetResolution(1366, 768, currentScreenMode); break;
+            case 2:
+                Screen.SetResolution(1536, 864, currentScreenMode); break;
+            case 3:
+                Screen.SetResolution(1280, 720, currentScreenMode); break;
+            case 4:
+                Screen.SetResolution(1440, 900, currentScreenMode); break;
+            case 5:
+                Screen.SetResolution(1600, 900, currentScreenMode); break;
+            default:
+                Screen.SetResolution(1920, 1080, currentScreenMode); break;
+        }
     }
 }

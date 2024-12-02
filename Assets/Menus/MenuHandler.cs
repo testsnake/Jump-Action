@@ -24,6 +24,11 @@ public class MenuHandler : MonoBehaviour
         switchTo(menuName.credits);
     }
 
+    public void quitGame()
+    {
+        Application.Quit();
+    }
+
     public void switchTo(menuName menu)
     {
         foreach (GameObject child in allMenus)

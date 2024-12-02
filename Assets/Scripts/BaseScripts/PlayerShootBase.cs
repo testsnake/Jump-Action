@@ -1,5 +1,7 @@
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.EnhancedTouch;
 
 public class PlayerShootBase : NetworkBehaviour
 {
@@ -8,10 +10,16 @@ public class PlayerShootBase : NetworkBehaviour
     private Transform cameraHolder; // Reference to the camera or look direction of the player
     public float firePointDistance = 1.1f; // Distance in front of the player
 
+    private InputActions inputActions;
+
+    public void Awake()
+    {
+        inputActions = new InputActions();
+    }
+
     public virtual void Start()
     {
         if (!IsOwner) return;
-
         // Find the main camera to use as the shooting direction (can be overridden in derived classes)
         cameraHolder = GameObject.Find("CameraHolder")?.GetComponent<Transform>();
     }
@@ -19,17 +27,23 @@ public class PlayerShootBase : NetworkBehaviour
     public virtual void Update()
     {
         if (!IsOwner) return;
-
-        // Fire the projectile when the left mouse button is clicked (can be overridden)
-        if (Input.GetMouseButtonDown(0))
-        {
-            Shoot();
-        }
     }
 
-    public virtual void Shoot()
+    private void OnEnable()
     {
+        inputActions.Player.Shoot.performed += Shoot;
+        inputActions.Player.Shoot.Enable();
+    }
 
+    private void OnDisable()
+    {
+        inputActions.Player.Shoot.performed -= Shoot;
+        inputActions.Player.Shoot.Disable();
+    }
+
+    private void Shoot(InputAction.CallbackContext obj)
+    {
+        if(!IsOwner) return;
         if (projectilePrefab != null && cameraHolder != null)
         {
             Vector3 spawnPosition = cameraHolder.position + cameraHolder.forward * firePointDistance;
