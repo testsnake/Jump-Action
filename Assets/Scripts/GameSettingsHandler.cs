@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameSettingsHandler : MonoBehaviour
 {
     private static GameSettingsHandler instance;
+    public InputActionAsset inputActionAsset;
     public static GameSettingsHandler Instance {  get { return instance; } }
     // Start is called before the first frame update
     void Awake()
@@ -17,6 +20,7 @@ public class GameSettingsHandler : MonoBehaviour
             instance = this;
         }
         DontDestroyOnLoad(this);
+        LoadRebinds();
     }
 
     void Start()
@@ -83,6 +87,16 @@ public class GameSettingsHandler : MonoBehaviour
                 Screen.SetResolution(1600, 900, currentScreenMode); break;
             default:
                 Screen.SetResolution(1920, 1080, currentScreenMode); break;
+        }
+    }
+
+    public void LoadRebinds()
+    {
+        if (PlayerPrefs.HasKey("Rebinds"))
+        {
+            Debug.Log("Loading Rebinds");
+            string rebinds = PlayerPrefs.GetString("Rebinds");
+            inputActionAsset.LoadBindingOverridesFromJson(rebinds);
         }
     }
 }

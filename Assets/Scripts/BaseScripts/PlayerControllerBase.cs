@@ -76,6 +76,7 @@ public class PlayerControllerBase : NetworkBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         inputActions = new InputActions();
+        LoadRebinds(inputActions.asset);
         movement = inputActions.Player.Movement;
         standYScale = transform.localScale.y;
         speed = standingSpeed;
@@ -86,6 +87,17 @@ public class PlayerControllerBase : NetworkBehaviour
         audioPlayer = GameObject.Find("AudioManager").GetComponent<PlayerSounds>();
         orientation = transform.Find("Orientation");
         ground = LayerMask.GetMask("ground", "Stage");
+    }
+
+    public void LoadRebinds(InputActionAsset inputActionAsset)
+    {
+        if (PlayerPrefs.HasKey("Rebinds"))
+        {
+            Debug.Log("Loading Rebinds");
+            string rebinds = PlayerPrefs.GetString("Rebinds");
+            inputActionAsset.LoadBindingOverridesFromJson(rebinds);
+            Debug.Log("Loaded Rebinds: " + rebinds);
+        }
     }
 
     public override void OnNetworkSpawn()
