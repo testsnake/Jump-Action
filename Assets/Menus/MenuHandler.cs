@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class MenuHandler : MonoBehaviour
 {
     public GameObject[] allMenus;
+    public TMP_Text VersionText;
     public enum menuName
     {
         lobbies = 0,
@@ -36,5 +38,10 @@ public class MenuHandler : MonoBehaviour
             child.SetActive(false);
         }
         allMenus[(int) menu].SetActive(true);
+    }
+
+    public void Start()
+    {
+        VersionText.text = Application.version;
     }
 }

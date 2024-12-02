@@ -74,6 +74,8 @@ public class PlayerControllerBase : NetworkBehaviour
     public virtual void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         rb.freezeRotation = true;
         inputActions = new InputActions();
         LoadRebinds(inputActions.asset);

@@ -14,6 +14,8 @@ public class SettingsMenuInitializer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         masterVolumeSlider.value = PlayerPrefs.GetFloat("MasterVolume", 1);
         musicVolumeSlider.value = PlayerPrefs.GetFloat("MusicVolume", 1);
         sfxVolumeSlider.value = PlayerPrefs.GetFloat("SFXVolume", 1);
