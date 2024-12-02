@@ -16909,8 +16909,8 @@ MonoBehaviour:
   masterVolumeSlider: {fileID: 414613205}
   musicVolumeSlider: {fileID: 617300003}
   sfxVolumeSlider: {fileID: 1167824687}
-  screenModeDD: {fileID: 0}
-  screenResDD: {fileID: 0}
+  screenModeDD: {fileID: 1667194919}
+  screenResDD: {fileID: 986236197}
 --- !u!1 &1723119303 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4989314809015228912, guid: 75f0c81aa1bb3d141a2abad6f779f131, type: 3}
