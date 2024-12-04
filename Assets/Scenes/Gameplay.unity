@@ -2929,19 +2929,41 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6441448110730187999, guid: 7ce4f38c4108e7c4ebc5d80728426976, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 706904167}
   m_SourcePrefab: {fileID: 100100000, guid: 7ce4f38c4108e7c4ebc5d80728426976, type: 3}
 --- !u!114 &706904165 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5308651115350483478, guid: 7ce4f38c4108e7c4ebc5d80728426976, type: 3}
   m_PrefabInstance: {fileID: 706904164}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 706904166}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40c8144adeac22f4e82292ffa1f84b58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &706904166 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6441448110730187999, guid: 7ce4f38c4108e7c4ebc5d80728426976, type: 3}
+  m_PrefabInstance: {fileID: 706904164}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &706904167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706904166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 438ff66cd946cf21cb999edc7fda6211, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teamScoreManager: {fileID: 706904165}
+  camera: {fileID: 1963642672}
 --- !u!43 &869634404
 Mesh:
   m_ObjectHideFlags: 0
@@ -8087,6 +8109,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24be7d49c8474f04b9928a4f1a70191e, type: 3}
+--- !u!20 &1963642672 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 7297832498370744902, guid: 24be7d49c8474f04b9928a4f1a70191e, type: 3}
+  m_PrefabInstance: {fileID: 1963642671}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1969730317
 Mesh:
   m_ObjectHideFlags: 0
