@@ -51,7 +51,7 @@ public class PlayerControllerBase : NetworkBehaviour
     public GameObject spawnPoint;
     public NetworkVariable<FixedString32Bytes> playerTeam = new NetworkVariable<FixedString32Bytes>(default, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public bool playerMatIsSet;
-    public MeshRenderer meshRenderer;
+    public SkinnedMeshRenderer meshRenderer;
 
     private InputActions inputActions;
     private InputAction movement;
@@ -60,6 +60,8 @@ public class PlayerControllerBase : NetworkBehaviour
     private PlayerSounds audioPlayer;
 
     public MovementState state;
+
+    public Animator animator;
 
     public enum MovementState
     {
@@ -184,7 +186,10 @@ public class PlayerControllerBase : NetworkBehaviour
     public virtual void FixedUpdate()
     {
         if (!IsOwner) return;
-
+        animator.SetInteger("MovementState", (int)state);
+        animator.SetFloat("MoveX", moveDirection.x);
+        animator.SetFloat("MoveY", moveDirection.z);
+        Debug.Log("MovementState: " +  state); 
         switch (state)
         {
             case MovementState.standing:
@@ -236,10 +241,12 @@ public class PlayerControllerBase : NetworkBehaviour
 
     private void Jump(InputAction.CallbackContext obj)
     {
+        
         if (isGrounded)
         {
-            if (state == MovementState.sliding)
-                transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
+            animator.SetTrigger("Jump");
+            //if (state == MovementState.sliding)
+            //    transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
 
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
@@ -247,6 +254,7 @@ public class PlayerControllerBase : NetworkBehaviour
         }
         else if (state == MovementState.wallRunning)
         {
+            animator.SetTrigger("Jump");
             wallRunning.wallJump();
             audioPlayer.playSound("Jump");
         }
@@ -256,7 +264,7 @@ public class PlayerControllerBase : NetworkBehaviour
     {
         if (isGrounded)
         {
-            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+            //transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
             rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
 
             if ((moveDirection.x != 0 || moveDirection.z != 0) && state != MovementState.sliding)
@@ -275,7 +283,7 @@ public class PlayerControllerBase : NetworkBehaviour
 
         if (state != MovementState.sliding)
         {
-            transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
+            //transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
             state = MovementState.standing;
         }
     }
@@ -357,7 +365,7 @@ public class PlayerControllerBase : NetworkBehaviour
         if (!IsOwner) return;
 
         audioPlayer.stopSound("Slide");
-        transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
+        //transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
         state = isGrounded ? MovementState.standing : MovementState.falling;
     }
 
@@ -397,7 +405,7 @@ public class PlayerControllerBase : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.4f, ground);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.6f, ground);
 
         if (isGrounded)
         {

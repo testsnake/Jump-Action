@@ -6,6 +6,7 @@ TagManager:
   tags:
   - DeathPlane
   - DataChip
+  - CinemachineTarget
   layers:
   - Default
   - TransparentFX

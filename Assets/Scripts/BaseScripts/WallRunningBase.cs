@@ -47,15 +47,17 @@ public class WallRunningBase : NetworkBehaviour
     protected virtual void startWallRun()
     {
         if (!IsOwner) return;
+        if (player.state == PlayerControllerBase.MovementState.falling || player.state == PlayerControllerBase.MovementState.climbing || player.state == PlayerControllerBase.MovementState.wallRunning)
+        {
+            player.state = PlayerControllerBase.MovementState.wallRunning;
+            player.speed = wallRunningSpeed;
+            wallRunTimer = maxWallRunTime;
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+            lastWall = wallRight ? rightWallHit.transform : leftWallHit.transform;
 
-        player.state = PlayerControllerBase.MovementState.wallRunning;
-        player.speed = wallRunningSpeed;
-        wallRunTimer = maxWallRunTime;
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        lastWall = wallRight ? rightWallHit.transform : leftWallHit.transform;
-
-        cam.DoFov(90f);
-        cam.DoTilt(wallLeft ? -15f : 15f);
+            cam.DoFov(90f);
+            cam.DoTilt(wallLeft ? -15f : 15f);
+        }
     }
 
     protected virtual void endWallRun()
@@ -108,6 +110,13 @@ public class WallRunningBase : NetworkBehaviour
 
         wallRight = Physics.Raycast(transform.position, orientation.right, out rightWallHit, wallCheckDistance, wall);
         wallLeft = Physics.Raycast(transform.position, -orientation.right, out leftWallHit, wallCheckDistance, wall);
+        if (wallLeft) {
+            player.animator.SetFloat("WallSide", 0);
+         }
+        else
+        {
+            player.animator.SetFloat("WallSide", 1);
+        }
     }
 
 
