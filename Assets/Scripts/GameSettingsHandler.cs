@@ -31,6 +31,8 @@ public class GameSettingsHandler : MonoBehaviour
         setDisplayMode(screenMode);
         int screenRes = PlayerPrefs.GetInt("ScreenRes", 0);
         setGameResolution(screenRes);
+        float mouseSens = PlayerPrefs.GetFloat("MouseSens", 0.5f);
+        setMouseSensitivity(mouseSens);
     }
 
     public void setMasterVolume(float vol)
@@ -88,6 +90,11 @@ public class GameSettingsHandler : MonoBehaviour
             default:
                 Screen.SetResolution(1920, 1080, currentScreenMode); break;
         }
+    }
+
+    public void setMouseSensitivity(float sensitivity)
+    {
+        PlayerPrefs.SetFloat("MouseSens", sensitivity);
     }
 
     public void LoadRebinds()

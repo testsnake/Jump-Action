@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1091362752988801798}
   - component: {fileID: 6636553020638664703}
   - component: {fileID: 2406652174324685773}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Catwalk Long
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9178306267115040294}
   - component: {fileID: 3198520559569326815}
   - component: {fileID: 8822811066928360500}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Catwalk Corner
   m_TagString: Untagged
   m_Icon: {fileID: 0}

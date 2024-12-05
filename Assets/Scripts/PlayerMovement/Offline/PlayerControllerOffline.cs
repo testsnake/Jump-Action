@@ -101,13 +101,25 @@ public class PlayerControllerOffline : MonoBehaviour
     public void respawnPlayer()
     {
         Debug.Log("Player team for spawn: " + playerTeam);
-        if(spawnPoint == null)
+        if (spawnPoint == null)
         {
-            spawnPoint = GameObject.Find("TeamSpawn");
+            if (playerTeam == "Red")
+            {
+                spawnPoint = GameObject.Find("RedTeamSpawn") ?? GameObject.Find("TeamSpawn");
+
+            }
+            else if (playerTeam == "Blue")
+            {
+                spawnPoint = GameObject.Find("BlueTeamSpawn") ?? GameObject.Find("TeamSpawn");
+            }
         }
         rb.velocity = Vector3.zero;
-        transform.position = spawnPoint.transform.position;
-        transform.rotation = spawnPoint.transform.rotation;
+
+        if (spawnPoint != null)
+        {
+            transform.position = spawnPoint.transform.position;
+            transform.rotation = spawnPoint.transform.rotation;
+        }
     }
 
     private void Update()
@@ -126,6 +138,8 @@ public class PlayerControllerOffline : MonoBehaviour
         {
             case MovementState.standing:
                 speed = standingSpeed;
+                if (transform.localScale.y != standYScale) 
+                    transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
                 movePlayer();
                 break;
             case MovementState.crouching:

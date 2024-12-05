@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3361326707275054544}
   - component: {fileID: 3361326707274284530}
   - component: {fileID: 3361326707273154354}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tunnel Stair Rails001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 3361326707274284532}
   - component: {fileID: 3361326707273154356}
   - component: {fileID: 4873006763677134250}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Tunnel Incline Walls001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -306,7 +306,7 @@ GameObject:
   - component: {fileID: 3361326707275054550}
   - component: {fileID: 3361326707274284536}
   - component: {fileID: 3361326707273154360}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tunnel Incline Pipes001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -601,7 +601,7 @@ GameObject:
   - component: {fileID: 3361326707275054556}
   - component: {fileID: 3361326707274284542}
   - component: {fileID: 3361326707273154366}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tunnel Incline Beams001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -682,7 +682,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3361326707275054558}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Corridor Incline Full
   m_TagString: Untagged
   m_Icon: {fileID: 0}

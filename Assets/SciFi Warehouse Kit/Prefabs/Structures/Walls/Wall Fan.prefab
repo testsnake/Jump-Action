@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7748243253764950960}
   - component: {fileID: 7748243253751519898}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: LP_vent_rotor_snaps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 7748243253762083736}
   - component: {fileID: 7748243253763180888}
   - component: {fileID: 7748243253758900536}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: LP_vent_guard_snaps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -205,7 +205,7 @@ GameObject:
   - component: {fileID: 7748243253764950964}
   - component: {fileID: 7748243253754154586}
   - component: {fileID: 7748243252877624316}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Wall Fan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -356,7 +356,7 @@ GameObject:
   - component: {fileID: 7748243253762083742}
   - component: {fileID: 7748243253763180894}
   - component: {fileID: 7748243253758900542}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: LP_vent_wall_snaps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -459,7 +459,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7748243253764950968}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Bone003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -490,7 +490,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7748243253764950970}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Bone002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -524,7 +524,7 @@ GameObject:
   - component: {fileID: 7748243253762083738}
   - component: {fileID: 7748243253763180890}
   - component: {fileID: 7748243253758900538}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: LP_vent_fan_snaps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -627,7 +627,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7748243253764950974}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: BoneRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4831997222278917037}
   - component: {fileID: 8972163369566219449}
   - component: {fileID: 779657175139347075}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: LP_Window_muntinBar_snaps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 4424715934604717301}
   - component: {fileID: 7436592752030856507}
   - component: {fileID: 8665513755005798311}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: LP_Window_Wall_snaps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -199,7 +199,7 @@ GameObject:
   - component: {fileID: 3992944023160742640}
   - component: {fileID: 1137434607478107237}
   - component: {fileID: 5665832749751076110}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: LP_Window_Glass_snaps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -280,7 +280,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6269635625250689571}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Wall Window
   m_TagString: Untagged
   m_Icon: {fileID: 0}
