@@ -115,7 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2746722322
+  GlobalObjectIdHash: 3393615307
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -237,6 +237,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   state: 0
   animator: {fileID: 7611516437615304654}
+  collider: {fileID: 64638763795489671}
 --- !u!114 &8431372143461298379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -960,8 +961,8 @@ PrefabInstance:
       propertyPath: m_WarningMessage
       value: "\nBinding warning: Some generic clip(s) animate transforms that are
         already bound by a Humanoid avatar. These transforms can only be changed
-        by Humanoid clips.\n\tTransform 'Right_UpperArm'\n\tTransform 'Right_LowerArm'\n\tFrom
-        animation clip 'Aim'"
+        by Humanoid clips.\n\tTransform 'Right_UpperArm'\n\tTransform 'Right_LowerArm'\n\tTransform
+        'Right_Hand'\n\tFrom animation clip 'Aim'"
       objectReference: {fileID: 0}
     - target: {fileID: 8729224428464104270, guid: 36078ab0369161e49a29d349ae3e0739, type: 3}
       propertyPath: m_LocalScale.x
