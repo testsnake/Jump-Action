@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 418558}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Light_SideLight_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   m_Component:
   - component: {fileID: 418556}
   - component: {fileID: 10818556}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Point light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 418560}
   - component: {fileID: 3318556}
   - component: {fileID: 2318556}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Light_SideLight_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 418562}
   - component: {fileID: 3318558}
   - component: {fileID: 2318558}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Light_SideLight_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -303,7 +303,7 @@ GameObject:
   m_Component:
   - component: {fileID: 418566}
   - component: {fileID: 10818558}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Point light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -396,7 +396,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 418564}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Light_SideLight_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -429,7 +429,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 418570}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Light_SideLight_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -463,7 +463,7 @@ GameObject:
   m_Component:
   - component: {fileID: 418568}
   - component: {fileID: 10818560}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Point light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -558,7 +558,7 @@ GameObject:
   - component: {fileID: 418572}
   - component: {fileID: 3318560}
   - component: {fileID: 2318560}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Light_SideLight_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -641,7 +641,7 @@ GameObject:
   - component: {fileID: 418574}
   - component: {fileID: 3318562}
   - component: {fileID: 2318562}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Light_SideLight_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -723,7 +723,7 @@ GameObject:
   m_Component:
   - component: {fileID: 418578}
   - component: {fileID: 10818562}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Point light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -816,7 +816,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 418576}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Light_SideLight_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -849,7 +849,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 437662}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Stairway_Plateform_07
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -890,7 +890,7 @@ GameObject:
   - component: {fileID: 437664}
   - component: {fileID: 3337664}
   - component: {fileID: 2337664}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Stairway_Plateform_07
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -973,7 +973,7 @@ GameObject:
   m_Component:
   - component: {fileID: 447414}
   - component: {fileID: 6547414}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Collider_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1026,7 +1026,7 @@ GameObject:
   m_Component:
   - component: {fileID: 447416}
   - component: {fileID: 6547416}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Collider_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1079,7 +1079,7 @@ GameObject:
   m_Component:
   - component: {fileID: 447418}
   - component: {fileID: 6547418}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Collider_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}

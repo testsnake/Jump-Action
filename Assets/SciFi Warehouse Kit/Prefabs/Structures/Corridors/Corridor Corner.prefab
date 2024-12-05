@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2056554025934628035}
   - component: {fileID: 8732923782887901139}
   - component: {fileID: 601793022435913369}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Tunnel Walls001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 8911123174686622694}
   - component: {fileID: 8911123174683755400}
   - component: {fileID: 8911123174684852680}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Tunnel Piipes001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -390,7 +390,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8911123174686622698}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Corridor Corner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -536,7 +536,7 @@ GameObject:
   - component: {fileID: 8911123174686622702}
   - component: {fileID: 8911123174683755406}
   - component: {fileID: 8911123174684852686}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Tunnel Beams001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -619,7 +619,7 @@ GameObject:
   - component: {fileID: 8911123174686622660}
   - component: {fileID: 8911123174683755492}
   - component: {fileID: 8911123174684852516}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: SciFi_WallLightBulb005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -702,7 +702,7 @@ GameObject:
   - component: {fileID: 8911123174686622684}
   - component: {fileID: 8911123174683755516}
   - component: {fileID: 8911123174684852540}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: SciFi_WallLight005
   m_TagString: Untagged
   m_Icon: {fileID: 0}

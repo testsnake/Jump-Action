@@ -86,7 +86,7 @@ public class ClimbingOffline : MonoBehaviour
 
     private void wallCheck()
     {
-        Vector3 position = transform.position - new Vector3(0f, player.playerHeight * 0.5f, 0f);
+        Vector3 position = transform.position - new Vector3(0f, player.playerHeight * 0.25f, 0f);
 
         wallFront = Physics.SphereCast(position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, smallWall);
         wallAngle = Vector3.Angle(orientation.forward, -frontWallHit.normal);

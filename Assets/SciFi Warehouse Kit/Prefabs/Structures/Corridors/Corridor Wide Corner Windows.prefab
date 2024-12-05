@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4804555236838379878}
   - component: {fileID: 4804555236834988376}
   - component: {fileID: 4804555236836086680}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Lights005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 4804555236838379888}
   - component: {fileID: 4804555236834988368}
   - component: {fileID: 4804555236836086672}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Corridor Piipes Wide004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -389,7 +389,7 @@ GameObject:
   - component: {fileID: 4804555236838379894}
   - component: {fileID: 4804555236834988374}
   - component: {fileID: 4804555236836086678}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Corridor Beams Wide004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -472,7 +472,7 @@ GameObject:
   - component: {fileID: 4804555236838379896}
   - component: {fileID: 4804555236834988378}
   - component: {fileID: 4804555236836086682}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Corridor Window Muntinbar003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -555,7 +555,7 @@ GameObject:
   - component: {fileID: 4804555236838379898}
   - component: {fileID: 4804555236834988380}
   - component: {fileID: 4804555236836086684}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Corridor Window Glass003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -636,7 +636,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4804555236838379900}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Corridor Wide Corner Windows
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -678,7 +678,7 @@ GameObject:
   - component: {fileID: 4804555236834988382}
   - component: {fileID: 4804555236836086686}
   - component: {fileID: 12677323263105982}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Corridor Walls Wide Window003
   m_TagString: Untagged
   m_Icon: {fileID: 0}

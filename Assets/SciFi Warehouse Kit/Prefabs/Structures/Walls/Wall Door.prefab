@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1609829962470302593}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Wall Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 188230827422167262}
   - component: {fileID: 1148355104667292788}
   - component: {fileID: 5695022446009426627}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: LP_Door_frame_snaps
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,7 +154,7 @@ GameObject:
   - component: {fileID: 6229680467468151987}
   - component: {fileID: 1435833231864793697}
   - component: {fileID: 4050499323738406480}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: LP_Door_Wall_snaps
   m_TagString: Untagged
   m_Icon: {fileID: 0}

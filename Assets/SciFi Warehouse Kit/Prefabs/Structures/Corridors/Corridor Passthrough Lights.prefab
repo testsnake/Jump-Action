@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2553481404177903938}
   - component: {fileID: 1104722251196838752}
   - component: {fileID: 7565617509996622608}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Tunnel Walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2553481404179805090}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Corridor Passthrough Lights
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -280,7 +280,7 @@ GameObject:
   - component: {fileID: 2553481404179805100}
   - component: {fileID: 2553481404176905100}
   - component: {fileID: 2553481404177903948}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Tunnel Piipes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -468,7 +468,7 @@ GameObject:
   - component: {fileID: 6954719014120846618}
   - component: {fileID: 3671847218826377793}
   - component: {fileID: 1901528179550079166}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Lights
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -551,7 +551,7 @@ GameObject:
   - component: {fileID: 4828240809788918178}
   - component: {fileID: 280795330591309906}
   - component: {fileID: 5145407453068376007}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Corridor Beams
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -88,8 +88,8 @@ public class WallRunningOffline : MonoBehaviour
 
     void startWallRun()
     {
-        // if ((wallRight && rightWallHit.transform == lastWall) || (wallLeft && leftWallHit.transform == lastWall))
-        //     return;
+        if ((wallRight && rightWallHit.transform == lastWall) || (wallLeft && leftWallHit.transform == lastWall))
+            return;
         player.state = PlayerControllerOffline.MovementState.wallRunning;
         player.speed = wallRunningSpeed;
         wallRunTimer = maxWallRunTime;
