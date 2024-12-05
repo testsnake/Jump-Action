@@ -10,6 +10,7 @@ public class ClimbingOffline : MonoBehaviour
     public Transform orientation;
     private Rigidbody rb;
     public LayerMask wall;
+    public LayerMask smallWall;
     private PlayerControllerOffline player;
     public PlayerCam cam;
 
@@ -49,7 +50,9 @@ public class ClimbingOffline : MonoBehaviour
         wallCheck();
         tallWallCheck();
 
-        if (wallFront && playerIsHoldingForward() && wallAngle < maxAngle) // Player is running into wall or barrier
+        Debug.Log(playerIsHoldingForward());
+
+        if ((wallFront || tallWallFront) && playerIsHoldingForward() && (wallAngle < maxAngle || tallWallAngle < maxAngle)) // Player is running into wall or barrier
         {
             if (canClimb() || canVault())
                 startClimb();
@@ -68,24 +71,24 @@ public class ClimbingOffline : MonoBehaviour
 
     private bool canClimb()
     {
-        return player.state == PlayerControllerOffline.MovementState.falling && climbTimer > 0;
+        return tallWallFront && player.state == PlayerControllerOffline.MovementState.falling && climbTimer > 0;
     }
 
     private bool canVault()
     {
-        return !tallWallFront && climbTimer > 0;
+        return wallFront && !tallWallFront && climbTimer > 0;
     }
 
     private bool playerIsHoldingForward()
     {
-        return player.moveDirection.x * orientation.forward.x > 0.1f || player.moveDirection.z * orientation.forward.z > 0.1f;
+        return player.moveDirection.x * orientation.forward.x > 0f || player.moveDirection.z * orientation.forward.z > 0f;
     }
 
     private void wallCheck()
     {
-        Vector3 position = transform.position - new Vector3(0f, player.playerHeight * 0.25f, 0f);
+        Vector3 position = transform.position - new Vector3(0f, player.playerHeight * 0.5f, 0f);
 
-        wallFront = Physics.SphereCast(position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, wall);
+        wallFront = Physics.SphereCast(position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, smallWall);
         wallAngle = Vector3.Angle(orientation.forward, -frontWallHit.normal);
 
         if (player.isGrounded)

@@ -8,7 +8,8 @@ public class DevHUD : MonoBehaviour
 {
     public TMP_Text speed;
     public TMP_Text state;
-    public PlayerController player;
+    public TMP_Text scale; 
+    public PlayerControllerOffline player;
 
     void Update()
     {
@@ -19,12 +20,13 @@ public class DevHUD : MonoBehaviour
             {
                 if (p.GetComponent<NetworkObject>()?.IsOwner == true)
                 {
-                    player = p.GetComponent<PlayerController>();
+                    player = p.GetComponent<PlayerControllerOffline>();
                 }
             }
         } else
         {
             speed.SetText("Speed: " + player.rb.velocity.magnitude.ToString("F2"));
+            scale.SetText("Scale: " + player.transform.localScale.y.ToString("F2"));
             state.SetText(player.state.ToString());
         }
     }
