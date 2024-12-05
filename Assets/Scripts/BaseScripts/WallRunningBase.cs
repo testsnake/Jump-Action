@@ -36,7 +36,7 @@ public class WallRunningBase : NetworkBehaviour
 
     public virtual void Start()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         // Setup references
         rb = GetComponent<Rigidbody>();
@@ -48,7 +48,7 @@ public class WallRunningBase : NetworkBehaviour
     {
         if ((wallRight && rightWallHit.transform == lastWall) || (wallLeft && leftWallHit.transform == lastWall))
             return;
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
         if (player.state == PlayerControllerBase.MovementState.falling || player.state == PlayerControllerBase.MovementState.climbing || player.state == PlayerControllerBase.MovementState.wallRunning)
         {
             player.state = PlayerControllerBase.MovementState.wallRunning;
@@ -64,7 +64,7 @@ public class WallRunningBase : NetworkBehaviour
 
     protected virtual void endWallRun()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         player.state = PlayerControllerBase.MovementState.standing;
         player.speed = player.standingSpeed;
@@ -76,7 +76,7 @@ public class WallRunningBase : NetworkBehaviour
 
     public virtual void Update()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         // Wall detection and wall-running logic
         checkForWall();
@@ -100,7 +100,7 @@ public class WallRunningBase : NetworkBehaviour
 
     public virtual void FixedUpdate()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         if (player?.state == PlayerControllerBase.MovementState.wallRunning)
             wallRunningMovement();
@@ -108,7 +108,7 @@ public class WallRunningBase : NetworkBehaviour
 
     protected virtual void checkForWall()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         wallRight = Physics.Raycast(transform.position, orientation.right, out rightWallHit, wallCheckDistance, wall);
         wallLeft = Physics.Raycast(transform.position, -orientation.right, out leftWallHit, wallCheckDistance, wall);
@@ -137,7 +137,7 @@ public class WallRunningBase : NetworkBehaviour
 
     protected virtual void wallRunningMovement()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         rb.useGravity = useGravity;
 
@@ -155,12 +155,22 @@ public class WallRunningBase : NetworkBehaviour
 
     public virtual void wallJump()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         Vector3 wallNormal = wallRight ? rightWallHit.normal : leftWallHit.normal;
         Vector3 wallJumpForce = transform.up * wallJumpUpForce + wallNormal * wallJumpSideForce;
 
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(wallJumpForce, ForceMode.Impulse);
+    }
+
+    private bool isNotOwner()
+    {
+        return PlayerPrefs.GetString("Mode") == "Online" && !IsOwner;
+    }
+
+    private bool isOwner()
+    {
+        return PlayerPrefs.GetString("Mode") == "Online" && IsOwner;
     }
 }

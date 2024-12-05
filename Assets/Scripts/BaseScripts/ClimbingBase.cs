@@ -37,7 +37,7 @@ public class ClimbingBase : NetworkBehaviour
 
     public virtual void Start()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         // Setup references
         rb = GetComponent<Rigidbody>();
@@ -56,10 +56,14 @@ public class ClimbingBase : NetworkBehaviour
 
     public virtual void Update()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         wallCheck();
         tallWallCheck();
+
+        Debug.Log("wf:" + wallFront);
+        Debug.Log("hf:" + playerIsHoldingForward());
+        Debug.Log("wa:" + (wallAngle < maxAngle));
 
         if ((wallFront || tallWallFront) && playerIsHoldingForward() && (wallAngle < maxAngle || tallWallAngle < maxAngle))
         {
@@ -99,7 +103,7 @@ public class ClimbingBase : NetworkBehaviour
 
     protected virtual void wallCheck()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         Vector3 position = transform.position - new Vector3(0f, player.playerHeight * 0.25f, 0f);
         wallFront = Physics.SphereCast(position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, smallWall);
@@ -111,7 +115,7 @@ public class ClimbingBase : NetworkBehaviour
 
     protected virtual void tallWallCheck()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         Vector3 position = transform.position + new Vector3(0f, player.playerHeight * 0.125f, 0f);
         tallWallFront = Physics.SphereCast(position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, wall);
@@ -123,7 +127,7 @@ public class ClimbingBase : NetworkBehaviour
 
     protected virtual void startClimb()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         player.state = PlayerControllerBase.MovementState.climbing;
         player.speed = climbSpeed;
@@ -131,14 +135,14 @@ public class ClimbingBase : NetworkBehaviour
 
     protected virtual void climbingMovement()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         rb.velocity = new Vector3(rb.velocity.x, climbSpeed, rb.velocity.z);
     }
 
     protected virtual void StopClimbing()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         player.state = PlayerControllerBase.MovementState.standing;
         player.speed = player.standingSpeed;
@@ -146,7 +150,7 @@ public class ClimbingBase : NetworkBehaviour
 
     public virtual void climbJump()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         Vector3 jumpForce = transform.up * climbJumpUpForce + frontWallHit.normal * climbJumpBackForce;
 
@@ -154,6 +158,15 @@ public class ClimbingBase : NetworkBehaviour
         rb.AddForce(jumpForce, ForceMode.Impulse);
 
         cam.Rotate180(climbJumpRotationDuration);
+    }
 
+    private bool isNotOwner()
+    {
+        return PlayerPrefs.GetString("Mode") == "Online" && !IsOwner;
+    }
+
+    private bool isOwner()
+    {
+        return PlayerPrefs.GetString("Mode") == "Online" && IsOwner;
     }
 }

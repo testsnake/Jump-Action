@@ -75,9 +75,6 @@ public class PlayerControllerBase : NetworkBehaviour
 
     public virtual void Awake()
     {
-        Debug.Log(PlayerPrefs.GetString("Mode"));
-        Debug.Log(isNotOwner());
-
         rb = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -176,6 +173,9 @@ public class PlayerControllerBase : NetworkBehaviour
         }
 
         if (isNotOwner()) return;
+
+        if (rb.isKinematic)
+            rb.isKinematic = false;
 
         checkGrounded();
         limitSpeed();
