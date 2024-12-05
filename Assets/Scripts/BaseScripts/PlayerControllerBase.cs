@@ -75,6 +75,9 @@ public class PlayerControllerBase : NetworkBehaviour
 
     public virtual void Awake()
     {
+        Debug.Log(PlayerPrefs.GetString("Mode"));
+        Debug.Log(isNotOwner());
+
         rb = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -90,7 +93,7 @@ public class PlayerControllerBase : NetworkBehaviour
         climbing = GetComponent<Climbing>();
         audioPlayer = GameObject.Find("AudioManager").GetComponent<PlayerSounds>();
         orientation = transform.Find("Orientation");
-        ground = LayerMask.GetMask("ground", "Stage");
+        ground = LayerMask.GetMask("ground", "Stage", "wall");
     }
 
     public void LoadRebinds(InputActionAsset inputActionAsset)
@@ -106,7 +109,7 @@ public class PlayerControllerBase : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (IsOwner)
+        if (isOwner())
         {
             StartCoroutine(InitializeTeamWithDelay());
         }
@@ -159,7 +162,7 @@ public class PlayerControllerBase : NetworkBehaviour
 
     public virtual void Start()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         respawnPlayer();
     }
@@ -172,7 +175,7 @@ public class PlayerControllerBase : NetworkBehaviour
             UpdateMaterial(playerTeam.Value.ToString());
         }
 
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         checkGrounded();
         limitSpeed();
@@ -185,7 +188,7 @@ public class PlayerControllerBase : NetworkBehaviour
 
     public virtual void FixedUpdate()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
         animator.SetInteger("MovementState", (int)state);
         animator.SetFloat("MoveX", moveDirection.x);
         animator.SetFloat("MoveY", moveDirection.z);
@@ -194,6 +197,8 @@ public class PlayerControllerBase : NetworkBehaviour
         {
             case MovementState.standing:
                 speed = standingSpeed;
+                if (transform.localScale.y != standYScale) 
+                    transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
                 movePlayer();
                 break;
             case MovementState.crouching:
@@ -279,7 +284,7 @@ public class PlayerControllerBase : NetworkBehaviour
 
     private void Uncrouch(InputAction.CallbackContext obj)
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         if (state != MovementState.sliding)
         {
@@ -290,7 +295,7 @@ public class PlayerControllerBase : NetworkBehaviour
 
     private void startSlide()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         audioPlayer.playSound("Slide");
         state = MovementState.sliding;
@@ -307,11 +312,11 @@ public class PlayerControllerBase : NetworkBehaviour
         {
             if (spawnTeam == "Red")
             {
-                spawnPoint = GameObject.Find("RedTeamSpawn");
+                spawnPoint = GameObject.Find("RedTeamSpawn") ?? GameObject.Find("TeamSpawn");
             }
             else if (spawnTeam == "Blue")
             {
-                spawnPoint = GameObject.Find("BlueTeamSpawn");
+                spawnPoint = GameObject.Find("BlueTeamSpawn") ?? GameObject.Find("TeamSpawn");
             }
             else
             {
@@ -326,15 +331,15 @@ public class PlayerControllerBase : NetworkBehaviour
 
     public void Die()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         audioPlayer.playSound("Die");
-        transform.position = new Vector3(0, 2, 0);
+        respawnPlayer();
     }
 
     public void OnTriggerEnter(Collider other)
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         if (other.gameObject.CompareTag("DeathPlane"))
         {
@@ -344,7 +349,7 @@ public class PlayerControllerBase : NetworkBehaviour
 
     private void slideMovement()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         if (!onSlope())
         {
@@ -362,7 +367,7 @@ public class PlayerControllerBase : NetworkBehaviour
 
     private void stopSlide()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         audioPlayer.stopSound("Slide");
         //transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
@@ -374,6 +379,8 @@ public class PlayerControllerBase : NetworkBehaviour
         Vector2 v2 = movement.ReadValue<Vector2>();
         moveDirection = orientation.forward * v2.y + orientation.right * v2.x;
 
+        Debug.Log(rb);
+
         if (isGrounded)
             rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
         else
@@ -382,7 +389,7 @@ public class PlayerControllerBase : NetworkBehaviour
 
     private void limitSpeed()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         if (onSlope())
         {
@@ -403,7 +410,7 @@ public class PlayerControllerBase : NetworkBehaviour
 
     private void checkGrounded()
     {
-        if (!IsOwner) return;
+        if (isNotOwner()) return;
 
         isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.6f, ground);
 
@@ -443,5 +450,15 @@ public class PlayerControllerBase : NetworkBehaviour
     private Vector3 getSlopeMovementDirection(Vector3 direction)
     {
         return Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
+    }
+
+    private bool isNotOwner()
+    {
+        return PlayerPrefs.GetString("Mode") == "Online" && !IsOwner;
+    }
+
+    private bool isOwner()
+    {
+        return PlayerPrefs.GetString("Mode") == "Online" && IsOwner;
     }
 }

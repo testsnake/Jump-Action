@@ -10,6 +10,7 @@ public class Climbing : NetworkBehaviour
     public Transform orientation;
     private Rigidbody rb;
     public LayerMask wall;
+    public LayerMask smallWall;
     private PlayerController player;
     public PlayerCam cam;
 
@@ -51,7 +52,7 @@ public class Climbing : NetworkBehaviour
         wallCheck();
         tallWallCheck();
 
-        if (wallFront && playerIsHoldingForward() && wallAngle < maxAngle) // Player is running into wall or barrier
+        if ((wallFront || tallWallFront) && playerIsHoldingForward() && (wallAngle < maxAngle || tallWallAngle < maxAngle)) // Player is running into wall or barrier
         {
             if (canClimb() || canVault())
                 startClimb();
@@ -70,17 +71,17 @@ public class Climbing : NetworkBehaviour
 
     private bool canClimb()
     {
-        return player.state == PlayerController.MovementState.falling && climbTimer > 0;
+        return tallWallFront && player.state == PlayerController.MovementState.falling && climbTimer > 0;
     }
 
     private bool canVault()
     {
-        return !tallWallFront && climbTimer > 0;
+        return wallFront && climbTimer > 0;
     }
 
     private bool playerIsHoldingForward()
     {
-        return player.moveDirection.x * orientation.forward.x > 0.1f || player.moveDirection.z * orientation.forward.z > 0.1f;
+        return player.moveDirection.x * orientation.forward.x > 0f || player.moveDirection.z * orientation.forward.z > 0f;
     }
 
     private void wallCheck()
@@ -88,7 +89,7 @@ public class Climbing : NetworkBehaviour
         if (!IsOwner) return;
         Vector3 position = transform.position - new Vector3(0f, player.playerHeight * 0.25f, 0f);
 
-        wallFront = Physics.SphereCast(position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, wall);
+        wallFront = Physics.SphereCast(position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, smallWall);
         wallAngle = Vector3.Angle(orientation.forward, -frontWallHit.normal);
 
         if (player.isGrounded)
@@ -100,7 +101,7 @@ public class Climbing : NetworkBehaviour
         if (!IsOwner) return;
         Vector3 position = transform.position + new Vector3(0f, player.playerHeight * 0.125f, 0f);
 
-        tallWallFront = Physics.SphereCast(position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, wall);
+        tallWallFront = Physics.SphereCast(position, sphereCastRadius + 0.25f, orientation.forward, out frontWallHit, detectionLength, wall);
         tallWallAngle = Vector3.Angle(orientation.forward, -frontWallHit.normal);
 
         if (player.isGrounded)

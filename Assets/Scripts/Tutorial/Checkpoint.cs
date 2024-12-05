@@ -13,7 +13,7 @@ public class Checkpoint : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (spawnPoint != null)
-            spawnPoint.position = transform.position;
+            spawnPoint.position = transform.position + new Vector3(0f, 1f, 0f);
         if (tutorialText != "")
             tutorialDisplay.text = tutorialText;
         if (tutorialText.Contains("Congratulations"))

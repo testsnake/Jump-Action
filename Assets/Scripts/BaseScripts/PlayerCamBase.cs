@@ -27,6 +27,7 @@ public class PlayerCamBase : MonoBehaviour
     {
         inputActions = new InputActions();
         rotation = inputActions.Player.Rotation;
+        turnSensitivity *= PlayerPrefs.GetFloat("MouseSens", 1f);
 
         AssignOrientation(); // Assign orientation if not manually set
 
@@ -91,7 +92,7 @@ public class PlayerCamBase : MonoBehaviour
         GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject player in allPlayers)
         {
-            if (player.GetComponent<NetworkObject>()?.IsOwner == true)
+            if (player.GetComponent<NetworkObject>()?.IsOwner == true && PlayerPrefs.GetString("Mode") == "Online")
             {
                 orientation = player.transform;
                 break;

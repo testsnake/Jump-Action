@@ -110,12 +110,12 @@ public class PlayerController : NetworkBehaviour
         {
             if (playerTeam == "Red")
             {
-                spawnPoint = GameObject.Find("RedTeamSpawn");
+                spawnPoint = GameObject.Find("RedTeamSpawn") ?? GameObject.Find("TeamSpawn");
 
             }
             else if (playerTeam == "Blue")
             {
-                spawnPoint = GameObject.Find("BlueTeamSpawn");
+                spawnPoint = GameObject.Find("BlueTeamSpawn") ?? GameObject.Find("TeamSpawn");
             }
             else
             {
@@ -146,6 +146,8 @@ public class PlayerController : NetworkBehaviour
         {
             case MovementState.standing:
                 speed = standingSpeed;
+                if (transform.localScale.y != standYScale) 
+                    transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
                 movePlayer();
                 break;
             case MovementState.crouching:
@@ -356,7 +358,7 @@ public class PlayerController : NetworkBehaviour
         if (!IsOwner) return;
         //Implement respawn logic here at some point.
         audioPlayer.playSound("Die");
-        transform.position = new Vector3(0, 2, 0);
+        respawnPlayer();
     }
 
     private void OnTriggerEnter(Collider other)

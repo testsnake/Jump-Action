@@ -11,6 +11,8 @@ public class SettingsMenuInitializer : MonoBehaviour
     public Slider sfxVolumeSlider;
     public TMP_Dropdown screenModeDD;
     public TMP_Dropdown screenResDD;
+    public Slider mouseSensSlider;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,5 +23,6 @@ public class SettingsMenuInitializer : MonoBehaviour
         sfxVolumeSlider.value = PlayerPrefs.GetFloat("SFXVolume", 1);
         screenModeDD.value = PlayerPrefs.GetInt("ScreenMode", 1);
         screenResDD.value = PlayerPrefs.GetInt("ScreenRes", 0);
+        mouseSensSlider.value = PlayerPrefs.GetFloat("MouseSens", 0.5f);
     }
 }

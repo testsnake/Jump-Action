@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 307657981080347270}
   - component: {fileID: 9160911233003646475}
-  - component: {fileID: 8814238167671665847}
   - component: {fileID: 778634540962944409}
   - component: {fileID: 4503252940981495812}
   - component: {fileID: 3478480198131752451}
@@ -66,21 +65,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &8814238167671665847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3382888079995388838}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f47c5aac3550614798aa429e7a484fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 8889818665173407388, guid: 63d59a4bb34b9244fbed4a2c30040af4, type: 3}
-  playerCam: {fileID: 0}
-  firePointDistance: 1
 --- !u!114 &778634540962944409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,6 +81,9 @@ MonoBehaviour:
   wall:
     serializedVersion: 2
     m_Bits: 192
+  smallWall:
+    serializedVersion: 2
+    m_Bits: 0
   cam: {fileID: 0}
   climbSpeed: 7
   maxClimbTime: 0.75

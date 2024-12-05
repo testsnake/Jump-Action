@@ -46,6 +46,8 @@ public class WallRunningBase : NetworkBehaviour
     }
     protected virtual void startWallRun()
     {
+        if ((wallRight && rightWallHit.transform == lastWall) || (wallLeft && leftWallHit.transform == lastWall))
+            return;
         if (!IsOwner) return;
         if (player.state == PlayerControllerBase.MovementState.falling || player.state == PlayerControllerBase.MovementState.climbing || player.state == PlayerControllerBase.MovementState.wallRunning)
         {

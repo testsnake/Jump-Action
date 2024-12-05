@@ -50,8 +50,6 @@ public class ClimbingOffline : MonoBehaviour
         wallCheck();
         tallWallCheck();
 
-        Debug.Log(tallWallFront);
-
         if ((wallFront || tallWallFront) && playerIsHoldingForward() && (wallAngle < maxAngle || tallWallAngle < maxAngle)) // Player is running into wall or barrier
         {
             if (canClimb() || canVault())

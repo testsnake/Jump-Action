@@ -10,6 +10,7 @@ public class ClimbingBase : NetworkBehaviour
     public Transform orientation;
     protected Rigidbody rb;
     public LayerMask wall;
+    public LayerMask smallWall;
     protected PlayerControllerBase player; // Base player controller for modularity
     private PlayerCamBase cam;
 
@@ -60,7 +61,7 @@ public class ClimbingBase : NetworkBehaviour
         wallCheck();
         tallWallCheck();
 
-        if (wallFront && playerIsHoldingForward() && wallAngle < maxAngle)
+        if ((wallFront || tallWallFront) && playerIsHoldingForward() && (wallAngle < maxAngle || tallWallAngle < maxAngle))
         {
             if (canClimb() || canVault())
                 startClimb();
@@ -83,17 +84,17 @@ public class ClimbingBase : NetworkBehaviour
 
     protected virtual bool canClimb()
     {
-        return player.state == PlayerControllerBase.MovementState.falling && climbTimer > 0;
+        return tallWallFront && player.state == PlayerControllerBase.MovementState.falling && climbTimer > 0;
     }
 
     protected virtual bool canVault()
     {
-        return !tallWallFront && climbTimer > 0;
+        return wallFront && climbTimer > 0;
     }
 
     protected virtual bool playerIsHoldingForward()
     {
-        return player.moveDirection.x * orientation.forward.x > 0.1f || player.moveDirection.z * orientation.forward.z > 0.1f;
+        return player.moveDirection.x * orientation.forward.x > 0f || player.moveDirection.z * orientation.forward.z > 0f;
     }
 
     protected virtual void wallCheck()
@@ -101,7 +102,7 @@ public class ClimbingBase : NetworkBehaviour
         if (!IsOwner) return;
 
         Vector3 position = transform.position - new Vector3(0f, player.playerHeight * 0.25f, 0f);
-        wallFront = Physics.SphereCast(position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, wall);
+        wallFront = Physics.SphereCast(position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, smallWall);
         wallAngle = Vector3.Angle(orientation.forward, -frontWallHit.normal);
 
         if (player.isGrounded)

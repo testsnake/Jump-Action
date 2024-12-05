@@ -92,8 +92,8 @@ public class WallRunning : NetworkBehaviour
 
     void startWallRun()
     {
-        // if ((wallRight && rightWallHit.transform == lastWall) || (wallLeft && leftWallHit.transform == lastWall))
-        //     return;
+        if ((wallRight && rightWallHit.transform == lastWall) || (wallLeft && leftWallHit.transform == lastWall))
+            return;
         if (!IsOwner) return;
         player.state = PlayerController.MovementState.wallRunning;
         player.speed = wallRunningSpeed;
