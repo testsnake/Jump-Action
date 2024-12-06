@@ -3,7 +3,8 @@ using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Collections;
-using System.Collections; // Add Netcode namespace
+using System.Collections;
+using CodeMonkey; // Add Netcode namespace
 
 public class PlayerControllerBase : NetworkBehaviour
 {
@@ -58,6 +59,8 @@ public class PlayerControllerBase : NetworkBehaviour
     [HideInInspector]
     public Rigidbody rb;
     private PlayerSounds audioPlayer;
+    public float animXVal;
+    public float animYVal;
 
     public MovementState state;
 
@@ -190,8 +193,8 @@ public class PlayerControllerBase : NetworkBehaviour
     {
         if (isNotOwner()) return;
         animator.SetInteger("MovementState", (int)state);
-        animator.SetFloat("MoveX", moveDirection.x);
-        animator.SetFloat("MoveY", moveDirection.z);
+        animator.SetFloat("MoveX", animXVal);
+        animator.SetFloat("MoveY", animYVal);
         Debug.Log("MovementState: " +  state); 
         switch (state)
         {
@@ -213,13 +216,10 @@ public class PlayerControllerBase : NetworkBehaviour
                 speed = slideSpeed;
                 slideMovement();
                 break;
-            case MovementState.wallRunning:
-                // WallRunning Script Does Everything
-                break;
-            case MovementState.climbing:
-                // Climbing Script Does Everything
-                break;
             default:
+                Vector2 v2 = movement.ReadValue<Vector2>();
+                animXVal = v2.x;
+                animYVal = v2.y;
                 break;
         }
     }
@@ -301,6 +301,9 @@ public class PlayerControllerBase : NetworkBehaviour
         state = MovementState.sliding;
         slideTimer = maxSlideTime;
         Vector2 v2 = movement.ReadValue<Vector2>();
+        animXVal = v2.x;
+        animYVal = v2.y;
+        //Debug.Log(animYVal);
         moveDirection = orientation.forward * v2.y + orientation.right * v2.x;
     }
 
@@ -350,7 +353,7 @@ public class PlayerControllerBase : NetworkBehaviour
     private void slideMovement()
     {
         if (isNotOwner()) return;
-
+        
         if (!onSlope())
         {
             rb.AddForce(moveDirection.normalized * slideSpeed * 10f, ForceMode.Force);
@@ -377,6 +380,9 @@ public class PlayerControllerBase : NetworkBehaviour
     private void movePlayer()
     {
         Vector2 v2 = movement.ReadValue<Vector2>();
+        animXVal = v2.x;
+        animYVal = v2.y;
+        
         moveDirection = orientation.forward * v2.y + orientation.right * v2.x;
 
         Debug.Log(rb);
@@ -385,6 +391,7 @@ public class PlayerControllerBase : NetworkBehaviour
             rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
         else
             rb.AddForce(moveDirection.normalized * speed * 10f * airSpeedMultiplier, ForceMode.Force);
+    
     }
 
     private void limitSpeed()
