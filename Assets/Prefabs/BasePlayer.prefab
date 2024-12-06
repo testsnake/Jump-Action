@@ -237,6 +237,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   state: 0
   animator: {fileID: 7611516437615304654}
+  collider: {fileID: 64638763795489671}
 --- !u!114 &8431372143461298379
 MonoBehaviour:
   m_ObjectHideFlags: 0

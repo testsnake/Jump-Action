@@ -28,8 +28,6 @@ public class PlayerControllerBase : NetworkBehaviour
 
     [Header("Crouching")]
     public float crouchingSpeed = 5f;
-    public float crouchYScale = 0.5f;
-    private float standYScale;
 
     [Header("Sliding")]
     public float maxSlideTime = 0.5f;
@@ -65,6 +63,13 @@ public class PlayerControllerBase : NetworkBehaviour
     public MovementState state;
 
     public Animator animator;
+    public CapsuleCollider collider;
+    private enum CapsuleDirection
+    {
+        X = 0, // Capsule elongated along the X-axis
+        Y = 1, // Capsule elongated along the Y-axis (default)
+        Z = 2  // Capsule elongated along the Z-axis
+    }
 
     public enum MovementState
     {
@@ -85,7 +90,6 @@ public class PlayerControllerBase : NetworkBehaviour
         inputActions = new InputActions();
         LoadRebinds(inputActions.asset);
         movement = inputActions.Player.Movement;
-        standYScale = transform.localScale.y;
         speed = standingSpeed;
         state = MovementState.standing;
         slideTimer = maxSlideTime;
@@ -170,7 +174,7 @@ public class PlayerControllerBase : NetworkBehaviour
     public virtual void Update()
     {
         //This is a very brute force way of doing this but we don't have time for optimization right now
-        if(!playerMatIsSet)
+        if (!playerMatIsSet)
         {
             UpdateMaterial(playerTeam.Value.ToString());
         }
@@ -200,8 +204,6 @@ public class PlayerControllerBase : NetworkBehaviour
         {
             case MovementState.standing:
                 speed = standingSpeed;
-                if (transform.localScale.y != standYScale) 
-                    transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
                 movePlayer();
                 break;
             case MovementState.crouching:
@@ -246,13 +248,10 @@ public class PlayerControllerBase : NetworkBehaviour
 
     private void Jump(InputAction.CallbackContext obj)
     {
-        
+
         if (isGrounded)
         {
             animator.SetTrigger("Jump");
-            //if (state == MovementState.sliding)
-            //    transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
-
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
             audioPlayer.playSound("Jump");
@@ -269,9 +268,6 @@ public class PlayerControllerBase : NetworkBehaviour
     {
         if (isGrounded)
         {
-            //transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
-
             if ((moveDirection.x != 0 || moveDirection.z != 0) && state != MovementState.sliding)
             {
                 if (!onSlope() || rb.velocity.y <= -0.1f)
@@ -279,6 +275,8 @@ public class PlayerControllerBase : NetworkBehaviour
             }
             else
                 state = MovementState.crouching;
+            
+            shiftHitBox();
         }
     }
 
@@ -288,8 +286,8 @@ public class PlayerControllerBase : NetworkBehaviour
 
         if (state != MovementState.sliding)
         {
-            //transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
             state = MovementState.standing;
+            shiftHitBox();
         }
     }
 
@@ -328,6 +326,7 @@ public class PlayerControllerBase : NetworkBehaviour
             }
         }
 
+        rb.velocity = Vector3.zero;
         transform.position = spawnPoint.transform.position;
         transform.rotation = spawnPoint.transform.rotation;
     }
@@ -373,8 +372,8 @@ public class PlayerControllerBase : NetworkBehaviour
         if (isNotOwner()) return;
 
         audioPlayer.stopSound("Slide");
-        //transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
         state = isGrounded ? MovementState.standing : MovementState.falling;
+        shiftHitBox();
     }
 
     private void movePlayer()
@@ -467,5 +466,52 @@ public class PlayerControllerBase : NetworkBehaviour
     private bool isOwner()
     {
         return PlayerPrefs.GetString("Mode") == "Online" && IsOwner;
+    }
+
+    private void shiftHitBox()
+    {
+        Vector3 center = new Vector3(0, 1, 0);
+        float radius = 0.5f;
+        float height = 2f;
+        CapsuleDirection direction = CapsuleDirection.Y;
+
+        switch (state)
+        {
+            case MovementState.sliding:
+                // Center: Vector3(-0.25, 0.35, 0.1)
+                center = new Vector3(-0.25f, 0.75f, 0.1f);
+                // Radius: 0.4
+                radius = 0.4f;
+                // Height: 2
+                height = 2f;
+                // Direction: Enum: Z-Axis
+                direction = CapsuleDirection.Z;
+                break;
+            case MovementState.crouching:
+                // Center: Vector3(0, 0.625, 0)
+                center = new Vector3(0f, 0.625f, 0f);
+                // Radius: 0.5
+                radius = 0.5f;
+                // Height: 1.25
+                height = 1.25f;
+                // Direction: Enum: Y-Axis
+                direction = CapsuleDirection.Y;
+                break;
+            default: // Standing or any other state
+                // Center: Vector3(0, 1, 0)
+                center = new Vector3(0f, 1f, 0f);
+                // Radius: 0.5
+                radius = 0.5f;
+                // Height: 2
+                height = 2f;
+                // Direction: Enum: Y-Axis
+                direction = CapsuleDirection.Y;
+                break;
+        }
+
+        collider.center = center;
+        collider.radius = radius;
+        collider.height = height;
+        collider.direction = (int) direction;
     }
 }
