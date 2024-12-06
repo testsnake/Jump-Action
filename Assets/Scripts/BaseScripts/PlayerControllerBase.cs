@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Collections;
 using System.Collections;
-using CodeMonkey; // Add Netcode namespace
+using UnityEngine.Animations.Rigging;
 
 public class PlayerControllerBase : NetworkBehaviour
 {
@@ -60,10 +60,14 @@ public class PlayerControllerBase : NetworkBehaviour
     public float animXVal;
     public float animYVal;
 
+    [Header("Rigging and Animation")]
+    public RigBuilder rigBuilder;
+    public MultiAimConstraint headAim;
+    private Transform aimTarget = null;
     public MovementState state;
-
     public Animator animator;
     public CapsuleCollider collider;
+
     private enum CapsuleDirection
     {
         X = 0, // Capsule elongated along the X-axis
@@ -169,6 +173,34 @@ public class PlayerControllerBase : NetworkBehaviour
         if (isNotOwner()) return;
 
         respawnPlayer();
+        setAimTarget();
+    }
+
+    public void setAimTarget()
+    {
+        try
+        {
+            aimTarget = GameObject.Find("PlayerLookTarget").transform;
+            if (aimTarget != null)
+            {
+                animator.enabled = false;
+                var sourceObj = headAim.data.sourceObjects;
+                sourceObj.Clear();
+                sourceObj.Add(new WeightedTransform(aimTarget, 1.0f));
+                headAim.data.sourceObjects = sourceObj;
+                rigBuilder.Build();
+                animator.Rebind();
+                animator.enabled = true;
+            }
+            else
+            {
+                Debug.LogWarning("Could not find target for player rig. Make sure there's an object named \"PlayerLookTarget\" as a child of the scene camera, for the player to look at. (Let me know if you need help! - Will)");
+            }
+        } catch 
+        {
+            Debug.LogError("Error in setting the aim target during start. This may be bad.");
+        }
+        
     }
 
     public virtual void Update()
