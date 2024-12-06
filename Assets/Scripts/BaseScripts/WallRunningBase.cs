@@ -46,7 +46,7 @@ public class WallRunningBase : NetworkBehaviour
     }
     protected virtual void startWallRun()
     {
-        if ((wallRight && rightWallHit.transform == lastWall) || (wallLeft && leftWallHit.transform == lastWall))
+        if (!wallValidation()) // Wall not valid
             return;
         if (isNotOwner()) return;
         if (player.state == PlayerControllerBase.MovementState.falling || player.state == PlayerControllerBase.MovementState.climbing || player.state == PlayerControllerBase.MovementState.wallRunning)
@@ -68,7 +68,7 @@ public class WallRunningBase : NetworkBehaviour
 
         player.state = PlayerControllerBase.MovementState.standing;
         player.speed = player.standingSpeed;
-        
+
         cam.DoFov(80f);
         cam.DoTilt(0f);
     }
@@ -112,9 +112,10 @@ public class WallRunningBase : NetworkBehaviour
 
         wallRight = Physics.Raycast(transform.position, orientation.right, out rightWallHit, wallCheckDistance, wall);
         wallLeft = Physics.Raycast(transform.position, -orientation.right, out leftWallHit, wallCheckDistance, wall);
-        if (wallLeft) {
+        if (wallLeft)
+        {
             player.animator.SetFloat("WallSide", 0);
-         }
+        }
         else
         {
             player.animator.SetFloat("WallSide", 1);
@@ -162,6 +163,19 @@ public class WallRunningBase : NetworkBehaviour
 
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
         rb.AddForce(wallJumpForce, ForceMode.Impulse);
+    }
+
+    private bool wallValidation()
+    {
+        if (lastWall == null) return true; // If haven't wallrun any wall is valid
+
+        Transform currentWall = wallRight ? rightWallHit.transform : leftWallHit.transform;
+
+        bool isSameWall = currentWall == lastWall;
+        bool isConnected = lastWall.position.x == currentWall.position.x ||
+                            lastWall.position.z == currentWall.position.z;
+
+        return !(isSameWall || isConnected); // True if wall is valid
     }
 
     private bool isNotOwner()

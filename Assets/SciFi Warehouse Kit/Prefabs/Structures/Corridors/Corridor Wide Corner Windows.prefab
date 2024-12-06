@@ -284,7 +284,7 @@ GameObject:
   - component: {fileID: 4804555236834988372}
   - component: {fileID: 4804555236836086676}
   - component: {fileID: 7691038954652114415}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Corridor Ceiling Wide004
   m_TagString: Untagged
   m_Icon: {fileID: 0}

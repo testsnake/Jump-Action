@@ -222,7 +222,7 @@ GameObject:
   - component: {fileID: 321761353806655629}
   - component: {fileID: 321761353805689549}
   - component: {fileID: 5366882391081145224}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Tunnel Ceiling002
   m_TagString: Untagged
   m_Icon: {fileID: 0}

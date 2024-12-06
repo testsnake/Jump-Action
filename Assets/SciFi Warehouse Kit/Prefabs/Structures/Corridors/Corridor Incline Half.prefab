@@ -495,7 +495,7 @@ GameObject:
   - component: {fileID: 6205427424515907437}
   - component: {fileID: 6205427424514907565}
   - component: {fileID: 8660407572311880145}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Tunnel Incline Ceiling002
   m_TagString: Untagged
   m_Icon: {fileID: 0}

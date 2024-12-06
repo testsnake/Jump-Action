@@ -27,8 +27,6 @@ public class PlayerControllerBase : NetworkBehaviour
 
     [Header("Crouching")]
     public float crouchingSpeed = 5f;
-    public float crouchYScale = 0.5f;
-    private float standYScale;
 
     [Header("Sliding")]
     public float maxSlideTime = 0.5f;
@@ -89,7 +87,6 @@ public class PlayerControllerBase : NetworkBehaviour
         inputActions = new InputActions();
         LoadRebinds(inputActions.asset);
         movement = inputActions.Player.Movement;
-        standYScale = transform.localScale.y;
         speed = standingSpeed;
         state = MovementState.standing;
         slideTimer = maxSlideTime;
@@ -204,8 +201,6 @@ public class PlayerControllerBase : NetworkBehaviour
         {
             case MovementState.standing:
                 speed = standingSpeed;
-                if (transform.localScale.y != standYScale)
-                    transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
                 movePlayer();
                 break;
             case MovementState.crouching:
@@ -257,9 +252,6 @@ public class PlayerControllerBase : NetworkBehaviour
         if (isGrounded)
         {
             animator.SetTrigger("Jump");
-            //if (state == MovementState.sliding)
-            //    transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
-
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
             audioPlayer.playSound("Jump");
@@ -276,9 +268,6 @@ public class PlayerControllerBase : NetworkBehaviour
     {
         if (isGrounded)
         {
-            //transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-            //rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
-
             if ((moveDirection.x != 0 || moveDirection.z != 0) && state != MovementState.sliding)
             {
                 if (!onSlope() || rb.velocity.y <= -0.1f)
@@ -297,7 +286,6 @@ public class PlayerControllerBase : NetworkBehaviour
 
         if (state != MovementState.sliding)
         {
-            //transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
             state = MovementState.standing;
             shiftHitBox();
         }
@@ -335,6 +323,7 @@ public class PlayerControllerBase : NetworkBehaviour
             }
         }
 
+        rb.velocity = Vector3.zero;
         transform.position = spawnPoint.transform.position;
         transform.rotation = spawnPoint.transform.rotation;
     }
@@ -380,7 +369,6 @@ public class PlayerControllerBase : NetworkBehaviour
         if (isNotOwner()) return;
 
         audioPlayer.stopSound("Slide");
-        //transform.localScale = new Vector3(transform.localScale.x, standYScale, transform.localScale.z);
         state = isGrounded ? MovementState.standing : MovementState.falling;
         shiftHitBox();
     }
