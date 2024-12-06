@@ -3,7 +3,8 @@ using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Collections;
-using System.Collections; // Add Netcode namespace
+using System.Collections;
+using UnityEngine.Animations.Rigging;
 
 public class PlayerControllerBase : NetworkBehaviour
 {
@@ -56,11 +57,17 @@ public class PlayerControllerBase : NetworkBehaviour
     [HideInInspector]
     public Rigidbody rb;
     private PlayerSounds audioPlayer;
+    public float animXVal;
+    public float animYVal;
 
+    [Header("Rigging and Animation")]
+    public RigBuilder rigBuilder;
+    public MultiAimConstraint headAim;
+    private Transform aimTarget = null;
     public MovementState state;
-
     public Animator animator;
     public CapsuleCollider collider;
+
     private enum CapsuleDirection
     {
         X = 0, // Capsule elongated along the X-axis
@@ -166,6 +173,34 @@ public class PlayerControllerBase : NetworkBehaviour
         if (isNotOwner()) return;
 
         respawnPlayer();
+        setAimTarget();
+    }
+
+    public void setAimTarget()
+    {
+        try
+        {
+            aimTarget = GameObject.Find("PlayerLookTarget").transform;
+            if (aimTarget != null)
+            {
+                animator.enabled = false;
+                var sourceObj = headAim.data.sourceObjects;
+                sourceObj.Clear();
+                sourceObj.Add(new WeightedTransform(aimTarget, 1.0f));
+                headAim.data.sourceObjects = sourceObj;
+                rigBuilder.Build();
+                animator.Rebind();
+                animator.enabled = true;
+            }
+            else
+            {
+                Debug.LogWarning("Could not find target for player rig. Make sure there's an object named \"PlayerLookTarget\" as a child of the scene camera, for the player to look at. (Let me know if you need help! - Will)");
+            }
+        } catch 
+        {
+            Debug.LogError("Error in setting the aim target during start. This may be bad.");
+        }
+        
     }
 
     public virtual void Update()
@@ -194,9 +229,9 @@ public class PlayerControllerBase : NetworkBehaviour
     {
         if (isNotOwner()) return;
         animator.SetInteger("MovementState", (int)state);
-        animator.SetFloat("MoveX", moveDirection.x);
-        animator.SetFloat("MoveY", moveDirection.z);
-        Debug.Log("MovementState: " + state);
+        animator.SetFloat("MoveX", animXVal);
+        animator.SetFloat("MoveY", animYVal);
+        Debug.Log("MovementState: " +  state); 
         switch (state)
         {
             case MovementState.standing:
@@ -215,13 +250,10 @@ public class PlayerControllerBase : NetworkBehaviour
                 speed = slideSpeed;
                 slideMovement();
                 break;
-            case MovementState.wallRunning:
-                // WallRunning Script Does Everything
-                break;
-            case MovementState.climbing:
-                // Climbing Script Does Everything
-                break;
             default:
+                Vector2 v2 = movement.ReadValue<Vector2>();
+                animXVal = v2.x;
+                animYVal = v2.y;
                 break;
         }
     }
@@ -299,6 +331,9 @@ public class PlayerControllerBase : NetworkBehaviour
         state = MovementState.sliding;
         slideTimer = maxSlideTime;
         Vector2 v2 = movement.ReadValue<Vector2>();
+        animXVal = v2.x;
+        animYVal = v2.y;
+        //Debug.Log(animYVal);
         moveDirection = orientation.forward * v2.y + orientation.right * v2.x;
     }
 
@@ -349,7 +384,7 @@ public class PlayerControllerBase : NetworkBehaviour
     private void slideMovement()
     {
         if (isNotOwner()) return;
-
+        
         if (!onSlope())
         {
             rb.AddForce(moveDirection.normalized * slideSpeed * 10f, ForceMode.Force);
@@ -376,6 +411,9 @@ public class PlayerControllerBase : NetworkBehaviour
     private void movePlayer()
     {
         Vector2 v2 = movement.ReadValue<Vector2>();
+        animXVal = v2.x;
+        animYVal = v2.y;
+        
         moveDirection = orientation.forward * v2.y + orientation.right * v2.x;
 
         Debug.Log(rb);
@@ -384,6 +422,7 @@ public class PlayerControllerBase : NetworkBehaviour
             rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
         else
             rb.AddForce(moveDirection.normalized * speed * 10f * airSpeedMultiplier, ForceMode.Force);
+    
     }
 
     private void limitSpeed()
