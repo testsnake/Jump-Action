@@ -29,6 +29,7 @@ public class TestLobby : MonoBehaviour
     public event EventHandler<EventArgs> OnGameStarted;
 
     public event EventHandler OnLeftLobby;
+    public ErrorHandler errorHandler;
 
     public event EventHandler<LobbyEventArgs> OnJoinedLobby;
     public event EventHandler<LobbyEventArgs> OnJoinedLobbyUpdate;
@@ -108,7 +109,13 @@ public class TestLobby : MonoBehaviour
         }
         catch (Exception ex)
         {
-            
+            try
+            {
+                errorHandler.displayError(ex);
+            } catch
+            {
+                Debug.LogError(ex);
+            }
         }
         
     }
@@ -215,7 +222,14 @@ public class TestLobby : MonoBehaviour
         }
         catch (LobbyServiceException ex)
         {
-            Debug.Log(ex);
+            try
+            {
+                errorHandler.displayError(ex);
+            }
+            catch
+            {
+                Debug.LogError(ex);
+            }
         }
     }
 
@@ -224,7 +238,6 @@ public class TestLobby : MonoBehaviour
         try
         {
             playerTeam = "None";
-            UpdatePlayerTeam("None");
             await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id, AuthenticationService.Instance.PlayerId);
             hostLobby = null;
             joinedLobby = null;
@@ -232,7 +245,15 @@ public class TestLobby : MonoBehaviour
         }
         catch (LobbyServiceException ex)
         {
-            Debug.Log(ex);
+            inLobbyPanel.SetActive(false);
+            try
+            {
+                errorHandler.displayError(ex);
+            }
+            catch
+            {
+                Debug.LogError(ex);
+            }
         }
     }
 
@@ -245,7 +266,14 @@ public class TestLobby : MonoBehaviour
         }
         catch (LobbyServiceException ex)
         {
-            Debug.Log(ex);
+            try
+            {
+                errorHandler.displayError(ex);
+            }
+            catch
+            {
+                Debug.LogError(ex);
+            }
         }
     }
 
@@ -264,7 +292,14 @@ public class TestLobby : MonoBehaviour
         }
         catch (LobbyServiceException ex)
         {
-            Debug.Log(ex);
+            try
+            {
+                errorHandler.displayError(ex);
+            }
+            catch
+            {
+                Debug.LogError(ex);
+            }
         }
     }
 
@@ -286,7 +321,14 @@ public class TestLobby : MonoBehaviour
         }
         catch (LobbyServiceException ex)
         {
-            Debug.Log(ex);
+            try
+            {
+                errorHandler.displayError(ex);
+            }
+            catch
+            {
+                Debug.LogError(ex);
+            }
         }
     }
 
@@ -309,7 +351,7 @@ public class TestLobby : MonoBehaviour
         }
         catch (LobbyServiceException ex)
         {
-            Debug.Log(ex);
+            Debug.LogError(ex);
         }
     }
 
@@ -331,6 +373,10 @@ public class TestLobby : MonoBehaviour
                     new QueryOrder(false, QueryOrder.FieldOptions.Created)
                 }
             };
+            foreach (Transform t in lobbiesMenu.transform)
+            {
+                Destroy(t.gameObject);
+            }
             QueryResponse res = await Lobbies.Instance.QueryLobbiesAsync(query);
             Debug.Log("Lobbies found: " + res.Results.Count);
             menuHandler.switchTo(MenuHandler.menuName.lobbies);
@@ -355,7 +401,14 @@ public class TestLobby : MonoBehaviour
             
         } catch (LobbyServiceException ex)
         {
-            Debug.Log(ex);
+            try
+            {
+                errorHandler.displayError(ex);
+            }
+            catch
+            {
+                Debug.LogError(ex);
+            }
         }
     }
 
@@ -377,7 +430,14 @@ public class TestLobby : MonoBehaviour
         }
         catch (LobbyServiceException ex)
         {
-            Debug.Log(ex);
+            try
+            {
+                errorHandler.displayError(ex);
+            }
+            catch
+            {
+                Debug.LogError(ex);
+            }
         }
     }
 
@@ -398,7 +458,14 @@ public class TestLobby : MonoBehaviour
         }
         catch (LobbyServiceException ex)
         {
-            Debug.Log(ex);
+            try
+            {
+                errorHandler.displayError(ex);
+            }
+            catch
+            {
+                Debug.LogError(ex);
+            }
         }
     }
 
@@ -411,7 +478,14 @@ public class TestLobby : MonoBehaviour
         }
         catch (LobbyServiceException ex)
         {
-            Debug.Log(ex);
+            try
+            {
+                errorHandler.displayError(ex);
+            }
+            catch
+            {
+                Debug.LogError(ex);
+            }
         }
         
     }
@@ -475,7 +549,14 @@ public class TestLobby : MonoBehaviour
         }
         catch (LobbyServiceException ex)
         {
-            Debug.Log(ex);
+            try
+            {
+                errorHandler.displayError(ex);
+            }
+            catch
+            {
+                Debug.LogError(ex);
+            }
         }
     }
 
@@ -500,7 +581,14 @@ public class TestLobby : MonoBehaviour
             }
             catch (LobbyServiceException ex)
             {
-                Debug.Log(ex);
+                try
+                {
+                    errorHandler.displayError(ex);
+                }
+                catch
+                {
+                    Debug.LogError(ex);
+                }
             }
         }
     }
