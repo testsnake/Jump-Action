@@ -9,6 +9,7 @@ public class PlayerShootBase : NetworkBehaviour
     public GameObject projectilePrefab; // Prefab for the projectile
     private Transform cameraHolder; // Reference to the camera or look direction of the player
     public float firePointDistance = 1.1f; // Distance in front of the player
+    private string team;
 
     private InputActions inputActions;
 
@@ -43,8 +44,15 @@ public class PlayerShootBase : NetworkBehaviour
 
     private void Shoot(InputAction.CallbackContext obj)
     {
-        if(!IsOwner) return;
-        if (projectilePrefab != null && cameraHolder != null)
+        if (!IsOwner) return;
+
+        string team = PlayerPrefs.GetString("Team");
+        Vector3 spawnPosition = cameraHolder.position + cameraHolder.forward * firePointDistance;
+        Quaternion spawnRotation = cameraHolder.rotation;
+
+        GenerateBulletServerRpc(spawnPosition, spawnRotation, team);
+
+        /*if (projectilePrefab != null && cameraHolder != null)
         {
             Vector3 spawnPosition = cameraHolder.position + cameraHolder.forward * firePointDistance;
             Quaternion spawnRotation = cameraHolder.rotation;
@@ -64,6 +72,49 @@ public class PlayerShootBase : NetworkBehaviour
         else
         {
             Debug.LogWarning("ProjectilePrefab or PlayerCam is not assigned in PlayerShootBase.");
-        }
+        }*/
     }
+
+    [ServerRpc]
+    private void GenerateBulletServerRpc(Vector3 spawnPosition, Quaternion spawnRotation, string team)
+    {
+        // Check projectilePrefab
+        if (projectilePrefab == null)
+        {
+            Debug.LogError("Projectile Prefab is null!");
+            return;
+        }
+
+        // Instantiate the prefab
+        GameObject projectileObject = Instantiate(projectilePrefab, spawnPosition, spawnRotation);
+        if (projectileObject == null)
+        {
+            Debug.LogError("Failed to instantiate projectilePrefab!");
+            return;
+        }
+
+        // Check for Projectile component
+        Projectile projectile = projectileObject.GetComponent<Projectile>();
+        if (projectile == null)
+        {
+            Debug.LogError("Projectile component is missing from projectilePrefab!");
+            return;
+        }
+
+        // Set team
+        projectile.SetTeam(team);
+
+        // Check for NetworkObject component
+        NetworkObject projectileNetwork = projectile.GetComponent<NetworkObject>();
+        if (projectileNetwork == null)
+        {
+            Debug.LogError("NetworkObject component is missing from projectilePrefab!");
+            return;
+        }
+
+        // Spawn the network object
+        projectileNetwork.Spawn(true);
+    }
+
+
 }

@@ -8,6 +8,8 @@ public class Projectile : MonoBehaviour
     public float damage = 25f; // Damage dealt by this projectile
     public ulong ownerClientId; // The owner of this projectile (NetworkObjectId)
 
+    private string _team;
+
     void Start()
     {
         Destroy(gameObject, lifetime); // Destroy projectile after its lifetime
@@ -17,6 +19,16 @@ public class Projectile : MonoBehaviour
     {
         // Move the projectile forward
         transform.position += transform.forward * speed * Time.fixedDeltaTime;
+    }
+
+    public void SetTeam(string team) 
+    {
+        _team = team;
+    }
+
+    public string GetTeam() 
+    {
+        return _team;
     }
 
     private void OnTriggerEnter(Collider other)
