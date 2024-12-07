@@ -196,7 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 0.13654038, g: 0.030675195, b: 0.20754719, a: 0.85882354}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -228,6 +228,7 @@ MonoBehaviour:
   Name: {fileID: 4984402126586011669}
   Gamemode: {fileID: 7759081215947712969}
   Playerslots: {fileID: 3775683831606893261}
+  lobbyManager: {fileID: 0}
 --- !u!1 &3546596596517213523
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,8 +296,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Join Lobby
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5f74e66fc28b71a4199a592055ed18fa, type: 2}
+  m_sharedMaterial: {fileID: 6611536896989801950, guid: 5f74e66fc28b71a4199a592055ed18fa, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -429,8 +430,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Game Mode
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bf98eea6386179b48a13e5bff0c18466, type: 2}
+  m_sharedMaterial: {fileID: -6284614009149327687, guid: bf98eea6386179b48a13e5bff0c18466, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -563,8 +564,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Lobby Name
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5f74e66fc28b71a4199a592055ed18fa, type: 2}
+  m_sharedMaterial: {fileID: 6611536896989801950, guid: 5f74e66fc28b71a4199a592055ed18fa, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -594,7 +595,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -698,15 +699,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Players: 0/10'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5f74e66fc28b71a4199a592055ed18fa, type: 2}
+  m_sharedMaterial: {fileID: 6611536896989801950, guid: 5f74e66fc28b71a4199a592055ed18fa, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4288716960
+  m_fontColor: {r: 0.6289307, g: 0.6289307, b: 0.6289307, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -780,3 +781,4 @@ MonoBehaviour:
   Name: {fileID: 0}
   Gamemode: {fileID: 0}
   Playerslots: {fileID: 0}
+  lobbyManager: {fileID: 0}
