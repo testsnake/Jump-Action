@@ -18,6 +18,7 @@ public class PlayerCamBase : MonoBehaviour
 
     protected float xRotation;
     protected float yRotation;
+    protected float teamSpawnOffset = 0;
 
     private Tween fovTween;
     private Tween tiltTween;
@@ -29,7 +30,11 @@ public class PlayerCamBase : MonoBehaviour
         rotation = inputActions.Player.Rotation;
         turnSensitivity *= PlayerPrefs.GetFloat("MouseSens", 1f);
         mainCamera = GetComponentInChildren<Camera>();
-
+        string team = PlayerPrefs.GetString("Team");
+        if(team == "Blue")
+        {
+            teamSpawnOffset = 180;
+        }
         AssignOrientation();
     }
 
@@ -65,7 +70,7 @@ public class PlayerCamBase : MonoBehaviour
         }
         else 
         {
-            Debug.LogWarning("Orientation is no longer null.");
+            //Debug.LogWarning("Orientation is no longer null.");
         }
 
         // Handle rotation input
@@ -78,8 +83,8 @@ public class PlayerCamBase : MonoBehaviour
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         transform.position = orientation.position + offset;
-        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+        transform.rotation = Quaternion.Euler(xRotation, yRotation + teamSpawnOffset, 0);
+        orientation.rotation = Quaternion.Euler(0, yRotation + teamSpawnOffset, 0);
     }
 
     private void AssignOrientation()
@@ -119,6 +124,7 @@ public class PlayerCamBase : MonoBehaviour
         tiltTween = mainCamera.transform.DOLocalRotate(new Vector3(0, 0, zTilt), 0.25f)
                              .SetEase(Ease.OutQuad);
     }
+
 
     public virtual void Rotate180(float duration)
     {

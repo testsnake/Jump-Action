@@ -17,6 +17,8 @@ public class PlayerControllerBase : NetworkBehaviour
     public float airDrag = 1f;
     public float airSpeedMultiplier = 0.4f;
     private Transform playerCam;
+    private PlayerCamBase camBase;
+    private float cameraOffsetAim = 0.9f;
 
     [HideInInspector]
     public Vector3 moveDirection;
@@ -107,6 +109,7 @@ public class PlayerControllerBase : NetworkBehaviour
         /*orientation = transform.Find("Orientation");*/
         ground = LayerMask.GetMask("ground", "Stage", "wall");
         playerCam = GameObject.Find("CameraHolder").GetComponent<Transform>();
+        camBase = playerCam.gameObject.GetComponent<PlayerCamBase>();
     }
 
     public void LoadRebinds(InputActionAsset inputActionAsset)
@@ -260,6 +263,8 @@ public class PlayerControllerBase : NetworkBehaviour
         checkGrounded();
         limitSpeed();
 
+        camBase.offset.y = Mathf.Lerp(camBase.offset.y, cameraOffsetAim, 0.3f);
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Application.Quit();
@@ -399,7 +404,6 @@ public class PlayerControllerBase : NetworkBehaviour
 
         rb.velocity = Vector3.zero;
         transform.position = spawnPoint.transform.position;
-        transform.rotation = spawnPoint.transform.rotation;
     }
 
     public void Die()
@@ -570,6 +574,7 @@ public class PlayerControllerBase : NetworkBehaviour
                 height = 2f;
                 // Direction: Enum: Z-Axis
                 direction = CapsuleDirection.Z;
+                cameraOffsetAim = 0.5f;
                 break;
             case MovementState.crouching:
                 // Center: Vector3(0, 0.625, 0)
@@ -580,6 +585,7 @@ public class PlayerControllerBase : NetworkBehaviour
                 height = 1.25f;
                 // Direction: Enum: Y-Axis
                 direction = CapsuleDirection.Y;
+                cameraOffsetAim = 0.5f;
                 break;
             default: // Standing or any other state
                 // Center: Vector3(0, 1, 0)
@@ -590,6 +596,7 @@ public class PlayerControllerBase : NetworkBehaviour
                 height = 2f;
                 // Direction: Enum: Y-Axis
                 direction = CapsuleDirection.Y;
+                cameraOffsetAim = 0.9f;
                 break;
         }
 
