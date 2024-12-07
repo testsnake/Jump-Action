@@ -28,22 +28,13 @@ public class PlayerCamBase : MonoBehaviour
         inputActions = new InputActions();
         rotation = inputActions.Player.Rotation;
         turnSensitivity *= PlayerPrefs.GetFloat("MouseSens", 1f);
-
-        AssignOrientation(); // Assign orientation if not manually set
-
-        // Assign the mainCamera reference
-        mainCamera = GetComponentInChildren<Camera>(); // Look for a Camera in child objects
+        mainCamera = GetComponentInChildren<Camera>();
     }
 
     protected virtual void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        if (orientation == null)
-        {
-            Debug.LogError("Orientation is not assigned! Make sure to assign it in the Inspector or dynamically in the code.");
-        }
     }
 
     protected virtual void OnEnable()
@@ -58,9 +49,9 @@ public class PlayerCamBase : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (orientation == null)
-        {
-            Debug.LogWarning("Orientation is null. Attempting to reassign.");
+        if (orientation == null) 
+        { 
+            Debug.LogWarning("Orientation still in the Update null.");
             AssignOrientation();
             return;
         }
@@ -89,6 +80,7 @@ public class PlayerCamBase : MonoBehaviour
 
     private void AssignOrientation()
     {
+        // Find all players with the "Player" tag
         GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject player in allPlayers)
         {
@@ -98,12 +90,8 @@ public class PlayerCamBase : MonoBehaviour
                 break;
             }
         }
-
-        if (orientation == null)
-        {
-            Debug.LogError("Failed to assign orientation. Ensure the player has a NetworkObject and is properly tagged.");
-        }
     }
+
 
     public virtual void DoFov(float endValue)
     {

@@ -11,13 +11,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/DevScenes/Will/GameObjectNetcodeTest.unity
     guid: 710b94dd7a73218438e13ed6fe984167
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: de55fd477c294fa6e84f2d42c3a2d51c
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Gameplay.unity
     guid: 9b8c4a04da942454cb3702716c5492dd
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Tutorial.unity
     guid: 8eb126e916522304dba400ecc56bb466
   - enabled: 0
