@@ -66,6 +66,7 @@ public class PlayerControllerBase : NetworkBehaviour
     public MultiAimConstraint headAim;
     public MultiAimConstraint handAim;
     public TwoBoneIKConstraint armAim;
+    private Transform lookTarget = null;
     private Transform aimTarget = null;
     public MovementState state;
     public Animator animator;
@@ -173,25 +174,43 @@ public class PlayerControllerBase : NetworkBehaviour
         }
     }
 
+    private void SetClientLayerRecursive(GameObject gameObj)
+    {
+        gameObj.layer = LayerMask.NameToLayer("Client");
+        foreach (Transform child in gameObj.transform)
+        {
+            child.gameObject.layer = LayerMask.NameToLayer("Client");
+
+            Transform children = child.GetComponentInChildren<Transform>();
+            if (children != null)
+            {
+                SetClientLayerRecursive(child.gameObject);
+            }
+                
+
+        }
+    }
+
     public virtual void Start()
     {
         if (isNotOwner()) return;
-
+        SetClientLayerRecursive(gameObject);
         respawnPlayer();
-        setAimTarget();
+        setRigTargets();
     }
 
-    public void setAimTarget()
+    public void setRigTargets()
     {
         try
         {
-            aimTarget = GameObject.Find("PlayerLookTarget").transform;
-            if (aimTarget != null)
+            lookTarget = GameObject.Find("PlayerLookTarget").transform;
+            aimTarget = GameObject.Find("PlayerAimTarget").transform;
+            if (lookTarget != null)
             {
                 animator.enabled = false;
                 var sourceObj = headAim.data.sourceObjects;
                 sourceObj.Clear();
-                sourceObj.Add(new WeightedTransform(aimTarget, 1.0f));
+                sourceObj.Add(new WeightedTransform(lookTarget, 1.0f));
                 headAim.data.sourceObjects = sourceObj;
 
                 sourceObj = handAim.data.sourceObjects;
