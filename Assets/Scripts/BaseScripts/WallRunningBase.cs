@@ -29,7 +29,7 @@ public class WallRunningBase : NetworkBehaviour
     public float gravityCounterForce = 5f;
 
     [Header("References")]
-    public Transform orientation;
+    /*public Transform orientation;*/
     private PlayerCamBase cam;
     protected PlayerControllerBase player; // Use PlayerControllerBase for modularity
     protected Rigidbody rb;
@@ -42,7 +42,7 @@ public class WallRunningBase : NetworkBehaviour
         rb = GetComponent<Rigidbody>();
         player = GetComponent<PlayerControllerBase>();
         cam = GameObject.Find("CameraHolder")?.GetComponent<PlayerCamBase>();
-        orientation = transform.Find("Orientation");
+        /*orientation = transform.Find("Orientation");*/
     }
     protected virtual void startWallRun()
     {
@@ -110,8 +110,8 @@ public class WallRunningBase : NetworkBehaviour
     {
         if (isNotOwner()) return;
 
-        wallRight = Physics.Raycast(transform.position, orientation.right, out rightWallHit, wallCheckDistance, wall);
-        wallLeft = Physics.Raycast(transform.position, -orientation.right, out leftWallHit, wallCheckDistance, wall);
+        wallRight = Physics.Raycast(transform.position, transform.right, out rightWallHit, wallCheckDistance, wall);
+        wallLeft = Physics.Raycast(transform.position, -transform.right, out leftWallHit, wallCheckDistance, wall);
         if (wallLeft)
         {
             player.animator.SetFloat("WallSide", 0);
@@ -136,6 +136,24 @@ public class WallRunningBase : NetworkBehaviour
         return !isGrounded;
     }
 
+    /*protected virtual void wallRunningMovement()
+    {
+        if (isNotOwner()) return;
+
+        rb.useGravity = useGravity;
+
+        Vector3 wallNormal = wallRight ? rightWallHit.normal : leftWallHit.normal;
+        Vector3 wallForward = Vector3.Cross(wallNormal, transform.up);
+
+        if ((transform.forward - wallForward).magnitude > (transform.forward + wallForward).magnitude)
+            wallForward = -wallForward;
+
+        rb.AddForce(wallForward * wallRunForce, ForceMode.Force);
+
+        if (useGravity)
+            rb.AddForce(Vector3.up * gravityCounterForce, ForceMode.Force);
+    }*/
+
     protected virtual void wallRunningMovement()
     {
         if (isNotOwner()) return;
@@ -145,7 +163,7 @@ public class WallRunningBase : NetworkBehaviour
         Vector3 wallNormal = wallRight ? rightWallHit.normal : leftWallHit.normal;
         Vector3 wallForward = Vector3.Cross(wallNormal, transform.up);
 
-        if ((orientation.forward - wallForward).magnitude > (orientation.forward + wallForward).magnitude)
+        if (Vector3.Dot(transform.forward, wallForward) < 0)
             wallForward = -wallForward;
 
         rb.AddForce(wallForward * wallRunForce, ForceMode.Force);
@@ -153,6 +171,7 @@ public class WallRunningBase : NetworkBehaviour
         if (useGravity)
             rb.AddForce(Vector3.up * gravityCounterForce, ForceMode.Force);
     }
+
 
     public virtual void wallJump()
     {

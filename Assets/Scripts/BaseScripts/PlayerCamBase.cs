@@ -7,7 +7,7 @@ public class PlayerCamBase : MonoBehaviour
 {
     [Header("Camera Settings")]
     public float turnSensitivity = 100f;
-    public Vector3 offset = new Vector3(0, 1, 0); // Offset of the camera from the player
+    public Vector3 offset = new Vector3(0, 1.5f, 0); // Offset of the camera from the player
 
     [Header("References")]
     private Camera mainCamera;
@@ -29,12 +29,20 @@ public class PlayerCamBase : MonoBehaviour
         rotation = inputActions.Player.Rotation;
         turnSensitivity *= PlayerPrefs.GetFloat("MouseSens", 1f);
         mainCamera = GetComponentInChildren<Camera>();
+
+        AssignOrientation();
     }
 
     protected virtual void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        if (orientation == null)
+        {
+            Debug.LogWarning("orientation is still null in Start(). Calling AssignOrientation()");
+            AssignOrientation();
+        }
     }
 
     protected virtual void OnEnable()
@@ -49,11 +57,15 @@ public class PlayerCamBase : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (orientation == null) 
-        { 
+        if (orientation == null)
+        {
             Debug.LogWarning("Orientation still in the Update null.");
             AssignOrientation();
             return;
+        }
+        else 
+        {
+            Debug.LogWarning("Orientation is no longer null.");
         }
 
         // Handle rotation input
@@ -65,17 +77,9 @@ public class PlayerCamBase : MonoBehaviour
         xRotation -= y;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
+        transform.position = orientation.position + offset;
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
         orientation.rotation = Quaternion.Euler(0, yRotation, 0);
-    }
-
-    protected virtual void LateUpdate()
-    {
-        // Ensure the camera follows the player
-        if (orientation != null)
-        {
-            transform.position = orientation.position + offset; // Follow the player's position with an offset
-        }
     }
 
     private void AssignOrientation()
@@ -87,7 +91,7 @@ public class PlayerCamBase : MonoBehaviour
             if (player.GetComponent<NetworkObject>()?.IsOwner == true && PlayerPrefs.GetString("Mode") == "Online")
             {
                 orientation = player.transform;
-                break;
+                return;
             }
         }
     }

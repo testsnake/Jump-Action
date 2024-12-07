@@ -21,6 +21,7 @@ public class PlayerShootBase : NetworkBehaviour
     public virtual void Start()
     {
         if (!IsOwner) return;
+
         // Find the main camera to use as the shooting direction (can be overridden in derived classes)
         cameraHolder = GameObject.Find("CameraHolder")?.GetComponent<Transform>();
     }
