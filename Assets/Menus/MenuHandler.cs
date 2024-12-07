@@ -40,6 +40,14 @@ public class MenuHandler : MonoBehaviour
         allMenus[(int) menu].SetActive(true);
     }
 
+    public void Awake()
+    {
+        if (VersionText == null)
+        { 
+            VersionText = GameObject.Find("VersionText").GetComponent<TMP_Text>();
+        }
+    }
+
     public void Start()
     {
         VersionText.text = Application.version;

@@ -1,16 +1,22 @@
 using UnityEngine;
 using Unity.Netcode;
 
-public class Projectile : MonoBehaviour
+public class Projectile : NetworkBehaviour
 {
     public float speed;
     public float lifetime;
     public float damage = 25f; // Damage dealt by this projectile
     public ulong ownerClientId; // The owner of this projectile (NetworkObjectId)
 
+    private string _team;
+
     void Start()
     {
-        Destroy(gameObject, lifetime); // Destroy projectile after its lifetime
+        if (IsServer)
+        {
+            // Schedule destruction on the server
+            Invoke(nameof(DestroyNetworkObject), lifetime);
+        }
     }
 
     void FixedUpdate()
@@ -19,10 +25,30 @@ public class Projectile : MonoBehaviour
         transform.position += transform.forward * speed * Time.fixedDeltaTime;
     }
 
+    public void SetTeam(string team)
+    {
+        _team = team;
+    }
+
+    public string GetTeam()
+    {
+        return _team;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the object hit has a NetworkObject
-        NetworkObject targetNetworkObject = other.GetComponent<NetworkObject>();
+        // Call ServerRpc to handle collision logic on the server
+        HandleCollisionServerRpc(other.GetComponent<NetworkObject>()?.NetworkObjectId ?? 0, other.GetComponent<Health>() != null);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void HandleCollisionServerRpc(ulong targetNetworkObjectId, bool hasHealth)
+    {
+        // Only the server processes the collision logic
+        NetworkObject targetNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(targetNetworkObjectId)
+            ? NetworkManager.Singleton.SpawnManager.SpawnedObjects[targetNetworkObjectId]
+            : null;
+
         if (targetNetworkObject != null)
         {
             // Ignore if the target is the owner of the projectile
@@ -33,18 +59,30 @@ public class Projectile : MonoBehaviour
             }
         }
 
-        // Check if the object hit has a Health component
-        Health targetHealth = other.GetComponent<Health>();
-        if (targetHealth != null)
+        // Check if the object has a Health component
+        if (hasHealth && targetNetworkObject != null)
         {
-            // Damage the target
-            targetHealth.ApplyDamage(damage);
+            Health targetHealth = targetNetworkObject.GetComponent<Health>();
+            if (targetHealth != null)
+            {
+                // Damage the target
+                targetHealth.ApplyDamage(damage);
 
-            // Optionally log the hit
-            Debug.Log($"{gameObject.name} hit {other.gameObject.name} for {damage} damage.");
+                // Optionally log the hit
+                Debug.Log($"{gameObject.name} hit {targetNetworkObject.name} for {damage} damage.");
+            }
         }
 
         // Destroy the projectile on impact
-        Destroy(gameObject);
+        DestroyNetworkObject();
+    }
+
+    private void DestroyNetworkObject()
+    {
+        if (IsServer)
+        {
+            // Despawn and destroy the network object
+            GetComponent<NetworkObject>().Despawn(true);
+        }
     }
 }

@@ -61,9 +61,9 @@ public class ClimbingBase : NetworkBehaviour
         wallCheck();
         tallWallCheck();
 
-        Debug.Log("wf:" + wallFront);
+        /*Debug.Log("wf:" + wallFront);
         Debug.Log("hf:" + playerIsHoldingForward());
-        Debug.Log("wa:" + (wallAngle < maxAngle));
+        Debug.Log("wa:" + (wallAngle < maxAngle));*/
 
         if ((wallFront || tallWallFront) && playerIsHoldingForward() && (wallAngle < maxAngle || tallWallAngle < maxAngle))
         {

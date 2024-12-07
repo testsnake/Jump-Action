@@ -9,6 +9,9 @@ public class Checkpoint : MonoBehaviour
     public Transform spawnPoint;
     public TMP_Text tutorialDisplay;
     public string tutorialText;
+    public GameObject cheers;
+    public GameObject fireworkAudio;
+    public GameObject fireworks;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -18,8 +21,11 @@ public class Checkpoint : MonoBehaviour
             tutorialDisplay.text = tutorialText;
         if (tutorialText.Contains("Congratulations"))
         {
+            cheers.SetActive(true);
+            fireworkAudio.SetActive(true);
+            fireworks.SetActive(true);
             SceneChange sceneManager = GameObject.Find("SceneManager").GetComponent<SceneChange>();
-            sceneManager.LoadSceneByNameWithDelay("MainMenu", 3f);
+            sceneManager.LoadSceneByNameWithDelay("MainMenu", 10f);
         }
     }
 }

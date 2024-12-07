@@ -7,7 +7,7 @@ public class PlayerCamBase : MonoBehaviour
 {
     [Header("Camera Settings")]
     public float turnSensitivity = 100f;
-    public Vector3 offset = new Vector3(0, 1, 0); // Offset of the camera from the player
+    public Vector3 offset = new Vector3(0, 1.5f, 0); // Offset of the camera from the player
 
     [Header("References")]
     private Camera mainCamera;
@@ -28,11 +28,9 @@ public class PlayerCamBase : MonoBehaviour
         inputActions = new InputActions();
         rotation = inputActions.Player.Rotation;
         turnSensitivity *= PlayerPrefs.GetFloat("MouseSens", 1f);
+        mainCamera = GetComponentInChildren<Camera>();
 
-        AssignOrientation(); // Assign orientation if not manually set
-
-        // Assign the mainCamera reference
-        mainCamera = GetComponentInChildren<Camera>(); // Look for a Camera in child objects
+        AssignOrientation();
     }
 
     protected virtual void Start()
@@ -42,7 +40,8 @@ public class PlayerCamBase : MonoBehaviour
 
         if (orientation == null)
         {
-            Debug.LogError("Orientation is not assigned! Make sure to assign it in the Inspector or dynamically in the code.");
+            Debug.LogWarning("orientation is still null in Start(). Calling AssignOrientation()");
+            AssignOrientation();
         }
     }
 
@@ -60,9 +59,13 @@ public class PlayerCamBase : MonoBehaviour
     {
         if (orientation == null)
         {
-            Debug.LogWarning("Orientation is null. Attempting to reassign.");
+            Debug.LogWarning("Orientation still in the Update null.");
             AssignOrientation();
             return;
+        }
+        else 
+        {
+            Debug.LogWarning("Orientation is no longer null.");
         }
 
         // Handle rotation input
@@ -74,36 +77,25 @@ public class PlayerCamBase : MonoBehaviour
         xRotation -= y;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
+        transform.position = orientation.position + offset;
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
         orientation.rotation = Quaternion.Euler(0, yRotation, 0);
     }
 
-    protected virtual void LateUpdate()
-    {
-        // Ensure the camera follows the player
-        if (orientation != null)
-        {
-            transform.position = orientation.position + offset; // Follow the player's position with an offset
-        }
-    }
-
     private void AssignOrientation()
     {
+        // Find all players with the "Player" tag
         GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject player in allPlayers)
         {
             if (player.GetComponent<NetworkObject>()?.IsOwner == true && PlayerPrefs.GetString("Mode") == "Online")
             {
                 orientation = player.transform;
-                break;
+                return;
             }
         }
-
-        if (orientation == null)
-        {
-            Debug.LogError("Failed to assign orientation. Ensure the player has a NetworkObject and is properly tagged.");
-        }
     }
+
 
     public virtual void DoFov(float endValue)
     {

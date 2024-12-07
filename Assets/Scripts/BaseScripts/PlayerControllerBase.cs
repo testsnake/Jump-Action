@@ -16,6 +16,7 @@ public class PlayerControllerBase : NetworkBehaviour
     public float groundDrag = 5f;
     public float airDrag = 1f;
     public float airSpeedMultiplier = 0.4f;
+    private Transform playerCam;
 
     [HideInInspector]
     public Vector3 moveDirection;
@@ -43,7 +44,7 @@ public class PlayerControllerBase : NetworkBehaviour
     [Header("SlopeHandling")]
     public float maxSlopeAngle = 40f;
     private RaycastHit slopeHit;
-    private Transform orientation;
+    /*private Transform orientation;*/
 
     [Header("Miscellaneous")]
     public List<Material> teamColorMaterials;
@@ -102,8 +103,9 @@ public class PlayerControllerBase : NetworkBehaviour
         wallRunning = GetComponent<WallRunningBase>();
         climbing = GetComponent<Climbing>();
         audioPlayer = GameObject.Find("AudioManager").GetComponent<PlayerSounds>();
-        orientation = transform.Find("Orientation");
+        /*orientation = transform.Find("Orientation");*/
         ground = LayerMask.GetMask("ground", "Stage", "wall");
+        playerCam = GameObject.Find("CameraHolder").GetComponent<Transform>();
     }
 
     public void LoadRebinds(InputActionAsset inputActionAsset)
@@ -212,6 +214,16 @@ public class PlayerControllerBase : NetworkBehaviour
         
     }
 
+    public void UpdateMovementDirection()
+    {
+        Vector2 v2 = movement.ReadValue<Vector2>();
+        animXVal = v2.x;
+        animYVal = v2.y;
+
+        moveDirection = playerCam.forward * v2.y + playerCam.right * v2.x;
+        moveDirection.y = 0;
+    }
+
     public virtual void Update()
     {
         //This is a very brute force way of doing this but we don't have time for optimization right now
@@ -240,7 +252,7 @@ public class PlayerControllerBase : NetworkBehaviour
         animator.SetInteger("MovementState", (int)state);
         animator.SetFloat("MoveX", animXVal);
         animator.SetFloat("MoveY", animYVal);
-        Debug.Log("MovementState: " +  state); 
+        /*Debug.Log("MovementState: " +  state); */
         switch (state)
         {
             case MovementState.standing:
@@ -309,6 +321,7 @@ public class PlayerControllerBase : NetworkBehaviour
     {
         if (isGrounded)
         {
+            UpdateMovementDirection();
             if ((moveDirection.x != 0 || moveDirection.z != 0) && state != MovementState.sliding)
             {
                 if (!onSlope() || rb.velocity.y <= -0.1f)
@@ -339,11 +352,8 @@ public class PlayerControllerBase : NetworkBehaviour
         audioPlayer.playSound("Slide");
         state = MovementState.sliding;
         slideTimer = maxSlideTime;
-        Vector2 v2 = movement.ReadValue<Vector2>();
-        animXVal = v2.x;
-        animYVal = v2.y;
         //Debug.Log(animYVal);
-        moveDirection = orientation.forward * v2.y + orientation.right * v2.x;
+        UpdateMovementDirection();
     }
 
     private void respawnPlayer()
@@ -393,7 +403,8 @@ public class PlayerControllerBase : NetworkBehaviour
     private void slideMovement()
     {
         if (isNotOwner()) return;
-        
+        UpdateMovementDirection();
+
         if (!onSlope())
         {
             rb.AddForce(moveDirection.normalized * slideSpeed * 10f, ForceMode.Force);
@@ -419,13 +430,25 @@ public class PlayerControllerBase : NetworkBehaviour
 
     private void movePlayer()
     {
-        Vector2 v2 = movement.ReadValue<Vector2>();
-        animXVal = v2.x;
-        animYVal = v2.y;
-        
-        moveDirection = orientation.forward * v2.y + orientation.right * v2.x;
+        UpdateMovementDirection();
 
-        Debug.Log(rb);
+        /*string direction = "Moving: ";
+
+        if (v2.y < 0)
+            direction += "Backwards + ";
+        else if (v2.y > 0)
+            direction += "Forwards + ";
+        else
+            direction += "Still + ";
+
+        if (v2.x < 0)
+            direction += "Left";
+        else if (v2.x > 0)
+            direction += "Right";
+        else
+            direction += "Still";*/
+
+        /*Debug.Log($"direction: {direction} || moveDirection: {moveDirection}");*/
 
         if (isGrounded)
             rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
