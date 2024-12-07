@@ -63,6 +63,8 @@ public class PlayerControllerBase : NetworkBehaviour
     [Header("Rigging and Animation")]
     public RigBuilder rigBuilder;
     public MultiAimConstraint headAim;
+    public MultiAimConstraint handAim;
+    public TwoBoneIKConstraint armAim;
     private Transform aimTarget = null;
     public MovementState state;
     public Animator animator;
@@ -188,6 +190,13 @@ public class PlayerControllerBase : NetworkBehaviour
                 sourceObj.Clear();
                 sourceObj.Add(new WeightedTransform(aimTarget, 1.0f));
                 headAim.data.sourceObjects = sourceObj;
+
+                sourceObj = handAim.data.sourceObjects;
+                sourceObj.Clear();
+                sourceObj.Add(new WeightedTransform(aimTarget, 1.0f));
+                handAim.data.sourceObjects = sourceObj;
+
+                armAim.data.target = aimTarget;
                 rigBuilder.Build();
                 animator.Rebind();
                 animator.enabled = true;

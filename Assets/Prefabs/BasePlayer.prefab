@@ -168,6 +168,7 @@ GameObject:
   - component: {fileID: 3733231846639502370}
   - component: {fileID: 7817422365187367772}
   - component: {fileID: 5476177581042497975}
+  - component: {fileID: 4172839545817473354}
   m_Layer: 0
   m_Name: BasePlayer
   m_TagString: Player
@@ -355,6 +356,8 @@ MonoBehaviour:
   animYVal: 0
   rigBuilder: {fileID: 2182878434374564483}
   headAim: {fileID: 6700210032177266786}
+  handAim: {fileID: 4560190281256854823}
+  armAim: {fileID: 2925311827275814762}
   state: 0
   animator: {fileID: 7611516437615304654}
   collider: {fileID: 64638763795489671}
@@ -465,6 +468,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abdcadd08edc5e545bd519fc53b7a963, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4172839545817473354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703967098984671567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8262fbaa1c9cf534d9f7eb0e4dc680fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionStateInfoList:
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 1617976464
+    DestinationState: 125937960
+    TransitionDuration: 0.25000003
+    TriggerNameHash: 125937960
+    TransitionIndex: 2
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: -1078995872
+    DestinationState: 125937960
+    TransitionDuration: 0.25
+    TriggerNameHash: 125937960
+    TransitionIndex: 2
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 1153744588
+    DestinationState: -409782759
+    TransitionDuration: 0.25
+    TriggerNameHash: 125937960
+    TransitionIndex: 1
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 1056877677
+    DestinationState: -409782759
+    TransitionDuration: 0.25
+    TriggerNameHash: 125937960
+    TransitionIndex: 1
+  - IsCrossFadeExit: 0
+    Layer: 0
+    OriginatingState: 545781641
+    DestinationState: 125937960
+    TransitionDuration: 0.25
+    TriggerNameHash: 125937960
+    TransitionIndex: 2
+  m_Animator: {fileID: 7611516437615304654}
 --- !u!1 &3291620614646515620
 GameObject:
   m_ObjectHideFlags: 0
@@ -1410,12 +1462,7 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 0ea447578a9a5c4418028187911cd08b, type: 2}
     - target: {fileID: 5866666021909216657, guid: 36078ab0369161e49a29d349ae3e0739, type: 3}
       propertyPath: m_WarningMessage
-      value: "\nBinding warning: Some generic clip(s) animate transforms that are
-        already bound by a Humanoid avatar. These transforms can only be changed
-        by Humanoid clips.\n\tTransform 'Head'\n\tTransform 'Right_UpperArm'\n\tTransform
-        'Right_LowerArm'\n\tTransform 'Neck'\n\tTransform 'Right_Hand'\n\tTransform
-        'Head'\n\tTransform 'Right_UpperArm'\n\tTransform 'Right_LowerArm'\n\tTransform
-        'Neck'\n\tTransform 'Right_Hand'\n\tand more ..."
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 36078ab0369161e49a29d349ae3e0739, type: 3}
       propertyPath: m_ApplyRootMotion
