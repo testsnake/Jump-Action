@@ -139,6 +139,7 @@ public class PlayerControllerBase : NetworkBehaviour
         {
             SetTeamOnServerRpc(team);
         }
+        respawnPlayer();
     }
 
     public override void OnNetworkDespawn()
