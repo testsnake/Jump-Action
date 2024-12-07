@@ -5,23 +5,30 @@ public class Projectile : NetworkBehaviour
 {
     public float speed;
     public float lifetime;
-    public float damage = 25f; // Damage dealt by this projectile
-    public ulong ownerClientId; // The owner of this projectile (NetworkObjectId)
+    public float damage = 25f;
+    public ulong ownerClientId;
 
     private string _team;
+    private bool isInitialized = false;
 
-    void Start()
+    private void Start()
     {
-        if (IsServer)
+        if (IsServer && isInitialized)
         {
-            // Schedule destruction on the server
             Invoke(nameof(DestroyNetworkObject), lifetime);
         }
     }
 
-    void FixedUpdate()
+    public void InitializeLifetime()
     {
-        // Move the projectile forward
+        if (!IsServer) return;
+
+        isInitialized = true;
+        Invoke(nameof(DestroyNetworkObject), lifetime);
+    }
+
+    private void FixedUpdate()
+    {
         transform.position += transform.forward * speed * Time.fixedDeltaTime;
     }
 
@@ -35,23 +42,24 @@ public class Projectile : NetworkBehaviour
         return _team;
     }
 
-    private void OnTriggerEnter(Collider other)
+    /*private void OnTriggerEnter(Collider other)
     {
-        // Call ServerRpc to handle collision logic on the server
+        if (!isInitialized) return;
+
         HandleCollisionServerRpc(other.GetComponent<NetworkObject>()?.NetworkObjectId ?? 0, other.GetComponent<Health>() != null);
-    }
+    }*/
 
     [ServerRpc(RequireOwnership = false)]
-    private void HandleCollisionServerRpc(ulong targetNetworkObjectId, bool hasHealth)
+    public void HandleCollisionServerRpc()
     {
-        // Only the server processes the collision logic
-        NetworkObject targetNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(targetNetworkObjectId)
+        if (!isInitialized) return;
+
+        /*NetworkObject targetNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(targetNetworkObjectId)
             ? NetworkManager.Singleton.SpawnManager.SpawnedObjects[targetNetworkObjectId]
             : null;
 
         if (targetNetworkObject != null)
         {
-            // Ignore if the target is the owner of the projectile
             if (targetNetworkObject.OwnerClientId == ownerClientId)
             {
                 Debug.Log("Projectile hit its owner; ignoring.");
@@ -59,30 +67,27 @@ public class Projectile : NetworkBehaviour
             }
         }
 
-        // Check if the object has a Health component
         if (hasHealth && targetNetworkObject != null)
         {
             Health targetHealth = targetNetworkObject.GetComponent<Health>();
             if (targetHealth != null)
             {
-                // Damage the target
                 targetHealth.ApplyDamage(damage);
 
-                // Optionally log the hit
                 Debug.Log($"{gameObject.name} hit {targetNetworkObject.name} for {damage} damage.");
             }
-        }
+        }*/
 
-        // Destroy the projectile on impact
         DestroyNetworkObject();
     }
 
-    private void DestroyNetworkObject()
+    public void DestroyNetworkObject()
     {
-        if (IsServer)
+        NetworkObject projectileNetwork = GetComponent<NetworkObject>();
+        if (IsServer && projectileNetwork.IsSpawned)
         {
-            // Despawn and destroy the network object
-            GetComponent<NetworkObject>().Despawn(true);
+            projectileNetwork.Despawn(true);
         }
     }
 }
+

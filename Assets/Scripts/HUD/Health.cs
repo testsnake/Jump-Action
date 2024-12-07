@@ -23,6 +23,17 @@ public class Health : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Projectile")
+        {
+            ApplyDamage(20f);
+            GameObject projectileGameObject = other.gameObject;
+            Projectile projectile = projectileGameObject.GetComponent<Projectile>();
+            projectile.HandleCollisionServerRpc();
+        }
+    }
+
     private void Die()
     {
         Debug.Log($"{gameObject.name} has died!");

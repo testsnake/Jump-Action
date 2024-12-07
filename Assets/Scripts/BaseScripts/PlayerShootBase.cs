@@ -79,43 +79,20 @@ public class PlayerShootBase : NetworkBehaviour
     [ServerRpc]
     private void GenerateBulletServerRpc(Vector3 spawnPosition, Quaternion spawnRotation, string team)
     {
-        // Check projectilePrefab
         if (projectilePrefab == null)
         {
             Debug.LogError("Projectile Prefab is null!");
             return;
         }
 
-        // Instantiate the prefab
         GameObject projectileObject = Instantiate(projectilePrefab, spawnPosition, spawnRotation);
-        if (projectileObject == null)
-        {
-            Debug.LogError("Failed to instantiate projectilePrefab!");
-            return;
-        }
 
-        // Check for Projectile component
         Projectile projectile = projectileObject.GetComponent<Projectile>();
-        if (projectile == null)
-        {
-            Debug.LogError("Projectile component is missing from projectilePrefab!");
-            return;
-        }
-
-        // Set team
         projectile.SetTeam(team);
 
-        // Check for NetworkObject component
         NetworkObject projectileNetwork = projectile.GetComponent<NetworkObject>();
-        if (projectileNetwork == null)
-        {
-            Debug.LogError("NetworkObject component is missing from projectilePrefab!");
-            return;
-        }
-
-        // Spawn the network object
         projectileNetwork.Spawn(true);
+
+        projectile.InitializeLifetime();
     }
-
-
 }
