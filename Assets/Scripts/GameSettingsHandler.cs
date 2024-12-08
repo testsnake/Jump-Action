@@ -35,6 +35,14 @@ public class GameSettingsHandler : MonoBehaviour
         setMouseSensitivity(mouseSens);
     }
 
+    public void setUsername(string username)
+    {
+        if (!string.IsNullOrEmpty(username))
+        {
+            PlayerPrefs.SetString("PlayerName", username);
+        }
+    }
+
     public void setMasterVolume(float vol)
     {
         PlayerPrefs.SetFloat("MasterVolume", vol);

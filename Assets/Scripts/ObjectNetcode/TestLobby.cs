@@ -52,9 +52,16 @@ public class TestLobby : MonoBehaviour
         Cursor.visible = true;
 
         const string glyphs = "ABCDE0123456789";
-        for (int i = 0; i < 5; i++)
+        string prefsPlayerName = PlayerPrefs.GetString("PlayerName");
+        if (prefsPlayerName != null && prefsPlayerName != "")
         {
-            playerName += glyphs[UnityEngine.Random.Range(0, glyphs.Length)];
+            playerName = prefsPlayerName;
+        } else
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                playerName += glyphs[UnityEngine.Random.Range(0, glyphs.Length)];
+            }
         }
         InitializationOptions initializationOptions = new InitializationOptions();
         initializationOptions.SetProfile(playerName);
@@ -493,6 +500,7 @@ public class TestLobby : MonoBehaviour
     public Player GetPlayer()
     {
         //Could store loadout data in here? Maybe?
+        playerName = PlayerPrefs.GetString("PlayerName");
         Player player = new Player
         {
             Data = new Dictionary<string, PlayerDataObject>
