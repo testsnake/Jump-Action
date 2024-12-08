@@ -62,6 +62,7 @@ public class PlayerControllerBase : NetworkBehaviour
     private PlayerSounds audioPlayer;
     public float animXVal;
     public float animYVal;
+    
 
     [Header("Rigging and Animation")]
     public RigBuilder rigBuilder;
@@ -72,6 +73,7 @@ public class PlayerControllerBase : NetworkBehaviour
     private Transform aimTarget = null;
     public MovementState state;
     public Animator animator;
+    private Animator hudGunAnimator;
     public CapsuleCollider collider;
 
     private enum CapsuleDirection
@@ -109,6 +111,7 @@ public class PlayerControllerBase : NetworkBehaviour
         /*orientation = transform.Find("Orientation");*/
         ground = LayerMask.GetMask("ground", "Stage", "wall");
         playerCam = GameObject.Find("CameraHolder").GetComponent<Transform>();
+        hudGunAnimator = GameObject.Find("HUDGun").GetComponent<Animator>();
         camBase = playerCam.gameObject.GetComponent<PlayerCamBase>();
     }
 
@@ -251,6 +254,14 @@ public class PlayerControllerBase : NetworkBehaviour
         animYVal = v2.y;
 
         moveDirection = playerCam.forward * v2.y + playerCam.right * v2.x;
+        if (isGrounded && moveDirection != Vector3.zero)
+        {
+            hudGunAnimator.SetBool("IsWalking", true);
+        }
+        else
+        {
+            hudGunAnimator.SetBool("IsWalking", false);
+        }
         moveDirection.y = 0;
     }
 
@@ -288,22 +299,29 @@ public class PlayerControllerBase : NetworkBehaviour
         switch (state)
         {
             case MovementState.standing:
+                hudGunAnimator.speed = 1f;
                 speed = standingSpeed;
                 movePlayer();
                 break;
             case MovementState.crouching:
+                hudGunAnimator.speed = 0.5f;
                 speed = crouchingSpeed;
                 movePlayer();
                 break;
             case MovementState.falling:
+                hudGunAnimator.speed = 1f;
                 movePlayer();
                 rb.AddForce(Vector3.down * 15f, ForceMode.Force);
                 break;
             case MovementState.sliding:
+                hudGunAnimator.speed = 1f;
+                hudGunAnimator.SetBool("IsWalking", false);
                 speed = slideSpeed;
                 slideMovement();
                 break;
             default:
+                hudGunAnimator.speed = 1f;
+                hudGunAnimator.SetBool("IsWalking", false);
                 Vector2 v2 = movement.ReadValue<Vector2>();
                 animXVal = v2.x;
                 animYVal = v2.y;
