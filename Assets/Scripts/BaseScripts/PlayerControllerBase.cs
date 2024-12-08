@@ -165,14 +165,21 @@ public class PlayerControllerBase : NetworkBehaviour
 
     private void UpdateMaterial(string team)
     {
+        Material[] mats = new Material[3];
         if (team == "Blue")
         {
-            meshRenderer.material = teamColorMaterials[0];
+            mats[0] = teamColorMaterials[0];
+            mats[1] = teamColorMaterials[1];
+            mats[2] = teamColorMaterials[2];
+            meshRenderer.materials = mats;
             playerMatIsSet = true;
         }
         else if (team == "Red")
         {
-            meshRenderer.material = teamColorMaterials[1];
+            mats[0] = teamColorMaterials[3];
+            mats[1] = teamColorMaterials[4];
+            mats[2] = teamColorMaterials[5];
+            meshRenderer.materials = mats;
             playerMatIsSet = true;
         }
     }

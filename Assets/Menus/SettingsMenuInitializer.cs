@@ -12,6 +12,7 @@ public class SettingsMenuInitializer : MonoBehaviour
     public TMP_Dropdown screenModeDD;
     public TMP_Dropdown screenResDD;
     public Slider mouseSensSlider;
+    public TMP_InputField usernameInputField;
 
     // Start is called before the first frame update
     void Start()
@@ -24,5 +25,6 @@ public class SettingsMenuInitializer : MonoBehaviour
         screenModeDD.value = PlayerPrefs.GetInt("ScreenMode", 1);
         screenResDD.value = PlayerPrefs.GetInt("ScreenRes", 0);
         mouseSensSlider.value = PlayerPrefs.GetFloat("MouseSens", 0.5f);
+        usernameInputField.text = PlayerPrefs.GetString("PlayerName");
     }
 }

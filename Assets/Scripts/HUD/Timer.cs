@@ -1,47 +1,50 @@
 using UnityEngine;
 using TMPro;
+using Unity.Netcode;
 
-public class Timer : MonoBehaviour
+public class Timer : NetworkBehaviour
 {
     public float startTimeInSeconds = 600f;
-    private float currentTime;
+    private NetworkVariable<float> currentTime = new NetworkVariable<float>(600f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public TextMeshProUGUI timerText;
 
     private bool timerRunning = false;
-
-    void Start()
+    public override void OnNetworkSpawn()
     {
-        // Initialize the timer
-        currentTime = startTimeInSeconds;
-        UpdateTimerDisplay();
-        StartTimer();
+        if (IsServer)
+        {
+            StartTimer();
+        }
     }
+
 
     void Update()
     {
-        if (timerRunning)
+        if (IsServer)
         {
-            
-            currentTime -= Time.deltaTime;
-
-            
-            if (currentTime <= 0)
+            if (timerRunning)
             {
-                currentTime = 0;
-                StopTimer();
+                currentTime.Value -= Time.deltaTime;
+                if (currentTime.Value <= 0)
+                {
+                    currentTime.Value = 0;
+                    StopTimer();
 
-                // TODO: Add some logic about the game state
+                    // TODO: Add some logic about the game state
 
+                }
             }
-
-            UpdateTimerDisplay();
         }
+        UpdateTimerDisplay();
     }
 
     
     public void StartTimer()
     {
+        // Initialize the timer
+        Debug.Log("Starting Timer");
+        currentTime.Value = startTimeInSeconds;
         timerRunning = true;
     }
 
@@ -53,7 +56,7 @@ public class Timer : MonoBehaviour
 
     public void ResetTimer()
     {
-        currentTime = startTimeInSeconds;
+        currentTime.Value = startTimeInSeconds;
         UpdateTimerDisplay();
     }
 
@@ -61,8 +64,8 @@ public class Timer : MonoBehaviour
     void UpdateTimerDisplay()
     {
         // Format the time in minutes and seconds (MM:SS)
-        string minutes = Mathf.Floor(currentTime / 60).ToString("00");
-        string seconds = Mathf.Floor(currentTime % 60).ToString("00");
+        string minutes = Mathf.Floor(currentTime.Value / 60).ToString("00");
+        string seconds = Mathf.Floor(currentTime.Value % 60).ToString("00");
 
         string timeText = minutes + ":" + seconds;
 

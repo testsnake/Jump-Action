@@ -7365,6 +7365,10 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7231477953309255936, guid: 1bd38f9605a6f7a4b9a7b9f1664ee228, type: 3}
+      propertyPath: startTimeInSeconds
+      value: 600
+      objectReference: {fileID: 0}
     - target: {fileID: 8382249915883782323, guid: 1bd38f9605a6f7a4b9a7b9f1664ee228, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -7391,13 +7395,42 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4074903737705728930, guid: 1bd38f9605a6f7a4b9a7b9f1664ee228, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6285733}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5049270798768805700, guid: 1bd38f9605a6f7a4b9a7b9f1664ee228, type: 3}
+      insertIndex: 4
+      addedObject: {fileID: 1598239861}
   m_SourcePrefab: {fileID: 100100000, guid: 1bd38f9605a6f7a4b9a7b9f1664ee228, type: 3}
 --- !u!224 &1598239859 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4074903737705728930, guid: 1bd38f9605a6f7a4b9a7b9f1664ee228, type: 3}
   m_PrefabInstance: {fileID: 1598239858}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1598239860 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5049270798768805700, guid: 1bd38f9605a6f7a4b9a7b9f1664ee228, type: 3}
+  m_PrefabInstance: {fileID: 1598239858}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1598239861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1598239860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3948451957
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!43 &1712713344
 Mesh:
   m_ObjectHideFlags: 0
