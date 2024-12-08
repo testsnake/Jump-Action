@@ -408,6 +408,8 @@ public class PlayerControllerBase : NetworkBehaviour
 
     private void respawnPlayer()
     {
+        Debug.Log("Called respawnPlayer");
+
         string spawnTeam = PlayerPrefs.GetString("Team");
 
         if (spawnPoint == null)
@@ -429,6 +431,8 @@ public class PlayerControllerBase : NetworkBehaviour
 
         rb.velocity = Vector3.zero;
         transform.position = spawnPoint.transform.position;
+
+        Debug.Log("Completed: respawnPlayer()");
     }
 
     public void Die()
