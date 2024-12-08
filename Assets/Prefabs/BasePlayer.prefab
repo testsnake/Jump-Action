@@ -311,8 +311,12 @@ MonoBehaviour:
   slideSpeed: 15
   maxSlopeAngle: 40
   teamColorMaterials:
-  - {fileID: 2100000, guid: a37938f532bd1cc4789ce033b8021b0e, type: 2}
-  - {fileID: 2100000, guid: 0e646c1945ab58949a5f8c52c0a6a5b7, type: 2}
+  - {fileID: 2100000, guid: 6754741d5262cc443883a2d13bc11017, type: 2}
+  - {fileID: 2100000, guid: f0049a3311994f944aa41ed47d4cf910, type: 2}
+  - {fileID: 2100000, guid: 7d63381e8f212db4db8200bb634f5e54, type: 2}
+  - {fileID: 2100000, guid: 2a34462db1b3b944584b11979d306439, type: 2}
+  - {fileID: 2100000, guid: 2124c7fea36143d4f94328120f707573, type: 2}
+  - {fileID: 2100000, guid: 82fbefeddf7b64542830951d8effe9fd, type: 2}
   spawnPoint: {fileID: 0}
   playerTeam:
     m_InternalValue:
