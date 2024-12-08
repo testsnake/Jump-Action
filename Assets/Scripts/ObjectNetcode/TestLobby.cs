@@ -200,10 +200,11 @@ public class TestLobby : MonoBehaviour
 
     public void createLobby()
     {
-        createLobby("My Lobby", 10, "Capture the Chip");
+        string name = PlayerPrefs.GetString("PlayerName") + "'s Lobby";
+        createLobby(name, 10, "Capture the Chip");
     }
 
-    public async void createLobby(string lobbyName = "My Lobby", int maxPlayers = 10, string gameMode = "Capture the Chip")
+    public async void createLobby(string lobbyName = "Lobby", int maxPlayers = 10, string gameMode = "Capture the Chip")
     {
         try
         {
