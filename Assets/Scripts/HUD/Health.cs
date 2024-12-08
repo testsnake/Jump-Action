@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Health : MonoBehaviour
@@ -20,18 +21,28 @@ public class Health : MonoBehaviour
         if (currentHealth <= 0)
         {
             Die();
+            ResetHealth();
         }
+    }
+
+    private void ResetHealth()
+    {
+        currentHealth = maxHealth;
     }
 
     private void OnCollisionEnter(Collision other)
     {
+        string collisionMessage = "OnCollisionEnter() ";
         if (other.gameObject.tag == "Projectile")
         {
+            collisionMessage += "|| The Other Object was a Projectile!";
+            Debug.Log(collisionMessage);
             ApplyDamage(20f);
             GameObject projectileGameObject = other.gameObject;
             Projectile projectile = projectileGameObject.GetComponent<Projectile>();
             projectile.HandleCollisionServerRpc();
         }
+        
     }
 
     private void Die()
