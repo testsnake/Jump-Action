@@ -8,6 +8,7 @@ TagManager:
   - DataChip
   - CinemachineTarget
   - Projectile
+  - GameManager
   layers:
   - Default
   - TransparentFX

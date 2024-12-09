@@ -5,6 +5,7 @@ public class MoveCameraBase : MonoBehaviour
     [Header("Target Settings")]
     public Transform target; // The target the camera should follow
     public string playerTag = "Player"; // Tag used to find the player GameObject
+    public GlobalVolumeManager globalVolumeManager;
 
     protected virtual void Update()
     {

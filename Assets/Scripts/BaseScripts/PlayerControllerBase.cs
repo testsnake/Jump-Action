@@ -76,6 +76,10 @@ public class PlayerControllerBase : NetworkBehaviour
     private Animator hudGunAnimator;
     public CapsuleCollider collider;
 
+
+    [Header("Extra")]
+    [SerializeField] private GlobalVolumeManager globalVolumeManager;
+
     private enum CapsuleDirection
     {
         X = 0, // Capsule elongated along the X-axis
@@ -287,6 +291,18 @@ public class PlayerControllerBase : NetworkBehaviour
         {
             Application.Quit();
         }
+
+
+        if (globalVolumeManager != null) {
+            globalVolumeManager.UpdateSpeed(rb.velocity);
+        } else {
+            GameObject gvm = GameObject.FindWithTag("GameManager");
+            if (gvm != null) {
+                globalVolumeManager = gvm.GetComponent<GlobalVolumeManager>();
+            }
+            
+        }
+
     }
 
     public virtual void FixedUpdate()

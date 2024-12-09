@@ -1,4 +1,14 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
+
+public enum EndGameReason {
+    unknown = 0,
+    teamWins = 1,
+    timeout = 2,
+    disconnect = 3,
+    error = 4
+}
 
 public class TeamScoreManager : MonoBehaviour
 {
@@ -12,8 +22,8 @@ public class TeamScoreManager : MonoBehaviour
     public event OnScoreChanged ScoreChanged;
 
     // Blue is 0, red is 1, add more if more teams needed
-    public delegate void OnTeamWin(int teamNumber, int blueScore, int redScore);
-    public event OnTeamWin TeamWins;
+    public delegate void OnTeamWin(int teamNumber, EndGameReason reason, int blueScore, int redScore);
+    public event OnTeamWin GameEnds;
 
     // Increment the Blue Team's score
     public void IncrementBlueTeamScore()
@@ -47,21 +57,26 @@ public class TeamScoreManager : MonoBehaviour
         ScoreChanged?.Invoke(blueTeamScore, redTeamScore);
         // Do weird check to allow for an "overtime" on edge case both teams score final point at same time
         if ((blueTeamScore >= scoreToWin && !(redTeamScore >= blueTeamScore)) || (redTeamScore >= scoreToWin && !(blueTeamScore >= redTeamScore))) {
-            NotifyTeamWins();
+            NotifiyGameEnds(EndGameReason.teamWins);
         }
         
     }
 
-    private void NotifyTeamWins() {
-        int team = -1;
-        if (blueTeamScore == scoreToWin && blueTeamScore > redTeamScore) {
-            team = 0;
-        } else if (redTeamScore == scoreToWin && redTeamScore > blueTeamScore) {
-            team = 1;
-        }
-        Debug.Log("TEAM " + team + " WINS");
-        TeamWins?.Invoke(team, blueTeamScore, redTeamScore);
+    private void NotifiyGameEnds(EndGameReason reason = EndGameReason.unknown) {
 
+        int team = 0;
+        if (blueTeamScore > redTeamScore) {
+            team = 1;
+        } else if (redTeamScore > blueTeamScore) {
+            team = 2;
+        }
+
+        Debug.Log("TEAM " + team + " WINS");
+        GameEnds?.Invoke(team, reason, blueTeamScore, redTeamScore);
+    }
+
+    public void EndGame(EndGameReason reason = EndGameReason.unknown) {
+        NotifiyGameEnds(reason);
     }
 
     // Future networking methods can go here

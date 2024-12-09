@@ -5,6 +5,7 @@ public class HealthDisplay : MonoBehaviour
 {
     public Health playerHealth;
     public TextMeshProUGUI healthText;
+   
 
     void Start()
     {
@@ -26,6 +27,8 @@ public class HealthDisplay : MonoBehaviour
         if (healthText != null && playerHealth != null)
         {
             healthText.text = playerHealth.GetCurrentHealth().ToString();
+            Debug.Log("Health");
         }
+        
     }
 }

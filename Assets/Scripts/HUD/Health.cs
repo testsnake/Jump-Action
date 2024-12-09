@@ -8,21 +8,46 @@ public class Health : MonoBehaviour
 
     public string team; // Assign team dynamically (e.g., "Blue" or "Red")
 
+    public GlobalVolumeManager globalVolumeManager;
+
     private void Start()
     {
         currentHealth = maxHealth;
     }
 
+    void Update()
+    {
+        if (globalVolumeManager != null)
+        {
+            globalVolumeManager.UpdateHealth(currentHealth);
+        }
+        else
+        {
+            GameObject gvm = GameObject.FindWithTag("GameManager");
+            if (gvm != null)
+            {
+                globalVolumeManager = gvm.GetComponent<GlobalVolumeManager>();
+            }
+        }
+    }
+
+
+
     public void ApplyDamage(float damage)
     {
         currentHealth -= damage;
         Debug.Log($"{gameObject.name} took {damage} damage. Remaining health: {currentHealth}");
-
+        globalVolumeManager?.UpdateHealth(currentHealth);
+        if (globalVolumeManager == null) {
+            Debug.Log("NULL");
+        }
         if (currentHealth <= 0)
         {
             Die();
             ResetHealth();
         }
+
+        
     }
 
     private void ResetHealth()
@@ -42,7 +67,7 @@ public class Health : MonoBehaviour
             Projectile projectile = projectileGameObject.GetComponent<Projectile>();
             projectile.HandleCollisionServerRpc();
         }
-        
+
     }
 
     private void Die()

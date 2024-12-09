@@ -18,7 +18,7 @@ public class GameComplete : MonoBehaviour
     void Start()
     {
         this.fixedDeltaTime = Time.fixedDeltaTime;
-        teamScoreManager.TeamWins += EndSquence;
+        teamScoreManager.GameEnds += EndSquence;
     }
 
     // Update is called once per frame
@@ -27,7 +27,11 @@ public class GameComplete : MonoBehaviour
 
     }
 
-    private void EndSquence(int team, int blueTeamScore, int redTeamScore)
+    public void EndGame(EndGameReason reason) {
+        teamScoreManager.EndGame();
+    }
+
+    private void EndSquence(int team, EndGameReason reason, int blueTeamScore, int redTeamScore)
     {
         StartCoroutine(SlowTime());
     }

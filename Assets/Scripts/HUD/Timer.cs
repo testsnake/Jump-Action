@@ -10,6 +10,10 @@ public class Timer : NetworkBehaviour
     public TextMeshProUGUI timerText;
 
     private bool timerRunning = false;
+    private bool EndSquenceStarted = false;
+
+    public GameComplete gameComplete;
+
     public override void OnNetworkSpawn()
     {
         if (IsServer)
@@ -33,10 +37,18 @@ public class Timer : NetworkBehaviour
 
                     // TODO: Add some logic about the game state
 
+
                 }
             }
         }
         UpdateTimerDisplay();
+        
+        // End game if at 0 time left
+        if (!timerRunning && currentTime.Value <= 0 && !EndSquenceStarted) {
+            EndSquenceStarted = true;
+            Debug.Log("Game ended");
+            gameComplete.EndGame(EndGameReason.timeout);
+        }
     }
 
     

@@ -4,8 +4,10 @@ using UnityEngine.UI;
 
 public class HealthSliderSync : MonoBehaviour
 {
-    [SerializeField] private Slider healthSlider; 
-    private Health targetHealth;                 
+    [SerializeField] private Slider healthSlider;
+    private Health targetHealth;
+
+    public GlobalVolumeManager globalVolumeManager;
 
     private void Start()
     {
@@ -51,6 +53,16 @@ public class HealthSliderSync : MonoBehaviour
         if (targetHealth != null && healthSlider != null)
         {
             healthSlider.value = targetHealth.GetCurrentHealth();
+        }
+
+        if (globalVolumeManager != null) {
+            globalVolumeManager.UpdateHealth(healthSlider.value);
+        } else {
+            GameObject gvm = GameObject.FindWithTag("GameManager");
+            if (gvm != null) {
+                globalVolumeManager = gvm.GetComponent<GlobalVolumeManager>();
+            }
+            
         }
     }
 }

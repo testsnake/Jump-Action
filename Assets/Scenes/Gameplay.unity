@@ -225,6 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthSlider: {fileID: 6285734}
+  globalVolumeManager: {fileID: 0}
 --- !u!43 &88169041
 Mesh:
   m_ObjectHideFlags: 0
@@ -3158,6 +3159,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 6441448110730187999, guid: 7ce4f38c4108e7c4ebc5d80728426976, type: 3}
+      propertyPath: m_TagString
+      value: GameManager
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3165,6 +3170,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6441448110730187999, guid: 7ce4f38c4108e7c4ebc5d80728426976, type: 3}
       insertIndex: -1
       addedObject: {fileID: 706904167}
+    - targetCorrespondingSourceObject: {fileID: 6441448110730187999, guid: 7ce4f38c4108e7c4ebc5d80728426976, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 706904168}
   m_SourcePrefab: {fileID: 100100000, guid: 7ce4f38c4108e7c4ebc5d80728426976, type: 3}
 --- !u!114 &706904165 stripped
 MonoBehaviour:
@@ -3196,6 +3204,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   teamScoreManager: {fileID: 706904165}
   camera: {fileID: 1963642672}
+--- !u!114 &706904168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706904166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5a193f3966d5596fa0212fa95f900a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  globalVolume: {fileID: 1177511833}
+  vignetteMaxIntensity: 0.5
+  vignetteScale: 0.5
+  hurtLengthSeconds: 0.9
+  hurtMultiplier: 0.5
+  runAberration: 0.1
+  maxAberration: 1
+  runSpeed: 10
+  maxSpeed: 20
+  verticalMultiplier: 1
 --- !u!43 &869634404
 Mesh:
   m_ObjectHideFlags: 0
@@ -7375,6 +7405,10 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1077664726723646380, guid: 1bd38f9605a6f7a4b9a7b9f1664ee228, type: 3}
+      propertyPath: globalVolumeManager
+      value: 
+      objectReference: {fileID: 706904168}
     - target: {fileID: 1198721363476933746, guid: 1bd38f9605a6f7a4b9a7b9f1664ee228, type: 3}
       propertyPath: m_Color.b
       value: 0.78431374
@@ -7443,6 +7477,10 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7231477953309255936, guid: 1bd38f9605a6f7a4b9a7b9f1664ee228, type: 3}
+      propertyPath: gameComplete
+      value: 
+      objectReference: {fileID: 706904167}
     - target: {fileID: 7231477953309255936, guid: 1bd38f9605a6f7a4b9a7b9f1664ee228, type: 3}
       propertyPath: startTimeInSeconds
       value: 600
