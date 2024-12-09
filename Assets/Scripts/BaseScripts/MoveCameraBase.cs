@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MoveCameraBase : MonoBehaviour
 {
@@ -6,6 +7,9 @@ public class MoveCameraBase : MonoBehaviour
     public Transform target; // The target the camera should follow
     public string playerTag = "Player"; // Tag used to find the player GameObject
     public GlobalVolumeManager globalVolumeManager;
+
+    private int errorCount = 0;
+    private readonly int maxErrorBeforeSwitch = 25;
 
     protected virtual void Update()
     {
@@ -33,6 +37,10 @@ public class MoveCameraBase : MonoBehaviour
         if (target == null)
         {
             Debug.LogWarning($"No valid target found with tag '{playerTag}'.");
+            errorCount++;
+            if (errorCount > maxErrorBeforeSwitch) {
+                SceneManager.LoadScene("MainMenu");
+            }
         }
     }
 
