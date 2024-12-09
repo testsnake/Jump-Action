@@ -46,23 +46,32 @@ public class TestLobby : MonoBehaviour
         public List<Lobby> lobbyList;
     }
 
-    private async void Start()
+    private void playerNameGenerator()
     {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-
         const string glyphs = "ABCDE0123456789";
         string prefsPlayerName = PlayerPrefs.GetString("PlayerName");
-        if (prefsPlayerName != null && prefsPlayerName != "")
+        if (!String.IsNullOrEmpty(prefsPlayerName))
         {
             playerName = prefsPlayerName;
-        } else
+        }
+        else
         {
+            playerName = "Anonymous";
             for (int i = 0; i < 5; i++)
             {
                 playerName += glyphs[UnityEngine.Random.Range(0, glyphs.Length)];
             }
         }
+        Debug.Log("Updating player name to: " +  playerName);
+    }
+
+    private async void Start()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        playerNameGenerator();
+
         InitializationOptions initializationOptions = new InitializationOptions();
         initializationOptions.SetProfile(playerName);
 
@@ -200,7 +209,7 @@ public class TestLobby : MonoBehaviour
 
     public void createLobby()
     {
-        string name = PlayerPrefs.GetString("PlayerName") + "'s Lobby";
+        string name = playerName + "'s Lobby";
         createLobby(name, 10, "Capture the Chip");
     }
 
@@ -501,7 +510,7 @@ public class TestLobby : MonoBehaviour
     public Player GetPlayer()
     {
         //Could store loadout data in here? Maybe?
-        playerName = PlayerPrefs.GetString("PlayerName");
+        playerNameGenerator();
         Player player = new Player
         {
             Data = new Dictionary<string, PlayerDataObject>
