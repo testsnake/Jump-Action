@@ -455,6 +455,7 @@ public class PlayerControllerBase : NetworkBehaviour
                 spawnPoint = null;
                 rb.velocity = Vector3.zero;
                 transform.position = GameObject.Find("DefaultSpawn").transform.position;
+                respawnPlayer();
             }
         }
     }
