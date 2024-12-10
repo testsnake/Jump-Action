@@ -172,6 +172,7 @@ public class PlayerControllerBase : NetworkBehaviour
 
     private void UpdateMaterial(string team)
     {
+        Health playerHealth = GetComponent<Health>();
         Material[] mats = new Material[3];
         if (team == "Blue")
         {
@@ -180,6 +181,7 @@ public class PlayerControllerBase : NetworkBehaviour
             mats[2] = teamColorMaterials[2];
             meshRenderer.materials = mats;
             playerMatIsSet = true;
+            playerHealth.SetTeam("Blue");
         }
         else if (team == "Red")
         {
@@ -188,7 +190,9 @@ public class PlayerControllerBase : NetworkBehaviour
             mats[2] = teamColorMaterials[5];
             meshRenderer.materials = mats;
             playerMatIsSet = true;
+            playerHealth.SetTeam("Red");
         }
+
     }
 
     private void SetClientLayerRecursive(GameObject gameObj)
@@ -440,7 +444,7 @@ public class PlayerControllerBase : NetworkBehaviour
             }
             else
             {
-                Debug.Log("Failed to properly spawn player.");
+                Debug.LogError("Failed to properly spawn player.");
                 spawnPoint = GameObject.Find("DefaultSpawn");
             }
         }

@@ -6,7 +6,7 @@ public class Health : MonoBehaviour
     public float maxHealth = 100f;
     private float currentHealth;
 
-    public string team; // Assign team dynamically (e.g., "Blue" or "Red")
+    public string _team; // Assign team dynamically (e.g., "Blue" or "Red")
 
     public GlobalVolumeManager globalVolumeManager;
 
@@ -31,10 +31,14 @@ public class Health : MonoBehaviour
         }
     }
 
+    public void SetTeam(string team)
+    {
+        _team = team;
+    }
+
     public string GetTeam()
     {
-        team = PlayerPrefs.GetString("Team");
-        return team;
+        return _team;
     }
 
 

@@ -24,6 +24,7 @@ public class DataChip : MonoBehaviour
 
         Health playerHealth = player.GetComponent<Health>();
         string playerTeam = playerHealth.GetTeam();
+        Debug.Log("DataChip Team: " + team + " || Player Team: " +  playerTeam);
         if (team == playerTeam) return;
 
         isBeingCarried = true;
