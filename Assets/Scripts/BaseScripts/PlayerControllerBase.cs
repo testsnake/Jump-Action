@@ -436,11 +436,11 @@ public class PlayerControllerBase : NetworkBehaviour
         {
             if (spawnTeam == "Red")
             {
-                spawnPoint = GameObject.Find("RedTeamSpawn") ?? GameObject.Find("TeamSpawn");
+                spawnPoint = GameObject.Find("RedTeamSpawn");
             }
             else if (spawnTeam == "Blue")
             {
-                spawnPoint = GameObject.Find("BlueTeamSpawn") ?? GameObject.Find("TeamSpawn");
+                spawnPoint = GameObject.Find("BlueTeamSpawn");
             }
             else
             {
