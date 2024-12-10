@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -19,6 +20,9 @@ public class GameComplete : MonoBehaviour
     [SerializeField] private GameObject _hud;
     [SerializeField] private Camera _gunHud;
     [SerializeField] private GameObject _endScreen;
+    [SerializeField] private TMP_Text _resultText;
+    [SerializeField] private TMP_Text _blueScoreText;
+    [SerializeField] private TMP_Text _redScoreText;
 
     private float fixedDeltaTime;
 
@@ -54,6 +58,15 @@ public class GameComplete : MonoBehaviour
     private void EndSquence(int team, EndGameReason reason, int blueTeamScore, int redTeamScore)
     {
         StartCoroutine(SlowTime());
+
+        _blueScoreText.text = blueTeamScore.ToString();
+        _redScoreText.text = redTeamScore.ToString();
+
+        if (blueTeamScore > redTeamScore) {
+            _resultText.text = "Blue Team Wins";
+        } else if (redTeamScore > blueTeamScore) {
+            _resultText.text = "Red Team Wins";
+        }
 
     }
 
