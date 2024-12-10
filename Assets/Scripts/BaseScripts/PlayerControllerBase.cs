@@ -5,6 +5,7 @@ using Unity.Netcode;
 using Unity.Collections;
 using System.Collections;
 using UnityEngine.Animations.Rigging;
+using System;
 
 public class PlayerControllerBase : NetworkBehaviour
 {
@@ -431,15 +432,19 @@ public class PlayerControllerBase : NetworkBehaviour
 
     private void respawnPlayer()
     {
-        Debug.Log("Called respawnPlayer");
+        if (isNotOwner()) return;
+        try
+        {
+            Debug.Log("Called respawnPlayer");
 
-        string spawnTeam = PlayerPrefs.GetString("Team");
+            string spawnTeam = PlayerPrefs.GetString("Team");
 
-        //if (spawnPoint == null)
-        //{
+            //if (spawnPoint == null)
+            //{
             if (spawnTeam == "Red")
             {
                 spawnPoint = GameObject.Find("RedTeamSpawn");
+                if (spawnPoint == null) throw Exception();
                 rb.velocity = Vector3.zero;
                 transform.position = spawnPoint.transform.position;
                 Debug.Log("Spawning player on red side");
@@ -447,6 +452,7 @@ public class PlayerControllerBase : NetworkBehaviour
             else if (spawnTeam == "Blue")
             {
                 spawnPoint = GameObject.Find("BlueTeamSpawn");
+                if (spawnPoint == null) throw Exception();
                 rb.velocity = Vector3.zero;
                 transform.position = spawnPoint.transform.position;
                 Debug.Log("Spawning player on blue side");
@@ -459,7 +465,18 @@ public class PlayerControllerBase : NetworkBehaviour
                 transform.position = GameObject.Find("DefaultSpawn").transform.position;
                 respawnPlayer();
             }
-        //}
+            //}
+        } catch
+        {
+            respawnPlayer();
+        }
+
+
+    }
+
+    private Exception Exception()
+    {
+        throw new NotImplementedException();
     }
 
     public void Die()
