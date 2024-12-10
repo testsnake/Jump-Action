@@ -149,10 +149,8 @@ public class PlayerControllerBase : NetworkBehaviour
         if (!string.IsNullOrEmpty(team))
         {
             SetTeamOnServerRpc(team);
-            respawnPlayer();
         } else
         {
-            respawnPlayer();
             StartCoroutine(InitializeTeamWithDelay());
         }
         
