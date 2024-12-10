@@ -27,6 +27,10 @@ public class GlobalVolumeManager : MonoBehaviour
     [SerializeField] private float maxSpeed = 20f;
     [SerializeField] private float verticalMultiplier = 1f;
 
+    private bool directMode = false;
+    private float directVignette = 0;
+    private float directChromatic = 0;
+
     private Vignette vignette;
     private ChromaticAberration chromaticAberration;
 
@@ -75,8 +79,15 @@ public class GlobalVolumeManager : MonoBehaviour
 
     private void UpdateVolume()
     {
-        UpdateVignette();
-        UpdateAberration();
+        if (!directMode)
+        {
+            UpdateVignette();
+            UpdateAberration();
+        } else {
+            chromaticAberration.intensity.value = directChromatic;
+            vignette.intensity.value = directVignette;
+        }
+
     }
 
     private void UpdateVignette()
@@ -102,31 +113,46 @@ public class GlobalVolumeManager : MonoBehaviour
     }
 
     private float ComputeAberration(float speed)
-{
-    if (speed <= 0)
-        return 0f;
+    {
+        if (speed <= 0)
+            return 0f;
 
-    if (speed <= runSpeed)
-    {
-        // Normalize speed to [0, 1] for the range [0, runSpeed]
-        float normalizedSpeed = speed / runSpeed;
-        // Exponentially scale between 0 and runAberration
-        return Mathf.Lerp(0f, runAberration, Mathf.Pow(normalizedSpeed, 2f)); // Adjust exponent as needed
+        if (speed <= runSpeed)
+        {
+            // Normalize speed to [0, 1] for the range [0, runSpeed]
+            float normalizedSpeed = speed / runSpeed;
+            // Exponentially scale between 0 and runAberration
+            return Mathf.Lerp(0f, runAberration, Mathf.Pow(normalizedSpeed, 2f)); // Adjust exponent as needed
+        }
+        else if (speed <= maxSpeed)
+        {
+            // Normalize speed to [0, 1] for the range [runSpeed, maxSpeed]
+            float normalizedSpeed = (speed - runSpeed) / (maxSpeed - runSpeed);
+            // Exponentially scale between runAberration and maxAberration
+            return Mathf.Lerp(runAberration, maxAberration, Mathf.Pow(normalizedSpeed, 2f)); // Adjust exponent as needed
+        }
+        else
+        {
+            // Clamp to maxAberration if speed exceeds maxSpeed
+            return maxAberration;
+        }
     }
-    else if (speed <= maxSpeed)
-    {
-        // Normalize speed to [0, 1] for the range [runSpeed, maxSpeed]
-        float normalizedSpeed = (speed - runSpeed) / (maxSpeed - runSpeed);
-        // Exponentially scale between runAberration and maxAberration
-        return Mathf.Lerp(runAberration, maxAberration, Mathf.Pow(normalizedSpeed, 2f)); // Adjust exponent as needed
-    }
-    else
-    {
-        // Clamp to maxAberration if speed exceeds maxSpeed
-        return maxAberration;
-    }
-}
 
+    public void SetDirectMode(bool mode) {
+        directMode = mode;
+    }
+
+    public void SetChromaticAberration(float value) {
+        directChromatic = value;
+    }
+
+    public float GetChromaticValue() {
+        return chromaticAberration.intensity.value;
+    }
+
+    public void SetVingette(float value) {
+        directVignette = value;
+    }
 
 
 
