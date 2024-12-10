@@ -15,7 +15,7 @@ public class TeamScoreManager : MonoBehaviour
     [Header("Team Scores")]
     [SerializeField] private int blueTeamScore = 0; // Blue team's score
     [SerializeField] private int redTeamScore = 0;  // Red team's score
-    [SerializeField] private int scoreToWin = 5; // Set to 5, settings to 1 for development
+    [SerializeField] private int scoreToWin = 3; // Set to 5, settings to 1 for development
 
     // Event to notify when the score is updated (for UI updates)
     public delegate void OnScoreChanged(int blueScore, int redScore);
