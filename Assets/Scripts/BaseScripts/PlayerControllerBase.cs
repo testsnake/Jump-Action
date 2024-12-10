@@ -447,7 +447,7 @@ public class PlayerControllerBase : NetworkBehaviour
                 if (spawnPoint == null) throw Exception();
                 rb.velocity = Vector3.zero;
                 transform.position = spawnPoint.transform.position;
-                Debug.Log("Spawning player on red side");
+                Debug.Log("Spawning player on red side at " + spawnPoint.transform.position);
             }
             else if (spawnTeam == "Blue")
             {
@@ -455,7 +455,7 @@ public class PlayerControllerBase : NetworkBehaviour
                 if (spawnPoint == null) throw Exception();
                 rb.velocity = Vector3.zero;
                 transform.position = spawnPoint.transform.position;
-                Debug.Log("Spawning player on blue side");
+                Debug.Log("Spawning player on blue side at " + spawnPoint.transform.position);
             }
             else
             {
