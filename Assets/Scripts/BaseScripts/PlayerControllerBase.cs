@@ -149,8 +149,13 @@ public class PlayerControllerBase : NetworkBehaviour
         if (!string.IsNullOrEmpty(team))
         {
             SetTeamOnServerRpc(team);
+            respawnPlayer();
+        } else
+        {
+            respawnPlayer();
+            StartCoroutine(InitializeTeamWithDelay());
         }
-        respawnPlayer();
+        
     }
 
     public override void OnNetworkDespawn()
@@ -452,7 +457,6 @@ public class PlayerControllerBase : NetworkBehaviour
                 spawnPoint = null;
                 rb.velocity = Vector3.zero;
                 transform.position = GameObject.Find("DefaultSpawn").transform.position;
-                respawnPlayer();
             }
         }
     }
