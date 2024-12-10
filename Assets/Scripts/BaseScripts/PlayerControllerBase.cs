@@ -437,22 +437,24 @@ public class PlayerControllerBase : NetworkBehaviour
             if (spawnTeam == "Red")
             {
                 spawnPoint = GameObject.Find("RedTeamSpawn");
+                rb.velocity = Vector3.zero;
+                transform.position = spawnPoint.transform.position;
             }
             else if (spawnTeam == "Blue")
             {
                 spawnPoint = GameObject.Find("BlueTeamSpawn");
+                rb.velocity = Vector3.zero;
+                transform.position = spawnPoint.transform.position;
             }
             else
             {
                 Debug.LogError("Failed to properly spawn player.");
-                spawnPoint = GameObject.Find("DefaultSpawn");
+                spawnPoint = null;
+                rb.velocity = Vector3.zero;
+                transform.position = GameObject.Find("DefaultSpawn").transform.position;
+                respawnPlayer();
             }
         }
-
-        rb.velocity = Vector3.zero;
-        transform.position = spawnPoint.transform.position;
-
-        Debug.Log("Completed: respawnPlayer()");
     }
 
     public void Die()
