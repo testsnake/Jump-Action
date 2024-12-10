@@ -435,19 +435,21 @@ public class PlayerControllerBase : NetworkBehaviour
 
         string spawnTeam = PlayerPrefs.GetString("Team");
 
-        if (spawnPoint == null)
-        {
+        //if (spawnPoint == null)
+        //{
             if (spawnTeam == "Red")
             {
                 spawnPoint = GameObject.Find("RedTeamSpawn");
                 rb.velocity = Vector3.zero;
                 transform.position = spawnPoint.transform.position;
+                Debug.Log("Spawning player on red side");
             }
             else if (spawnTeam == "Blue")
             {
                 spawnPoint = GameObject.Find("BlueTeamSpawn");
                 rb.velocity = Vector3.zero;
                 transform.position = spawnPoint.transform.position;
+                Debug.Log("Spawning player on blue side");
             }
             else
             {
@@ -457,7 +459,7 @@ public class PlayerControllerBase : NetworkBehaviour
                 transform.position = GameObject.Find("DefaultSpawn").transform.position;
                 respawnPlayer();
             }
-        }
+        //}
     }
 
     public void Die()
