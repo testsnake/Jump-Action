@@ -3231,6 +3231,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5308651115350483478, guid: 7ce4f38c4108e7c4ebc5d80728426976, type: 3}
+      propertyPath: scoreToWin
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6441448110730187999, guid: 7ce4f38c4108e7c4ebc5d80728426976, type: 3}
       propertyPath: m_Name
       value: GameManager
@@ -7828,7 +7832,7 @@ PrefabInstance:
       objectReference: {fileID: 706904167}
     - target: {fileID: 7231477953309255936, guid: 1bd38f9605a6f7a4b9a7b9f1664ee228, type: 3}
       propertyPath: startTimeInSeconds
-      value: 600
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 8382249915883782323, guid: 1bd38f9605a6f7a4b9a7b9f1664ee228, type: 3}
       propertyPath: m_fontAsset
@@ -8960,6 +8964,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1910246594}
+  - component: {fileID: 1910246595}
   m_Layer: 0
   m_Name: EndScreen
   m_TagString: Untagged
@@ -8983,6 +8988,18 @@ Transform:
   - {fileID: 1360672770}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1910246595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910246593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b52d4abc16a037049bebda98de088086, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &1914517257
 Mesh:
   m_ObjectHideFlags: 0
@@ -9537,7 +9554,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Game over lol
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

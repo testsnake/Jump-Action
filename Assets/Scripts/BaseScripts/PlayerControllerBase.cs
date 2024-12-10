@@ -469,6 +469,16 @@ public class PlayerControllerBase : NetworkBehaviour
         }
     }
 
+    public void OnTriggerStay(Collider other)
+    {
+        if (isNotOwner()) return;
+
+        if (other.gameObject.CompareTag("DeathPlane"))
+        {
+            Die();
+        }
+    }
+
     private void slideMovement()
     {
         if (isNotOwner()) return;

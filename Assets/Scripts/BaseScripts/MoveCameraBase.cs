@@ -38,9 +38,9 @@ public class MoveCameraBase : MonoBehaviour
         {
             Debug.LogWarning($"No valid target found with tag '{playerTag}'.");
             errorCount++;
-            if (errorCount > maxErrorBeforeSwitch) {
-                SceneManager.LoadScene("MainMenu");
-            }
+            //if (errorCount > maxErrorBeforeSwitch) {
+            //    SceneManager.LoadScene("MainMenu");
+            //}
         }
     }
 

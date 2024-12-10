@@ -42,9 +42,9 @@ public class Timer : NetworkBehaviour
 
                 // TODO: remove this before pushing
 
-                if (currentTime.Value >= 10f) {
-                    currentTime.Value = 10f;
-                }
+                //if (currentTime.Value >= 10f) {
+                //    currentTime.Value = 10f;
+                //}
             }
         }
         UpdateTimerDisplay();

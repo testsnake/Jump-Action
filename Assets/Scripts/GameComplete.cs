@@ -93,6 +93,7 @@ public class GameComplete : MonoBehaviour
         }
 
         Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         endScreen.interactable = true;
         endScreen.blocksRaycasts = true;
 
