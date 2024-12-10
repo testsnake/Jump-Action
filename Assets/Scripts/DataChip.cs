@@ -16,28 +16,35 @@ public class DataChip : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the player collides with the data chip
-        if (!isBeingCarried && other.CompareTag("Player"))
-        {
-            isBeingCarried = true;
+        if (isBeingCarried) return;
+        if (!other.CompareTag("Player")) return;
 
-            // Attach the entire DataChip (parent) to the player
-            transform.SetParent(other.transform);
+        GameObject otherObject = other.gameObject;
+        GameObject player = otherObject.transform.parent.gameObject;
 
-            // Optionally adjust position relative to the player
-            transform.localPosition = new Vector3(0, 1, 0); // Adjust based on where the chip should appear
-            audioPlayer.playSound("Grab Chip");
-        }
+        Health playerHealth = player.GetComponent<Health>();
+        string playerTeam = playerHealth.GetTeam();
+        if (team == playerTeam) return;
+
+        isBeingCarried = true;
+
+        transform.SetParent(other.transform);
+        transform.position = player.transform.position + new Vector3(0, 1.5f, 0);
+        transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+
+        audioPlayer.playSound("Grab Chip");
     }
 
     public void ResetDataChip()
     {
-        // Detach from the player and reset position
         isBeingCarried = false;
-        transform.SetParent(null); // Remove parent-child relationship
+        string dataChipParentObjectName = team + "DataChipSpawn";
+        Debug.Log("dataChipParentObjectName: " +  dataChipParentObjectName);
+        Transform dataChipSpawn = GameObject.Find(dataChipParentObjectName).GetComponent<Transform>();
+        transform.SetParent(dataChipSpawn);
 
-        // Reset position to above the starting point
         transform.position = startingPosition.position + new Vector3(0, resetHeightOffset, 0);
+        transform.localScale = Vector3.one;
 
         Debug.Log($"DataChip reset above the starting position by {resetHeightOffset} units.");
     }

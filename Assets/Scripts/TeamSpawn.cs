@@ -10,21 +10,25 @@ public class TeamSpawn : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // If the object doesn't have the player tag, ignore it
         if (!other.CompareTag(playerTag)) return;
 
-        // Check if the player is carrying the DataChip
         DataChip dataChip = other.GetComponentInChildren<DataChip>();
         if (dataChip == null || !dataChip.IsBeingCarried()) return;
 
-        // If no TeamScoreManager is assigned, log a warning and return
+        GameObject otherObject = other.gameObject;
+        GameObject player = otherObject.transform.parent.gameObject;
+        Health playerHealth = player.GetComponent<Health>();
+        string playerTeam = playerHealth.GetTeam();
+        bool isBlue = playerTeam == "Blue" ? true : false;
+
+        if (isBlue != isBlueTeam) return;
+
         if (teamScoreManager == null)
         {
             Debug.LogWarning("TeamScoreManager is not assigned to the TeamSpawn.");
             return;
         }
 
-        // Increment the team's score
         if (isBlueTeam)
         {
             teamScoreManager.IncrementBlueTeamScore();
@@ -34,7 +38,6 @@ public class TeamSpawn : MonoBehaviour
             teamScoreManager.IncrementRedTeamScore();
         }
 
-        // Reset the DataChip to its starting position
         dataChip.ResetDataChip();
     }
 }

@@ -165,7 +165,6 @@ GameObject:
   - component: {fileID: 8431372143461298379}
   - component: {fileID: 7813168467580229862}
   - component: {fileID: 3386717610773807290}
-  - component: {fileID: 3733231846639502370}
   - component: {fileID: 7817422365187367772}
   - component: {fileID: 5476177581042497975}
   - component: {fileID: 4172839545817473354}
@@ -233,7 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4105809260
+  GlobalObjectIdHash: 3393615307
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -365,6 +364,7 @@ MonoBehaviour:
   state: 0
   animator: {fileID: 7611516437615304654}
   collider: {fileID: 64638763795489671}
+  globalVolumeManager: {fileID: 0}
 --- !u!114 &8431372143461298379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -432,19 +432,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 8889818665173407388, guid: 63d59a4bb34b9244fbed4a2c30040af4, type: 3}
   firePointDistance: 1
---- !u!114 &3733231846639502370
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1703967098984671567}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc7b8d00eb9e27441a446093c3250b33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  basePosition: {fileID: 0}
 --- !u!114 &7817422365187367772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -459,6 +446,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   team: Blue
+  globalVolumeManager: {fileID: 0}
 --- !u!114 &5476177581042497975
 MonoBehaviour:
   m_ObjectHideFlags: 0

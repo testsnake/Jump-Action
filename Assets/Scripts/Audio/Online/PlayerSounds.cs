@@ -28,6 +28,11 @@ public class PlayerSounds : MonoBehaviour
         sounds.Add("Grab Chip", grabChipSound);
     }
 
+    public Dictionary<string, AudioSource> GetSounds()
+    {
+        return sounds;
+    }
+
     void Update()
     {
         if (playerObject == null)

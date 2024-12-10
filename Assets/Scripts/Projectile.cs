@@ -1,5 +1,10 @@
 using UnityEngine;
 using Unity.Netcode;
+using Unity.VisualScripting;
+using System.Collections.ObjectModel;
+using System.Linq;
+
+
 
 public class Projectile : NetworkBehaviour
 {
@@ -7,34 +12,38 @@ public class Projectile : NetworkBehaviour
     public float lifetime;
     public float damage = 25f;
     public ulong ownerClientId;
-
+    
+    
     private string _team;
     private bool isInitialized = false;
 
-    private void Start()
+    /*private void Start()
     {
         if (IsServer && isInitialized)
         {
             Invoke(nameof(DestroyNetworkObject), lifetime);
         }
-    }
+    }*/
 
-    public void InitializeLifetime()
+    /*public void InitializeLifetime()
     {
         if (!IsServer) return;
 
         isInitialized = true;
         Invoke(nameof(DestroyNetworkObject), lifetime);
-    }
+    }*/
 
     private void FixedUpdate()
     {
         transform.position += transform.forward * speed * Time.fixedDeltaTime;
     }
 
-    public void SetTeam(string team)
+    public void InitializeTeam(string team)
     {
         _team = team;
+        isInitialized = true;
+
+        Debug.Log("Projectile Initialized.");
     }
 
     public string GetTeam()
@@ -42,19 +51,48 @@ public class Projectile : NetworkBehaviour
         return _team;
     }
 
-/*    private void OnTriggerEnter(Collider other)
+
+    private void OnTriggerEnter(Collider other)
     {
         if (!isInitialized) return;
 
-        HandleCollisionServerRpc();
-    }*/
+        string onTriggerEnterMessage = "OnTriggerEnter(): ";
+        GameObject otherObject = other.gameObject;
 
-    [ServerRpc(RequireOwnership = false)]
+        if (otherObject.tag != "Player") 
+        {
+            Destroy(this);
+            return;
+        }
+
+        GameObject player = otherObject.transform.parent.gameObject;
+        Health playerHealth = player.GetComponent<Health>();
+        string playerTeam = playerHealth.GetTeam();
+
+        if (_team == playerTeam)
+        {
+            Destroy(this);
+            return;
+        }
+
+        playerHealth.ApplyDamage(damage);
+        onTriggerEnterMessage += "|| The Other Object was an Enemy Player!";
+        Debug.Log(onTriggerEnterMessage);
+
+        /*HandleCollisionServerRpc();*/
+        Destroy(this);
+    }
+
+    /*[ServerRpc(RequireOwnership = false)]
     public void HandleCollisionServerRpc()
     {
+        Debug.Log("HandleCollisionServerRpc() Got Called!");
+        Debug.Log("Calling CalledClientRpc");
+        CalledClientRpc();
+
         if (!isInitialized) return;
 
-        /*NetworkObject targetNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(targetNetworkObjectId)
+        *//*NetworkObject targetNetworkObject = NetworkManager.Singleton.SpawnManager.SpawnedObjects.ContainsKey(targetNetworkObjectId)
             ? NetworkManager.Singleton.SpawnManager.SpawnedObjects[targetNetworkObjectId]
             : null;
 
@@ -76,18 +114,24 @@ public class Projectile : NetworkBehaviour
 
                 Debug.Log($"{gameObject.name} hit {targetNetworkObject.name} for {damage} damage.");
             }
-        }*/
+        }*//*
 
         DestroyNetworkObject();
-    }
+    }*/
 
-    public void DestroyNetworkObject()
+    /*[ClientRpc]
+    public void CalledClientRpc()
+    {
+        Debug.Log("HandleCollisionServerRpc() Got Called!");
+    }*/
+
+    /*public void DestroyNetworkObject()
     {
         NetworkObject projectileNetwork = GetComponent<NetworkObject>();
         if (IsServer && projectileNetwork.IsSpawned)
         {
             projectileNetwork.Despawn(true);
         }
-    }
+    }*/
 }
 

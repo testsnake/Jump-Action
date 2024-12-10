@@ -456,7 +456,23 @@ public class PlayerControllerBase : NetworkBehaviour
         if (isNotOwner()) return;
 
         audioPlayer.playSound("Die");
+
         respawnPlayer();
+        try 
+        {
+            GameObject dataChipObject = gameObject.transform.Find("PlayerBody/DataChip").gameObject;
+
+            if (dataChipObject == null) return;
+
+            DataChip dataChip = dataChipObject.GetComponent<DataChip>();
+            dataChip.ResetDataChip();
+        } 
+        catch 
+        { 
+            
+        }
+        
+
     }
 
     public void OnTriggerEnter(Collider other)
@@ -472,11 +488,6 @@ public class PlayerControllerBase : NetworkBehaviour
     public void OnTriggerStay(Collider other)
     {
         if (isNotOwner()) return;
-
-        if (other.gameObject.CompareTag("DeathPlane"))
-        {
-            Die();
-        }
     }
 
     private void slideMovement()
@@ -510,24 +521,6 @@ public class PlayerControllerBase : NetworkBehaviour
     private void movePlayer()
     {
         UpdateMovementDirection();
-
-        /*string direction = "Moving: ";
-
-        if (v2.y < 0)
-            direction += "Backwards + ";
-        else if (v2.y > 0)
-            direction += "Forwards + ";
-        else
-            direction += "Still + ";
-
-        if (v2.x < 0)
-            direction += "Left";
-        else if (v2.x > 0)
-            direction += "Right";
-        else
-            direction += "Still";*/
-
-        /*Debug.Log($"direction: {direction} || moveDirection: {moveDirection}");*/
 
         if (isGrounded)
             rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);

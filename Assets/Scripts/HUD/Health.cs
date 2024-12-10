@@ -31,6 +31,11 @@ public class Health : MonoBehaviour
         }
     }
 
+    public string GetTeam()
+    {
+        team = PlayerPrefs.GetString("Team");
+        return team;
+    }
 
 
     public void ApplyDamage(float damage)
@@ -55,20 +60,21 @@ public class Health : MonoBehaviour
         currentHealth = maxHealth;
     }
 
-    private void OnCollisionEnter(Collision other)
+/*    private void OnCollisionEnter(Collision other)
     {
-        string collisionMessage = "OnCollisionEnter() ";
-        if (other.gameObject.tag == "Projectile")
-        {
-            collisionMessage += "|| The Other Object was a Projectile!";
-            Debug.Log(collisionMessage);
-            ApplyDamage(20f);
-            GameObject projectileGameObject = other.gameObject;
-            Projectile projectile = projectileGameObject.GetComponent<Projectile>();
-            projectile.HandleCollisionServerRpc();
-        }
 
-    }
+
+        string collisionMessage = "OnCollisionEnter():";
+
+        Debug.Log(collisionMessage);
+        ApplyDamage(20f);
+        GameObject projectileGameObject = other.gameObject;
+
+        Destroy(projectileGameObject);
+        *//*Projectile projectile = projectileGameObject.GetComponent<Projectile>();
+        projectile.HandleCollisionServerRpc();*//*
+
+    }*/
 
     private void Die()
     {
