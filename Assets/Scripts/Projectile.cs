@@ -42,11 +42,11 @@ public class Projectile : NetworkBehaviour
         return _team;
     }
 
-    /*private void OnTriggerEnter(Collider other)
+/*    private void OnTriggerEnter(Collider other)
     {
         if (!isInitialized) return;
 
-        HandleCollisionServerRpc(other.GetComponent<NetworkObject>()?.NetworkObjectId ?? 0, other.GetComponent<Health>() != null);
+        HandleCollisionServerRpc();
     }*/
 
     [ServerRpc(RequireOwnership = false)]
