@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -104,7 +102,6 @@ public class GlobalVolumeManager : MonoBehaviour
         double intensity = (baseIntensity + multiplier) * vignetteMaxIntensity;
 
         vignette.intensity.value = (float)intensity;
-        //Debug.Log("Vignette intensity = " + vignette.intensity + " base intensity = " + baseIntensity + " damage = " + damage);
     }
 
     private void UpdateAberration()
@@ -153,10 +150,4 @@ public class GlobalVolumeManager : MonoBehaviour
     public void SetVingette(float value) {
         directVignette = value;
     }
-
-
-
-
-
-
 }
