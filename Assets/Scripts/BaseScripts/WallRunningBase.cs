@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
@@ -29,7 +27,6 @@ public class WallRunningBase : NetworkBehaviour
     public float gravityCounterForce = 5f;
 
     [Header("References")]
-    /*public Transform orientation;*/
     private PlayerCamBase cam;
     protected PlayerControllerBase player; // Use PlayerControllerBase for modularity
     protected Rigidbody rb;
@@ -42,7 +39,6 @@ public class WallRunningBase : NetworkBehaviour
         rb = GetComponent<Rigidbody>();
         player = GetComponent<PlayerControllerBase>();
         cam = GameObject.Find("CameraHolder")?.GetComponent<PlayerCamBase>();
-        /*orientation = transform.Find("Orientation");*/
     }
     protected virtual void startWallRun()
     {
@@ -136,24 +132,6 @@ public class WallRunningBase : NetworkBehaviour
         return !isGrounded;
     }
 
-    /*protected virtual void wallRunningMovement()
-    {
-        if (isNotOwner()) return;
-
-        rb.useGravity = useGravity;
-
-        Vector3 wallNormal = wallRight ? rightWallHit.normal : leftWallHit.normal;
-        Vector3 wallForward = Vector3.Cross(wallNormal, transform.up);
-
-        if ((transform.forward - wallForward).magnitude > (transform.forward + wallForward).magnitude)
-            wallForward = -wallForward;
-
-        rb.AddForce(wallForward * wallRunForce, ForceMode.Force);
-
-        if (useGravity)
-            rb.AddForce(Vector3.up * gravityCounterForce, ForceMode.Force);
-    }*/
-
     protected virtual void wallRunningMovement()
     {
         if (isNotOwner()) return;
@@ -200,10 +178,5 @@ public class WallRunningBase : NetworkBehaviour
     private bool isNotOwner()
     {
         return PlayerPrefs.GetString("Mode") == "Online" && !IsOwner;
-    }
-
-    private bool isOwner()
-    {
-        return PlayerPrefs.GetString("Mode") == "Online" && IsOwner;
     }
 }

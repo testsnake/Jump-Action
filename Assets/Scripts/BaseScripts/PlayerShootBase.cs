@@ -1,8 +1,6 @@
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.EnhancedTouch;
-using System.Collections.Generic;
 
 public class PlayerShootBase : NetworkBehaviour
 {
@@ -10,7 +8,6 @@ public class PlayerShootBase : NetworkBehaviour
     public GameObject projectilePrefab; // Prefab for the projectile
     private Transform cameraHolder; // Reference to the camera or look direction of the player
     public float firePointDistance = 1.1f; // Distance in front of the player
-    private string team;
 
     private InputActions inputActions;
 
@@ -56,66 +53,13 @@ public class PlayerShootBase : NetworkBehaviour
         playerSounds.playSound("Shoot");
 
         GenerateBulletServerRpc(spawnPosition, spawnRotation, team);
-
-        /*if (projectilePrefab != null && cameraHolder != null)
-        {
-            Vector3 spawnPosition = cameraHolder.position + cameraHolder.forward * firePointDistance;
-            Quaternion spawnRotation = cameraHolder.rotation;
-
-            GameObject projectile = Instantiate(projectilePrefab, spawnPosition, spawnRotation);
-
-            if (projectile != null)
-            {
-                // Assign the ownerClientId to the projectile
-                Projectile projectileComponent = projectile.GetComponent<Projectile>();
-                if (projectileComponent != null)
-                {
-                    projectileComponent.ownerClientId = NetworkManager.Singleton.LocalClientId;
-                }
-            }
-        }
-        else
-        {
-            Debug.LogWarning("ProjectilePrefab or PlayerCam is not assigned in PlayerShootBase.");
-        }*/
     }
 
     [ServerRpc]
     private void GenerateBulletServerRpc(Vector3 spawnPosition, Quaternion spawnRotation, string team)
     {
         GenerateBulletClientRpc(spawnPosition, spawnRotation, team);
-        /*if (projectilePrefab == null)
-        {
-            Debug.LogError("Projectile Prefab is null!");
-            return;
-        }*/
-
-        /*GameObject projectileObject = Instantiate(projectilePrefab, spawnPosition, spawnRotation);
-
-        Projectile projectile = projectileObject.GetComponent<Projectile>();
-        projectile.SetTeam(team);
-
-        NetworkObject projectileNetwork = projectile.GetComponent<NetworkObject>();
-        projectileNetwork.Spawn(true);
-
-        projectile.InitializeLifetime();*/
     }
-    /*
-        [ClientRpc]
-        private void GenerateBulletClientRpc(Vector3 spawnPosition, Quaternion spawnRotation, string team)
-        {
-            GameObject projectileObject = Instantiate(projectilePrefab, spawnPosition, spawnRotation);
-
-            Projectile projectile = projectileObject.GetComponent<Projectile>();
-            projectile.SetTeam(team);
-            Debug.Log("Created a Bullet! From team: " + team);
-
-            NetworkObject projectileNetwork = projectile.GetComponent<NetworkObject>();
-            projectileNetwork.Spawn(true);
-
-            projectile.InitializeLifetime();
-        }*/
-
 
     [ClientRpc]
     private void GenerateBulletClientRpc(Vector3 spawnPosition, Quaternion spawnRotation, string team)

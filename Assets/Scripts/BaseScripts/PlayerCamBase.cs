@@ -68,10 +68,6 @@ public class PlayerCamBase : MonoBehaviour
             AssignOrientation();
             return;
         }
-        else 
-        {
-            //Debug.LogWarning("Orientation is no longer null.");
-        }
 
         // Handle rotation input
         Vector2 rotationVector2D = rotation.ReadValue<Vector2>();

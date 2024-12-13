@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 using Unity.Netcode;
 
 public class ClimbingBase : NetworkBehaviour
@@ -60,10 +57,6 @@ public class ClimbingBase : NetworkBehaviour
 
         wallCheck();
         tallWallCheck();
-
-        /*Debug.Log("wf:" + wallFront);
-        Debug.Log("hf:" + playerIsHoldingForward());
-        Debug.Log("wa:" + (wallAngle < maxAngle));*/
 
         if ((wallFront || tallWallFront) && playerIsHoldingForward() && (wallAngle < maxAngle || tallWallAngle < maxAngle))
         {
@@ -163,10 +156,5 @@ public class ClimbingBase : NetworkBehaviour
     private bool isNotOwner()
     {
         return PlayerPrefs.GetString("Mode") == "Online" && !IsOwner;
-    }
-
-    private bool isOwner()
-    {
-        return PlayerPrefs.GetString("Mode") == "Online" && IsOwner;
     }
 }

@@ -47,7 +47,6 @@ public class PlayerControllerBase : NetworkBehaviour
     [Header("SlopeHandling")]
     public float maxSlopeAngle = 40f;
     private RaycastHit slopeHit;
-    /*private Transform orientation;*/
 
     [Header("Miscellaneous")]
     public List<Material> teamColorMaterials;
@@ -113,7 +112,6 @@ public class PlayerControllerBase : NetworkBehaviour
         wallRunning = GetComponent<WallRunningBase>();
         climbing = GetComponent<Climbing>();
         audioPlayer = GameObject.Find("AudioManager").GetComponent<PlayerSounds>();
-        /*orientation = transform.Find("Orientation");*/
         ground = LayerMask.GetMask("ground", "Stage", "wall");
         playerCam = GameObject.Find("CameraHolder").GetComponent<Transform>();
         hudGunAnimator = GameObject.Find("HUDGun").GetComponent<Animator>();
@@ -154,7 +152,6 @@ public class PlayerControllerBase : NetworkBehaviour
         {
             StartCoroutine(InitializeTeamWithDelay());
         }
-        
     }
 
     public override void OnNetworkDespawn()
@@ -196,7 +193,6 @@ public class PlayerControllerBase : NetworkBehaviour
             playerMatIsSet = true;
             playerHealth.SetTeam("Red");
         }
-
     }
 
     private void SetClientLayerRecursive(GameObject gameObj)
@@ -211,8 +207,6 @@ public class PlayerControllerBase : NetworkBehaviour
             {
                 SetClientLayerRecursive(child.gameObject);
             }
-                
-
         }
     }
 
@@ -256,7 +250,6 @@ public class PlayerControllerBase : NetworkBehaviour
         {
             Debug.LogError("Error in setting the aim target during start. This may be bad.");
         }
-        
     }
 
     public void UpdateMovementDirection()
@@ -308,9 +301,7 @@ public class PlayerControllerBase : NetworkBehaviour
             if (gvm != null) {
                 globalVolumeManager = gvm.GetComponent<GlobalVolumeManager>();
             }
-            
         }
-
     }
 
     public virtual void FixedUpdate()
@@ -319,7 +310,6 @@ public class PlayerControllerBase : NetworkBehaviour
         animator.SetInteger("MovementState", (int)state);
         animator.SetFloat("MoveX", animXVal);
         animator.SetFloat("MoveY", animYVal);
-        /*Debug.Log("MovementState: " +  state); */
         switch (state)
         {
             case MovementState.standing:
@@ -426,52 +416,41 @@ public class PlayerControllerBase : NetworkBehaviour
         audioPlayer.playSound("Slide");
         state = MovementState.sliding;
         slideTimer = maxSlideTime;
-        //Debug.Log(animYVal);
         UpdateMovementDirection();
     }
 
     private void respawnPlayer()
     {
         if (isNotOwner()) return;
-        try
-        {
-            Debug.Log("Called respawnPlayer");
+        Debug.Log("Called respawnPlayer");
 
-            string spawnTeam = PlayerPrefs.GetString("Team");
+        string spawnTeam = PlayerPrefs.GetString("Team");
 
-            //if (spawnPoint == null)
-            //{
-            if (spawnTeam == "Red")
-            {
-                spawnPoint = GameObject.Find("RedTeamSpawn");
-                if (spawnPoint == null) throw Exception();
-                rb.velocity = Vector3.zero;
-                transform.position = spawnPoint.transform.position;
-                Debug.Log("Spawning player on red side at " + spawnPoint.transform.position);
-            }
-            else if (spawnTeam == "Blue")
-            {
-                spawnPoint = GameObject.Find("BlueTeamSpawn");
-                if (spawnPoint == null) throw Exception();
-                rb.velocity = Vector3.zero;
-                transform.position = spawnPoint.transform.position;
-                Debug.Log("Spawning player on blue side at " + spawnPoint.transform.position);
-            }
-            else
-            {
-                Debug.LogError("Failed to properly spawn player.");
-                spawnPoint = null;
-                rb.velocity = Vector3.zero;
-                transform.position = GameObject.Find("DefaultSpawn").transform.position;
-                respawnPlayer();
-            }
-            //}
-        } catch
+        if (spawnTeam == "Red")
         {
+            spawnPoint = GameObject.Find("RedTeamSpawn");
+            if (spawnPoint == null) throw Exception();
+            rb.velocity = Vector3.zero;
+            transform.position = spawnPoint.transform.position;
+            Debug.Log("Spawning player on red side at " + spawnPoint.transform.position);
+        }
+        else if (spawnTeam == "Blue")
+        {
+            spawnPoint = GameObject.Find("BlueTeamSpawn");
+            if (spawnPoint == null) throw Exception();
+            rb.velocity = Vector3.zero;
+            transform.position = spawnPoint.transform.position;
+            Debug.Log("Spawning player on blue side at " + spawnPoint.transform.position);
+        }
+        else
+        {
+            Debug.LogError("Failed to properly spawn player.");
+            spawnPoint = null;
+            rb.velocity = Vector3.zero;
+            transform.position = GameObject.Find("DefaultSpawn").transform.position;
             respawnPlayer();
         }
-
-
+            
     }
 
     private Exception Exception()
@@ -499,8 +478,6 @@ public class PlayerControllerBase : NetworkBehaviour
         { 
             
         }
-        
-
     }
 
     public void OnTriggerEnter(Collider other)
@@ -554,7 +531,6 @@ public class PlayerControllerBase : NetworkBehaviour
             rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
         else
             rb.AddForce(moveDirection.normalized * speed * 10f * airSpeedMultiplier, ForceMode.Force);
-    
     }
 
     private void limitSpeed()
