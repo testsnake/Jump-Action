@@ -9,14 +9,19 @@ using UnityEngine;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
 
+//The Relay handles the in-game connection, linking each client to each other and allowing for the easy bypassing of things like firewalls and such.
+//Check out the CodeMonkey tutorial here for some of the info on where i got this: https://www.youtube.com/watch?v=msPNJ2cxWfw
 public class TestRelay : MonoBehaviour
 {
+    //Singleton stuff
     public static TestRelay Instance { get; private set; }
     private void Awake()
     {
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
     }
+
+    //Creates the relay which links clients together
     public async Task<string> CreateRelay()
     {
         try
@@ -35,6 +40,7 @@ public class TestRelay : MonoBehaviour
         }
     }
 
+    //Causes a player to join into a relay given its code
     public async void JoinRelay(string joinCode)
     {
         try
@@ -50,6 +56,7 @@ public class TestRelay : MonoBehaviour
         }
     }
 
+    //Handles asynchronously loading a scene while maintaining important data, useful for performance. Then starts hosting on the networkmanager
     private IEnumerator ChangeSceneAndHost(Allocation alloc)
     {
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync("Gameplay");
@@ -64,6 +71,7 @@ public class TestRelay : MonoBehaviour
         NetworkManager.Singleton.StartHost();
     }
 
+    //Handles asynchronously loading a scene while maintaining important data, useful for performance. Then joins as client on the networkmanager
     private IEnumerator ChangeSceneAndJoin(JoinAllocation alloc)
     {
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync("Gameplay");

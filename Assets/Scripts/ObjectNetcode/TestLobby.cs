@@ -8,6 +8,8 @@ using Unity.Services.Lobbies.Models;
 using System;
 using System.Threading.Tasks;
 
+//Handles all the lobby connection and the way in which player data is sent across the network within the lobby.
+//Check out CodeMonkey's tutorial on this, it's where i got a good chunk of the code from lol: https://www.youtube.com/watch?v=-KDlEBfCBiU
 public class TestLobby : MonoBehaviour
 {
     private Lobby hostLobby;
@@ -20,6 +22,8 @@ public class TestLobby : MonoBehaviour
     //Set this through settings? Would be nice to save this to a file and load dynamically.
     public string playerName = "Anonymous";
     public string playerTeam = "None";
+
+    //Heartbeat and polling handle keeping the connection alive and checking for updates.
     private float heartbeatTimer;
     [SerializeField] private float heartbeatTimerMax = 15;
     public float pollTimer;
@@ -31,6 +35,7 @@ public class TestLobby : MonoBehaviour
     public event EventHandler OnLeftLobby;
     public ErrorHandler errorHandler;
 
+    //Mostly not using these right now, though the code does depend on their existence in many ways so i've left them in
     public event EventHandler<LobbyEventArgs> OnJoinedLobby;
     public event EventHandler<LobbyEventArgs> OnJoinedLobbyUpdate;
     public event EventHandler<LobbyEventArgs> OnKickedFromLobby;
@@ -46,6 +51,7 @@ public class TestLobby : MonoBehaviour
         public List<Lobby> lobbyList;
     }
 
+    //Generates the random player name, or gets the set username from playerprefs
     private void playerNameGenerator()
     {
         const string glyphs = "ABCDE0123456789";
@@ -67,10 +73,13 @@ public class TestLobby : MonoBehaviour
 
     private async void Start()
     {
+        //This is as good a place as any to do this, i guess. Probably should've gone in the gamemanager in retrospect but oh well
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
         playerNameGenerator();
+
+        //Initialize the authentication stuff so that the player can use Lobby
 
         InitializationOptions initializationOptions = new InitializationOptions();
         initializationOptions.SetProfile(playerName);
@@ -88,12 +97,14 @@ public class TestLobby : MonoBehaviour
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
     }
 
+    //Update function, a classic
     private void Update()
     {
         try
         {
             if (joinedLobby != null && playerTeam == "None")
             {
+                //Handles setting your team. This could be done more dynamically in the future, but for now this is ok
                 int bluePlayers = 0;
                 int redPlayers = 0;
                 foreach (Player p in joinedLobby.Players)
@@ -127,6 +138,7 @@ public class TestLobby : MonoBehaviour
         {
             try
             {
+                //Display an error on screen if it happens.
                 errorHandler.displayError(ex);
             } catch
             {
@@ -136,6 +148,7 @@ public class TestLobby : MonoBehaviour
         
     }
 
+    //Heartbeat keeps the connection alive when no updates are happening
     private async void HandleLobbyHeartbeat()
     {
         if (hostLobby != null)
@@ -149,6 +162,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    //Checks for updates to the lobby.
     private async void HandleLobbyPollForUpdates()
     {
         if (joinedLobby != null)
@@ -186,11 +200,13 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    //Are we the host of the current lobby (if it exists)?
     public bool IsLobbyHost()
     {
         return joinedLobby != null && joinedLobby.HostId == AuthenticationService.Instance.PlayerId;
     }
 
+    //Are we currently in the lobby that we think we're in? (Used if we get kicked out of a lobby for some reason)
     private bool IsPlayerInLobby()
     {
         if (joinedLobby != null && joinedLobby.Players != null)
@@ -207,12 +223,14 @@ public class TestLobby : MonoBehaviour
         return false;
     }
 
+    //Overrides the below function with some default values, used for being called through UI
     public void createLobby()
     {
         string name = playerName + "'s Lobby";
         createLobby(name, 10, "Capture the Chip");
     }
 
+    //Creates a new lobby with the given parameters.
     public async void createLobby(string lobbyName = "Lobby", int maxPlayers = 10, string gameMode = "Capture the Chip")
     {
         try
@@ -250,6 +268,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    //Removes us from the current lobby.
     public async void LeaveLobby()
     {
         try
@@ -320,6 +339,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    //Propogates an update of the player name to the server
     public async void UpdatePlayerName(string newPlayerName)
     {
         try
@@ -349,6 +369,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    //Propogates an update of the player team to the server
     public async void UpdatePlayerTeam(string newPlayerTeam)
     {
         try
@@ -458,6 +479,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    //Join a lobby given its lobby id
     public async Task JoinLobbyById(string id)
     {
         try
@@ -486,7 +508,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
-    //Do we want this? Maybe. It's easy as hell so might as well include it.
+    //Currently unused, but could easily be implemented in a future update! We're leaving it in here for later.
     public async void QuickJoin()
     {
         try
@@ -507,6 +529,7 @@ public class TestLobby : MonoBehaviour
         
     }
 
+    //Gets all relevant data about the current client player (their name and team.)
     public Player GetPlayer()
     {
         //Could store loadout data in here? Maybe?
@@ -522,11 +545,13 @@ public class TestLobby : MonoBehaviour
         return player;
     }
 
+    //Overload function for printplayers, used for testing with UI.
     public void PrintPlayers()
     {
         PrintPlayers(joinedLobby);
     }
 
+    //Debug function that Logs the players in the current lobby and their IDs.
     public void PrintPlayers(Lobby lobby)
     {
         Debug.Log("Players in Lobby " + lobby.Name);
@@ -536,6 +561,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    //Handle some last minute code before the player quits the game.
     private void OnApplicationQuit()
     {
         Debug.Log("OnQuit");
@@ -545,6 +571,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    //Same as above, basically, just in case. Having 2 places where this code runs adds redundancy for more reliability.
     private void OnDisable()
     {
         Debug.Log("OnDisable");
@@ -554,6 +581,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    //Removes the player from the lobby when they quit the game and resets all their temporary data.
     private async Task LeaveOnQuit()
     {
         Debug.Log("LeaveOnQuit");
@@ -578,6 +606,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    //Allows the host to start the game and synchronizes the game starting across all clients.
     public async void StartGame()
     {
         if (IsLobbyHost())
@@ -586,6 +615,7 @@ public class TestLobby : MonoBehaviour
             {
                 Debug.Log("StartGame");
 
+                //Initializes the relay, see TestRelay for details
                 string relayCode = await TestRelay.Instance.CreateRelay();
 
                 Lobby lobby = await Lobbies.Instance.UpdateLobbyAsync(joinedLobby.Id, new UpdateLobbyOptions
