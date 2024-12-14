@@ -69,7 +69,7 @@ public class PlayerCamBase : MonoBehaviour
             return;
         }
 
-        // Handle rotation input
+        // Read and handle Mouse Movement
         Vector2 rotationVector2D = rotation.ReadValue<Vector2>();
         float x = rotationVector2D.x * turnSensitivity * Time.deltaTime;
         float y = rotationVector2D.y * turnSensitivity * Time.deltaTime;

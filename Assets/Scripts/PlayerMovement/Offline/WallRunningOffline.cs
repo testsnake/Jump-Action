@@ -26,12 +26,12 @@ public class WallRunningOffline : MonoBehaviour
 
     [Header("Gravity")]
     private bool useGravity = true;
-    public float gravityCounterForce;
+    public float gravityCounterForce; // Value to prevent player from falling while wallrunning
 
     [Header("References")]
     public Transform orientation;
     public PlayerCam cam;
-    private PlayerControllerOffline player;
+    private PlayerControllerOffline player; // Use PlayerControllerOffline for modularity
     private Rigidbody rb;
 
     void Start()
@@ -44,6 +44,7 @@ public class WallRunningOffline : MonoBehaviour
 
     void Update()
     {
+        // Wall detection and wall-running logic
         checkForWall();
         if (AboveGround() && (wallRight || wallLeft) && player.moveDirection.z != 0)
         {

@@ -62,7 +62,7 @@ public class PlayerControllerBase : NetworkBehaviour
     private PlayerSounds audioPlayer;
     public float animXVal;
     public float animYVal;
-    
+
 
     [Header("Rigging and Animation")]
     public RigBuilder rigBuilder;
@@ -148,7 +148,8 @@ public class PlayerControllerBase : NetworkBehaviour
         if (!string.IsNullOrEmpty(team))
         {
             SetTeamOnServerRpc(team);
-        } else
+        }
+        else
         {
             StartCoroutine(InitializeTeamWithDelay());
         }
@@ -246,7 +247,8 @@ public class PlayerControllerBase : NetworkBehaviour
             {
                 Debug.LogWarning("Could not find target for player rig. Make sure there's an object named \"PlayerLookTarget\" as a child of the scene camera, for the player to look at. (Let me know if you need help! - Will)");
             }
-        } catch 
+        }
+        catch
         {
             Debug.LogError("Error in setting the aim target during start. This may be bad.");
         }
@@ -294,11 +296,15 @@ public class PlayerControllerBase : NetworkBehaviour
         }
 
 
-        if (globalVolumeManager != null) {
+        if (globalVolumeManager != null)
+        {
             globalVolumeManager.UpdateSpeed(rb.velocity);
-        } else {
+        }
+        else
+        {
             GameObject gvm = GameObject.FindWithTag("GameManager");
-            if (gvm != null) {
+            if (gvm != null)
+            {
                 globalVolumeManager = gvm.GetComponent<GlobalVolumeManager>();
             }
         }
@@ -386,15 +392,15 @@ public class PlayerControllerBase : NetworkBehaviour
         if (isGrounded)
         {
             UpdateMovementDirection();
-            if ((moveDirection.x != 0 || moveDirection.z != 0) && state != MovementState.sliding)
+            if ((moveDirection.x != 0 || moveDirection.z != 0) && state != MovementState.sliding) // If is moving and is not currently sliding
             {
-                if (!onSlope() || rb.velocity.y <= -0.1f)
+                if (!onSlope() || rb.velocity.y <= -0.1f) // If is not on slope or is going down a slope
                     startSlide();
             }
             else
                 state = MovementState.crouching;
-            
-            shiftHitBox();
+
+            shiftHitBox(); // Adjust player collider size and position according to Movement State
         }
     }
 
@@ -405,7 +411,7 @@ public class PlayerControllerBase : NetworkBehaviour
         if (state != MovementState.sliding)
         {
             state = MovementState.standing;
-            shiftHitBox();
+            shiftHitBox(); // Adjust player collider size and position according to Movement State
         }
     }
 
@@ -426,7 +432,15 @@ public class PlayerControllerBase : NetworkBehaviour
 
         string spawnTeam = PlayerPrefs.GetString("Team");
 
-        if (spawnTeam == "Red")
+        if (PlayerPrefs.GetString("Mode") == "Offline")
+        {
+            spawnPoint = GameObject.Find("TeamSpawn");
+            if (spawnPoint == null) throw Exception();
+            rb.velocity = Vector3.zero;
+            transform.position = spawnPoint.transform.position;
+            Debug.Log("Spawning player at " + spawnPoint.transform.position);
+        }
+        else if (spawnTeam == "Red")
         {
             spawnPoint = GameObject.Find("RedTeamSpawn");
             if (spawnPoint == null) throw Exception();
@@ -450,7 +464,6 @@ public class PlayerControllerBase : NetworkBehaviour
             transform.position = GameObject.Find("DefaultSpawn").transform.position;
             respawnPlayer();
         }
-            
     }
 
     private Exception Exception()
@@ -465,7 +478,7 @@ public class PlayerControllerBase : NetworkBehaviour
         audioPlayer.playSound("Die");
 
         respawnPlayer();
-        try 
+        try
         {
             GameObject dataChipObject = gameObject.transform.Find("PlayerBody/DataChip").gameObject;
 
@@ -473,10 +486,10 @@ public class PlayerControllerBase : NetworkBehaviour
 
             DataChip dataChip = dataChipObject.GetComponent<DataChip>();
             dataChip.ResetDataChip();
-        } 
-        catch 
-        { 
-            
+        }
+        catch
+        {
+
         }
     }
 
@@ -505,7 +518,7 @@ public class PlayerControllerBase : NetworkBehaviour
             rb.AddForce(moveDirection.normalized * slideSpeed * 10f, ForceMode.Force);
             slideTimer -= Time.deltaTime;
         }
-        else if (rb.velocity.y <= -0.1f)
+        else if (rb.velocity.y <= -0.1f) // If going down a slope
         {
             rb.AddForce(getSlopeMovementDirection(moveDirection) * slideSpeed * 10f, ForceMode.Force);
         }
@@ -520,7 +533,7 @@ public class PlayerControllerBase : NetworkBehaviour
 
         audioPlayer.stopSound("Slide");
         state = isGrounded ? MovementState.standing : MovementState.falling;
-        shiftHitBox();
+        shiftHitBox(); // Adjust player collider size and position according to Movement State
     }
 
     private void movePlayer()
@@ -539,6 +552,7 @@ public class PlayerControllerBase : NetworkBehaviour
 
         if (onSlope())
         {
+            // Adjust speed cap according to movement on slope inclination
             if (rb.velocity.magnitude > speed)
                 rb.velocity = rb.velocity.normalized * speed;
         }
@@ -655,6 +669,6 @@ public class PlayerControllerBase : NetworkBehaviour
         collider.center = center;
         collider.radius = radius;
         collider.height = height;
-        collider.direction = (int) direction;
+        collider.direction = (int)direction;
     }
 }

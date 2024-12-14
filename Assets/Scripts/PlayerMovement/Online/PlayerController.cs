@@ -210,10 +210,6 @@ public class PlayerController : NetworkBehaviour
             wallRunning.wallJump();
             audioPlayer.playSound("Jump");
         }
-        // else if (state == MovementState.climbing)
-        // {
-        //     climbing.climbJump();
-        // }
     }
 
     private void Crouch(InputAction.CallbackContext obj)
@@ -223,9 +219,9 @@ public class PlayerController : NetworkBehaviour
             transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
             rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
 
-            if ((moveDirection.x != 0 || moveDirection.z != 0) && state != MovementState.sliding)
+            if ((moveDirection.x != 0 || moveDirection.z != 0) && state != MovementState.sliding) // If is moving and is not currently sliding
             {
-                if (!onSlope() || rb.velocity.y <= -0.1f)
+                if (!onSlope() || rb.velocity.y <= -0.1f) // If is not on slope or is going down a slope
                     startSlide();
             }
             else
@@ -261,7 +257,7 @@ public class PlayerController : NetworkBehaviour
             rb.AddForce(moveDirection.normalized * slideSpeed * 10f, ForceMode.Force);
             slideTimer -= Time.deltaTime;
         }
-        else if (rb.velocity.y <= -0.1f)
+        else if (rb.velocity.y <= -0.1f) // If going down a slope
         {
             rb.AddForce(getSlopeMovementDirection(moveDirection) * slideSpeed * 10f, ForceMode.Force);
         }
@@ -303,6 +299,7 @@ public class PlayerController : NetworkBehaviour
         if (!IsOwner) return;
         if (onSlope())
         {
+            // Adjust speed cap according to movement on slope inclination
             if (rb.velocity.magnitude > speed)
                 rb.velocity = rb.velocity.normalized * speed;
         }

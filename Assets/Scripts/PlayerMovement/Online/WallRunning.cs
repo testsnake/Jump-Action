@@ -26,12 +26,12 @@ public class WallRunning : NetworkBehaviour
 
     [Header("Gravity")]
     private bool useGravity = true;
-    public float gravityCounterForce;
+    public float gravityCounterForce; // Value to prevent player from falling while wallrunning
 
     [Header("References")]
     public Transform orientation;
     public PlayerCam cam;
-    private PlayerController player;
+    private PlayerController player; // Use PlayerController for modularity
     private Rigidbody rb;
 
     void Start()
@@ -46,6 +46,7 @@ public class WallRunning : NetworkBehaviour
     void Update()
     {
         if (!IsOwner) return;
+        // Wall detection and wall-running logic
         checkForWall();
         if (AboveGround() && (wallRight || wallLeft) && player.moveDirection.z != 0)
         {

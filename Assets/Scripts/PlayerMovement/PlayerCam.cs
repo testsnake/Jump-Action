@@ -59,6 +59,7 @@ public class PlayerCam : MonoBehaviour
             return;
         }
 
+        // Read and handle Mouse Movement
         Vector2 rotationVector2D = rotation.ReadValue<Vector2>();
         float x = rotationVector2D.x * turnSensitivity * Time.deltaTime;
         float y = rotationVector2D.y * turnSensitivity * Time.deltaTime;
@@ -73,6 +74,7 @@ public class PlayerCam : MonoBehaviour
 
     private void AssignOrientation()
     {
+        // Find all players with the "Player" tag
         GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject player in allPlayers)
         {

@@ -11,6 +11,7 @@ public class DevHUD : MonoBehaviour
 
     void Update()
     {
+        // Find player
         if (player == null)
         {
             GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");

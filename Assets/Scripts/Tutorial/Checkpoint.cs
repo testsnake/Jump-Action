@@ -15,10 +15,15 @@ public class Checkpoint : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // Update spawn point when entering checkpoint
         if (spawnPoint != null)
             spawnPoint.position = transform.position + new Vector3(0f, 1f, 0f);
+
+        // Update tutorial guiding text when entering checkpoint
         if (tutorialText != "")
             tutorialDisplay.text = tutorialText;
+
+        // Start tutorial end sequence
         if (tutorialText.Contains("Congratulations"))
         {
             cheers.SetActive(true);

@@ -24,7 +24,7 @@ public class WallRunningBase : NetworkBehaviour
 
     [Header("Gravity")]
     protected bool useGravity = true;
-    public float gravityCounterForce = 5f;
+    public float gravityCounterForce = 5f; // Value to prevent player from falling while wallrunning
 
     [Header("References")]
     private PlayerCamBase cam;
@@ -45,7 +45,9 @@ public class WallRunningBase : NetworkBehaviour
         if (!wallValidation()) // Wall not valid
             return;
         if (isNotOwner()) return;
-        if (player.state == PlayerControllerBase.MovementState.falling || player.state == PlayerControllerBase.MovementState.climbing || player.state == PlayerControllerBase.MovementState.wallRunning)
+        if (player.state == PlayerControllerBase.MovementState.falling || 
+            player.state == PlayerControllerBase.MovementState.climbing || 
+            player.state == PlayerControllerBase.MovementState.wallRunning)
         {
             player.state = PlayerControllerBase.MovementState.wallRunning;
             player.speed = wallRunningSpeed;

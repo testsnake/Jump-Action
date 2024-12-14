@@ -5,9 +5,9 @@ using Unity.Netcode;
 
 public class PlayerSounds : MonoBehaviour
 {
-    private GameObject playerObject;
-    private Rigidbody playerRB;
-    private PlayerController playerMovement;
+    private GameObject playerObject; // Reference to player object
+    private Rigidbody playerRB; // Reference to player rigidbody
+    private PlayerController playerMovement; // Reference to Player Novement Script
     public AudioSource runningSound;
     public AudioSource wallRunningSound;
     public AudioSource jumpingSound;
@@ -15,10 +15,11 @@ public class PlayerSounds : MonoBehaviour
     public AudioSource dyingSound;
     public AudioSource shootingSound;
     public AudioSource grabChipSound;
-    private Dictionary<string, AudioSource> sounds = new Dictionary<string, AudioSource>();
+    private Dictionary<string, AudioSource> sounds = new Dictionary<string, AudioSource>(); // Dictionary linking strings (names) to audio sources
 
     void Start()
     {
+        // Add audios to dictionary
         sounds.Add("Run", runningSound);
         sounds.Add("Wall Run", wallRunningSound);
         sounds.Add("Jump", jumpingSound);
@@ -35,6 +36,7 @@ public class PlayerSounds : MonoBehaviour
 
     void Update()
     {
+        // Assign player object reference from networked object
         if (playerObject == null)
         {
             GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
@@ -54,29 +56,31 @@ public class PlayerSounds : MonoBehaviour
             bool currentlyWallRunning = isWallRunning();
             bool currentlySliding = isSliding();
 
-            if (currentlyRunning && !runningSound.isPlaying)
+            if (currentlyRunning && !runningSound.isPlaying) // If player is running and running audio is not playing
                 playSound("Run");
-            else if (!currentlyRunning && runningSound.isPlaying)
+            else if (!currentlyRunning && runningSound.isPlaying) // If player is not running and running audio is playing
                 stopSound("Run");
 
-            if (currentlyWallRunning && !wallRunningSound.isPlaying)
+            if (currentlyWallRunning && !wallRunningSound.isPlaying) // If player is wallrunning and wallrunning audio is not playing
                 playSound("Wall Run");
-            else if (!currentlyWallRunning && wallRunningSound.isPlaying)
+            else if (!currentlyWallRunning && wallRunningSound.isPlaying) // If player is not wallrunning and wallrunning audio is playing
                 stopSound("Wall Run");
 
-            if (!currentlySliding && slidingSound.isPlaying)
+            if (!currentlySliding && slidingSound.isPlaying) // If player is not sliding and sliding audio is playing
                 stopSound("Slide");
         }
     }
 
     bool isRunning()
     {
+        // Player is moving and is in standing state (On the ground and not crouching or sliding)
         return (playerMovement.moveDirection.x != 0f || playerMovement.moveDirection.z != 0f) && 
                 playerMovement.state == PlayerController.MovementState.standing;
     }
 
     bool isWallRunning()
     {
+        // Player is moving and is in wallrunning state
         return (playerMovement.moveDirection.x != 0f || playerMovement.moveDirection.z != 0f) && 
                 playerMovement.state == PlayerController.MovementState.wallRunning;
     }

@@ -7,11 +7,11 @@ using Unity.Netcode;
 public class Climbing : NetworkBehaviour
 {
     [Header("References")]
-    public Transform orientation;
-    private Rigidbody rb;
-    public LayerMask wall;
-    public LayerMask smallWall;
-    private PlayerController player;
+    public Transform orientation; // Reference to player's Orientation
+    private Rigidbody rb; // Reference to player's rigidbody
+    public LayerMask wall; // Reference to objects that can be run up
+    public LayerMask smallWall; // Reference to objects that can be vaulted over 
+    private PlayerController player; // Reference to player's movement
     public PlayerCam cam;
 
     [Header("Climbing")]
@@ -22,6 +22,8 @@ public class Climbing : NetworkBehaviour
     [Header("WallDetection")]
     public float detectionLength;
     public float sphereCastRadius;
+
+    // Max angle at which the spherecast collision will be valid (Makes it so that player has to be somewhat facing the wall)
     public float maxAngle;
     private float wallAngle;
     private float tallWallAngle;
@@ -29,11 +31,6 @@ public class Climbing : NetworkBehaviour
     private RaycastHit tallWallHit;
     private bool wallFront;
     private bool tallWallFront;
-
-    [Header("ClimbJumping")]
-    public float climbJumpUpForce;
-    public float climbJumpBackForce;
-    public float climbJumpRotationDuration;
 
 
     // Start is called before the first frame update
@@ -87,6 +84,7 @@ public class Climbing : NetworkBehaviour
     private void wallCheck()
     {
         if (!IsOwner) return;
+        // Shoot raycast from a bit below the center of the player
         Vector3 position = transform.position - new Vector3(0f, player.playerHeight * 0.25f, 0f);
 
         wallFront = Physics.SphereCast(position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, smallWall);
@@ -99,6 +97,7 @@ public class Climbing : NetworkBehaviour
     private void tallWallCheck()
     {
         if (!IsOwner) return;
+        // Shoot raycast from a bit above the center of the player
         Vector3 position = transform.position + new Vector3(0f, player.playerHeight * 0.125f, 0f);
 
         tallWallFront = Physics.SphereCast(position, sphereCastRadius + 0.25f, orientation.forward, out frontWallHit, detectionLength, wall);
@@ -126,15 +125,5 @@ public class Climbing : NetworkBehaviour
         if (!IsOwner) return;
         player.state = PlayerController.MovementState.standing;
         player.speed = player.standingSpeed;
-    }
-
-    public void climbJump()
-    {
-        if (!IsOwner) return;
-        Vector3 jumpForce = transform.up * climbJumpUpForce + frontWallHit.normal * climbJumpBackForce;
-
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        rb.AddForce(jumpForce, ForceMode.Impulse);
-        cam.Rotate180(climbJumpRotationDuration);
     }
 }
