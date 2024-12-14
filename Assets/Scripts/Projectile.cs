@@ -1,5 +1,6 @@
 using UnityEngine;
 using Unity.Netcode;
+using UnityEditor;
 
 public class Projectile : NetworkBehaviour
 {
@@ -11,6 +12,11 @@ public class Projectile : NetworkBehaviour
     
     private string _team;
     private bool isInitialized = false;
+
+    public void Start()
+    {
+        Destroy(gameObject, lifetime);
+    }
 
     private void FixedUpdate()
     {
@@ -40,7 +46,7 @@ public class Projectile : NetworkBehaviour
 
         if (otherObject.tag != "Player") 
         {
-            Destroy(this);
+            Destroy(gameObject);
             return;
         }
 
@@ -50,7 +56,7 @@ public class Projectile : NetworkBehaviour
 
         if (_team == playerTeam)
         {
-            Destroy(this);
+            Destroy(gameObject);
             return;
         }
 
@@ -58,6 +64,6 @@ public class Projectile : NetworkBehaviour
         onTriggerEnterMessage += "|| The Other Object was an Enemy Player!";
         Debug.Log(onTriggerEnterMessage);
 
-        Destroy(this);
+        Destroy(gameObject);
     }
 }
